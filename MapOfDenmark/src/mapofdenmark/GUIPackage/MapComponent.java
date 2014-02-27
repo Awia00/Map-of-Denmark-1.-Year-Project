@@ -6,11 +6,23 @@
 
 package mapofdenmark.GUIPackage;
 
+import javax.swing.JComponent;
 
 /**
+ * Class description:
  *
- * @author Anders
+ * @version 0.1 - changed 27-02-2014
+ * @authorNewVersion  Anders Wind - awis@itu.dk
+ *
+ * @buildDate 27-02-2014
+ * @author Anders Wind - awis@itu.dk
  */
-public class MapComponent {
+public class MapComponent extends JComponent {
     
+    private MapComponent drawMapComponent;
+    
+    public MapComponent()
+    {
+		
+    }
 }

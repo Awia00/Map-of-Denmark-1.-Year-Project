@@ -6,10 +6,29 @@
 
 package mapofdenmark.GUIPackage;
 
+import javax.swing.JFrame;
+
 /**
- * Change the class name
- * @author Anders
+ * Class description:
+ *
+ * @version 0.1 - changed 27-02-2014
+ * @authorNewVersion  Anders Wind - awis@itu.dk
+ *
+ * @buildDate 27-02-2014
+ * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame {
+public class MainFrame extends JFrame {
+    
+    private MapComponent drawMapComponent;
+    
+    public MainFrame()
+    {
+		initialize();        
+    }
+    
+    private void initialize()
+    {
+		drawMapComponent = new MapComponent();
+    }
     
 }
