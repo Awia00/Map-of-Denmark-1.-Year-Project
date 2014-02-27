@@ -9,6 +9,7 @@ package mapofdenmark.GUIPackage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import javax.swing.JComponent;
 
 /**
@@ -23,23 +24,38 @@ import javax.swing.JComponent;
 public class MapComponent extends JComponent {
     
     private MapComponent drawMapComponent;
+	Dimension screenSize;
     
     public MapComponent()
     {
-		
+		initialize();
     }
+	
+	private void initialize()
+	{
+		setBackground(Color.blue);
+		setForeground(Color.blue);
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	}
 	
 	@Override
     public void paint(Graphics g)
 	{
 		g.setColor(Color.red);
-		g.fillRect(5, 60, 30, 40);
+		g.drawLine(5, 60, 30, 40);
+		g.drawLine(50, 30, 100, 60);
+		g.drawLine(100, 60, 30, 40);
+		g.drawLine(50, 30, 100, 60);
+		g.drawLine(50, 60, 20, 90);
+		g.drawLine(50, 30, 100, 60);
+		g.drawRect(0, 0, getPreferredSize().width-1, getPreferredSize().height-1);
+		
 	}
 	
 	@Override
     public Dimension getPreferredSize()
     {
-        return new Dimension(200,200);
+        return new Dimension((int)(screenSize.getWidth()/2),(int)(screenSize.getHeight()/2));
     }
 
     @Override
@@ -47,4 +63,10 @@ public class MapComponent extends JComponent {
     {
         return getPreferredSize();
     }
+	
+	@Override
+	public Dimension getMaximumSize()
+	{
+		return getPreferredSize();
+	}
 }
