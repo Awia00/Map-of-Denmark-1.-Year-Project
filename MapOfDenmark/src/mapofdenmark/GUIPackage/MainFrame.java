@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame {
     
     private MapComponent drawMapComponent;
-	private Container container;
+	private Container mainEastContainer, mainWestContainer;
 	private Dimension screenSize;
     
     public MainFrame()
@@ -42,12 +42,14 @@ public class MainFrame extends JFrame {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setMinimumSize(getMinimumSize());
 		
-		container = new JPanel();
-		container.setBackground(Color.black);
-		getContentPane().add(container);
+		mainEastContainer = new JPanel();
+		mainWestContainer = new JPanel();
+		getContentPane().add(mainEastContainer);
+		getContentPane().add(mainEastContainer);
+		
 		
 		drawMapComponent = new MapComponent();
-		container.add(drawMapComponent);
+		mainEastContainer.add(drawMapComponent);
 		
 		
 		// rdy up
