@@ -36,7 +36,6 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<SQLWarning> warnings = new ArrayList();
     ComboPooledDataSource cpds = new ComboPooledDataSource();
 
-
     /**
      * Constructor for this object. For more detail about the API methods of
      * this class, please refer to:
@@ -55,15 +54,18 @@ public class DatabaseHandler implements DatabaseInterface {
 
     private void initiateDataSource() throws SQLException {
         // initiates the connection to the database, and sets the basic parameters for the connection pooling.
-        cpds.setJdbcUrl(jdbcurl);
+
         cpds.setUser(user);
         cpds.setPassword(pass);
+        cpds.setJdbcUrl(jdbcurl);
         cpds.setMinPoolSize(1);
         cpds.setAcquireIncrement(3);
         cpds.setMaxPoolSize(100);
         cpds.setIdleConnectionTestPeriod(10);
         cpds.setTestConnectionOnCheckin(true);
         cpds.setMaxIdleTimeExcessConnections(5);
+        
+        
     }
 
     private Connection getConnection() throws SQLException {
@@ -198,7 +200,6 @@ public class DatabaseHandler implements DatabaseInterface {
 
                 for (Connection con : cons) {
                     con.close();
-
                 }
 
                 this.pstatements.removeAll(pstatements);

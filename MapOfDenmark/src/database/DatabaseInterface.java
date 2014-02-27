@@ -5,8 +5,6 @@
  */
 package database;
 
-import java.util.ArrayList;
-
 /**
  * This interface states all public methods available for interaction with the
  * database, and should provide sufficient coverage for developers wishing to
