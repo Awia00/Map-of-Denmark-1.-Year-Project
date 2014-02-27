@@ -3,7 +3,7 @@ package database;
 /**
  * There can only be one of this class.
  * Used to connect from classes to the database handler.
- * @author Andreas Jacobsen
+ * @author Aleksandar Jonovic
  */
 public class Database 
 {
