@@ -28,7 +28,7 @@ public class DatabaseHandler implements DatabaseInterface {
     //DB & SQL fields
     private static final String user = "aljon";
     private static final String pass = "Jegeradministratorher123";
-    private static final String jdbcurl = "jdbc:sqlserver://localhost/mapofdenmark";
+    private static final String jdbcurl = "jdbc:sqlserver://localhost;databaseName=MapofDenmark;integratedSecurity=true;";
 
     ArrayList<PreparedStatement> pstatements = new ArrayList();
     ArrayList<ResultSet> resultsets = new ArrayList();
@@ -40,7 +40,7 @@ public class DatabaseHandler implements DatabaseInterface {
     /**
      * Constructor for this object. For more detail about the API methods of
      * this class, please refer to:
-     * {@link airplanebooking.database.DatabaseInterface DatabaseInterface}
+     * {@link MapOfDenmark.database.DatabaseInterface DatabaseInterface}
      */
     public DatabaseHandler() {
         try {
@@ -166,15 +166,15 @@ public class DatabaseHandler implements DatabaseInterface {
      */
     private void getNumCon() {
         //Maintenance debug method, for getting all number of alive connections and connection pools - use to debug current state of the pool.
-        /*try {
-            //System.out.println("Number of Connections: " + cpds.getNumConnections());
-            //System.out.println("Number of Idle Connections: " + cpds.getNumIdleConnections());
-            //System.out.println("Number of Busy Connections: " + cpds.getNumBusyConnections());
-            //System.out.println("Number of Connection Pools: " + cpds.getNumUserPools());
-            //System.out.println("");
+        try {
+            System.out.println("Number of Connections: " + cpds.getNumConnections());
+            System.out.println("Number of Idle Connections: " + cpds.getNumIdleConnections());
+            System.out.println("Number of Busy Connections: " + cpds.getNumBusyConnections());
+            System.out.println("Number of Connection Pools: " + cpds.getNumUserPools());
+            System.out.println("");
         } catch (SQLException ex) {
             printSQLException(ex);
-        }*/
+        }
     }
 
     private void closeConnection(ArrayList<Connection> cons, ArrayList<PreparedStatement> pstatements, ArrayList<ResultSet> resultsets) {
@@ -210,4 +210,6 @@ public class DatabaseHandler implements DatabaseInterface {
             printSQLException(ex);
         }
     }
+    
+    
 }
