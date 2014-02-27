@@ -6,6 +6,9 @@
 
 package mapofdenmark.GUIPackage;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import javax.swing.JComponent;
 
 /**
@@ -24,5 +27,24 @@ public class MapComponent extends JComponent {
     public MapComponent()
     {
 		
+    }
+	
+	@Override
+    public void paint(Graphics g)
+	{
+		g.setColor(Color.red);
+		g.fillRect(5, 60, 30, 40);
+	}
+	
+	@Override
+    public Dimension getPreferredSize()
+    {
+        return new Dimension(200,200);
+    }
+
+    @Override
+    public Dimension getMinimumSize()
+    {
+        return getPreferredSize();
     }
 }

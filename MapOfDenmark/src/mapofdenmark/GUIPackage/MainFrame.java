@@ -6,7 +6,10 @@
 
 package mapofdenmark.GUIPackage;
 
+import java.awt.Color;
+import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Class description:
@@ -20,6 +23,7 @@ import javax.swing.JFrame;
 public class MainFrame extends JFrame {
     
     private MapComponent drawMapComponent;
+	private Container container;
     
     public MainFrame()
     {
@@ -28,7 +32,27 @@ public class MainFrame extends JFrame {
     
     private void initialize()
     {
+		// frame properties
+		setTitle("Map of Denmark");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+		
+		container = new JPanel();
+		getContentPane().add(container);
+		
 		drawMapComponent = new MapComponent();
+		container.add(drawMapComponent);
+		
+		
+		// rdy up
+		repaint();
+		pack();
     }
     
+	
+	
+	public static void main(String[] args)
+	{
+		new MainFrame();
+	}
 }
