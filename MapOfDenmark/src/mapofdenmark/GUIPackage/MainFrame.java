@@ -6,12 +6,17 @@
 
 package mapofdenmark.GUIPackage;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * Class description:
@@ -25,7 +30,10 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame {
     
     private MapComponent drawMapComponent;
-	private Container mainEastContainer, mainWestContainer;
+	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
+	private JLabel mapOfDenmarkLabel;
+	private JTextField enterAddressField;
+	private JButton searchButton;
 	private Dimension screenSize;
     
     public MainFrame()
@@ -42,14 +50,31 @@ public class MainFrame extends JFrame {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setMinimumSize(getMinimumSize());
 		
-		mainEastContainer = new JPanel();
-		mainWestContainer = new JPanel();
-		getContentPane().add(mainEastContainer);
-		getContentPane().add(mainEastContainer);
-		
-		
+		// Components
 		drawMapComponent = new MapComponent();
-		mainEastContainer.add(drawMapComponent);
+		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
+		enterAddressField = new JTextField("Enter Address");
+		searchButton = new JButton("Search");
+		
+		// Structure
+		EastContainer = new JPanel(new BorderLayout());
+		WestContainer = new JPanel();
+		getContentPane().add(EastContainer, BorderLayout.EAST);
+		getContentPane().add(WestContainer,BorderLayout.WEST);
+		
+		East_SouthContainer = new JPanel();
+		East_NorthContainer = new JPanel();
+		EastContainer.add(East_SouthContainer, BorderLayout.SOUTH);
+		EastContainer.add(East_NorthContainer, BorderLayout.NORTH);
+		
+		// Content adding
+		East_NorthContainer.add(mapOfDenmarkLabel);
+		East_SouthContainer.add(drawMapComponent);
+		East_SouthContainer.setBackground(Color.white);
+		WestContainer.add(enterAddressField);
+		WestContainer.add(searchButton);
+
+		// Action listeners
 		
 		
 		// rdy up
@@ -67,7 +92,7 @@ public class MainFrame extends JFrame {
 	@Override
     public Dimension getPreferredSize()
     {
-        return new Dimension((int)screenSize.getWidth(),(int)screenSize.getHeight());
+        return new Dimension((int)(screenSize.getWidth()/1.001),(int)(screenSize.getHeight()/1.05));
     }
 
     @Override

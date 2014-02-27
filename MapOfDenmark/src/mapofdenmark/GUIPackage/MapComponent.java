@@ -55,7 +55,7 @@ public class MapComponent extends JComponent {
 	@Override
     public Dimension getPreferredSize()
     {
-        return new Dimension((int)(screenSize.getWidth()/2),(int)(screenSize.getHeight()/2));
+        return new Dimension((int)(screenSize.getWidth()/1.2),(int)(screenSize.getHeight()/1.2));
     }
 
     @Override
