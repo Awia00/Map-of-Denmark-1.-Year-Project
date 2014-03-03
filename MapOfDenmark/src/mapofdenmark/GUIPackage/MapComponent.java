@@ -7,9 +7,8 @@
 package mapofdenmark.GUIPackage;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Toolkit;
+import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 
 /**
@@ -24,16 +23,16 @@ import javax.swing.JComponent;
 public class MapComponent extends JComponent {
     
     private MapComponent drawMapComponent;
-	Dimension screenSize;
+	private QuadTree quadTreeToDraw;
     
-    public MapComponent()
+    public MapComponent(QuadTree quadTreeToDraw)
     {
+		this.quadTreeToDraw = quadTreeToDraw;
 		initialize();
     }
 	
 	private void initialize()
 	{
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	}
 	
 	@Override
@@ -43,5 +42,10 @@ public class MapComponent extends JComponent {
 		g.fillRect(0, 0, getSize().width-1, getSize().height-1);
 		g.setColor(Color.red);
 		g.drawRect(0, 0, getSize().width-1, getSize().height-1);
+		g.setColor(Color.blue);
+		for(Point2D point : quadTreeToDraw.getPoints())
+		{
+			g.fillRect((int)(point.getY()*getWidth()/250), (int)(point.getX()*getHeight()/250), 2, 2);
+		}
 	}
 }

@@ -10,6 +10,9 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +53,12 @@ public class MainFrame extends JFrame {
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]10", "[]10[top]10");
 		
 		// Components
-		drawMapComponent = new MapComponent();
+		List<Point2D> points = new ArrayList<>();
+		for (int i = 0; i < 50; i++)
+		{
+			points.add(new Point2D.Double(QuadTree.randomInRange(10.0, 200.0), QuadTree.randomInRange(10.0, 200.0)));
+		}
+		drawMapComponent = new MapComponent(new QuadTree(points,0,0,200));
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
