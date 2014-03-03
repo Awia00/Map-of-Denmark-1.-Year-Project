@@ -48,25 +48,6 @@ public class MapComponent extends JComponent {
 		g.drawLine(50, 30, 100, 60);
 		g.drawLine(50, 60, 20, 90);
 		g.drawLine(50, 30, 100, 60);
-		g.drawRect(0, 0, getPreferredSize().width-1, getPreferredSize().height-1);
-		
-	}
-	
-	@Override
-    public Dimension getPreferredSize()
-    {
-        return new Dimension((int)(screenSize.getWidth()/1.25),(int)(screenSize.getHeight()/1.25));
-    }
-
-    @Override
-    public Dimension getMinimumSize()
-    {
-        return getPreferredSize();
-    }
-	
-	@Override
-	public Dimension getMaximumSize()
-	{
-		return getPreferredSize();
+		g.drawRect(0, 0, getSize().width-1, getSize().height-1);
 	}
 }
