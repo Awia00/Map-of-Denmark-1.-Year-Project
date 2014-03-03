@@ -33,21 +33,15 @@ public class MapComponent extends JComponent {
 	
 	private void initialize()
 	{
-		setBackground(Color.blue);
-		setForeground(Color.blue);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	}
 	
 	@Override
     public void paint(Graphics g)
 	{
+		g.setColor(Color.white);
+		g.fillRect(0, 0, getSize().width-1, getSize().height-1);
 		g.setColor(Color.red);
-		g.drawLine(5, 60, 30, 40);
-		g.drawLine(50, 30, 100, 60);
-		g.drawLine(100, 60, 30, 40);
-		g.drawLine(50, 30, 100, 60);
-		g.drawLine(50, 60, 20, 90);
-		g.drawLine(50, 30, 100, 60);
 		g.drawRect(0, 0, getSize().width-1, getSize().height-1);
 	}
 }

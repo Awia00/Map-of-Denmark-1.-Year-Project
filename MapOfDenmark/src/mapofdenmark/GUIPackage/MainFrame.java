@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
+		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]10", "[]10[top]10");
 		
 		// Components
 		drawMapComponent = new MapComponent();
@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
 		mainContainer.add(enterAddressField, "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width "+(int)(screenSize.width/2.5)+":"+(int)(screenSize.width/1.15)+":, "
-				+ "height "+(int)(screenSize.height/2.5)+":"+(int)(screenSize.height/1.19)+":, left");
+				+ "height "+(int)(screenSize.height/2.5)+":"+(int)(screenSize.height/1.18)+":, left");
 		
 		// Action listeners
 		
