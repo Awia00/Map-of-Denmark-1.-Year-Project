@@ -15,8 +15,11 @@ import java.awt.geom.Point2D;
 
 
 public class Intersection {
+    //The number of roads in the intersection.
     private final int roadCount;
+    //The roads in the intersection.
     private final Road[] roads;
+    //The coordinate of the intersection.
     private final Point2D position;
 
 

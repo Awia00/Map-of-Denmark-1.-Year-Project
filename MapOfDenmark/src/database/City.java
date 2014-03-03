@@ -11,8 +11,9 @@ package database;
  * @author Christian Grøn
  */
 public class City {
-    
+    // The name of the city.
     private final String cityName;
+    // The postal code of the city.
     private final Integer postalCode;
     
     public City(String cityName, Integer postalCode)
