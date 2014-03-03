@@ -16,17 +16,24 @@ import java.awt.geom.Point2D;
 public class Road {
     
     private final String roadName;
+    private enum roadType{HIGHWAY, MAINROAD, PATH, OTHER}; 
     private final Point2D position1;
     private final Point2D position2;
-public Road(String roadName, Point2D position1, Point2D position2)
+public Road(String roadName,enum roadType, Point2D position1, Point2D position2)
 {
     this.roadName = roadName;
+    this.roadtype = roadType;
     this.position1 = position1;
     this.position2 = position2;
 }
 public String getRoadName()
 {
     return roadName;
+}
+
+public enum getRoadType()
+{
+    return roadType;
 }
 
 public double getPosition1X()

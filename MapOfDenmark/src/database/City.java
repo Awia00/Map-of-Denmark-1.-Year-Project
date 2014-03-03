@@ -12,4 +12,22 @@ package database;
  */
 public class City {
     
+    private final String cityName;
+    private final Integer postalCode;
+    
+    public City(String cityName, Integer postalCode)
+    {
+        this.cityName = cityName;
+        this.postalCode = postalCode;
+    }
+    
+    public String getCityName()
+    {
+    return cityName;
+    }
+    
+    public Integer getPostalCode()
+    {
+        return postalCode;
+    }
 }
