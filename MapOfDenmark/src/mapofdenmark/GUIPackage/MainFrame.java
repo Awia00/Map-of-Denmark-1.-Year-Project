@@ -52,8 +52,9 @@ public class MainFrame extends JFrame {
 		
 		// Components
 		drawMapComponent = new MapComponent();
+		
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
-		enterAddressField = new JTextField("Enter Address");
+		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 		
 		// Structure
@@ -84,10 +85,7 @@ public class MainFrame extends JFrame {
     
 	
 	
-	public static void main(String[] args)
-	{
-		new MainFrame();
-	}
+
 	
 	@Override
     public Dimension getPreferredSize()
@@ -105,5 +103,10 @@ public class MainFrame extends JFrame {
 	public Dimension getMaximumSize()
 	{
 		return getPreferredSize();
+	}
+	
+	public static void main(String[] args)
+	{
+		new MainFrame();
 	}
 }
