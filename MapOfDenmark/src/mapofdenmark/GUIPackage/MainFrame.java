@@ -7,16 +7,15 @@
 package mapofdenmark.GUIPackage;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Class description:
@@ -31,6 +30,7 @@ public class MainFrame extends JFrame {
     
     private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
+	private Container mainContainer, mapContainer;
 	private JLabel mapOfDenmarkLabel;
 	private JTextField enterAddressField;
 	private JButton searchButton;
@@ -46,64 +46,47 @@ public class MainFrame extends JFrame {
 		// frame properties
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setMinimumSize(getMinimumSize());
+		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 		
 		// Components
 		drawMapComponent = new MapComponent();
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
-		enterAddressField = new JTextField("Enter Address");
+		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 		
 		// Structure
-		EastContainer = new JPanel(new BorderLayout());
-		WestContainer = new JPanel();
-		getContentPane().add(EastContainer, BorderLayout.EAST);
-		getContentPane().add(WestContainer,BorderLayout.WEST);
+		mainContainer = new JPanel(migMainLayout);
+		//drawMapComponent.setSize(new Dimension((int)(getSize().width/1.2), (int)(getSize().height/1.2)));
 		
-		East_SouthContainer = new JPanel();
-		East_NorthContainer = new JPanel();
-		EastContainer.add(East_SouthContainer, BorderLayout.SOUTH);
-		EastContainer.add(East_NorthContainer, BorderLayout.NORTH);
 		
-		// Content adding
-		East_NorthContainer.add(mapOfDenmarkLabel);
-		East_SouthContainer.add(drawMapComponent);
-		East_SouthContainer.setBackground(Color.white);
-		WestContainer.add(enterAddressField);
-		WestContainer.add(searchButton);
-
+		getContentPane().add(mainContainer);
+		mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
+		mainContainer.add(enterAddressField, "cell 0 1");
+		mainContainer.add(drawMapComponent, "cell 1 1,"
+				+ "width "+(int)(screenSize.width/2.5)+":"+(int)(screenSize.width/1.15)+":, "
+				+ "height "+(int)(screenSize.height/2.5)+":"+(int)(screenSize.height/1.19)+":, left");
+		
 		// Action listeners
 		
 		
 		// rdy up
+		revalidate();
 		repaint();
 		pack();
+		setVisible(true);
+		
+		
     }
     
 	
 	
+
+	
+
 	public static void main(String[] args)
 	{
 		new MainFrame();
 	}
 	
-	@Override
-    public Dimension getPreferredSize()
-    {
-        return new Dimension((int)(screenSize.getWidth()/1.001),(int)(screenSize.getHeight()/1.05));
-    }
-
-    @Override
-    public Dimension getMinimumSize()
-    {
-        return new Dimension((int)(screenSize.getWidth()/1.5), (int)(screenSize.getHeight()/1.5));
-    }
-	
-	@Override
-	public Dimension getMaximumSize()
-	{
-		return getPreferredSize();
-	}
 }
