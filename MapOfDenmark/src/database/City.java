@@ -8,7 +8,7 @@ package database;
 
 /**
  *
- * @author Envy
+ * @author Christian Grøn
  */
 public class City {
     
