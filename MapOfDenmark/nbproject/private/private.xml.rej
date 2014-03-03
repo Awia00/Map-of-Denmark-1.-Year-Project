@@ -1,0 +1,16 @@
+diff a/MapOfDenmark/nbproject/private/private.xml b/MapOfDenmark/nbproject/private/private.xml	(rejected hunks)
+@@ -2,6 +2,14 @@
+ <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
++<<<<<<< HEAD
+         <group/>
++=======
++        <group>
++            <file>file:/C:/Users/Anders/Documents/Map-of-Denmark-1.-Year-Project/MapOfDenmark/src/mapofdenmark/GUIPackage/MapComponent.java</file>
++            <file>file:/C:/Users/Anders/Documents/Map-of-Denmark-1.-Year-Project/MapOfDenmark/src/mapofdenmark/MapOfDenmark.java</file>
++            <file>file:/C:/Users/Anders/Documents/Map-of-Denmark-1.-Year-Project/MapOfDenmark/src/mapofdenmark/GUIPackage/MainFrame.java</file>
++        </group>
++>>>>>>> 140a479c1315b640f1c534ff9afba437db76548c
+     </open-files>
+ </project-private>
