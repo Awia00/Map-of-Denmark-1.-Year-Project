@@ -49,8 +49,9 @@ public class MainFrame extends JFrame {
 		// frame properties
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setExtendedState(MAXIMIZED_BOTH);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]10", "[]10[top]10");
+		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 		
 		// Components
 		List<Point2D> points = new ArrayList<>();
@@ -72,8 +73,8 @@ public class MainFrame extends JFrame {
 		mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
 		mainContainer.add(enterAddressField, "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
-				+ "width "+(int)(screenSize.width/2.5)+":"+(int)(screenSize.width/1.15)+":, "
-				+ "height "+(int)(screenSize.height/2.5)+":"+(int)(screenSize.height/1.18)+":, left");
+				+ "width "+(int)(screenSize.width/2.5)+":"+(int)(screenSize.width-125)+":, "
+				+ "height "+(int)(screenSize.height/2.5)+":"+(int)(screenSize.height-25)+":, left");
 		
 		// Action listeners
 		
@@ -86,10 +87,16 @@ public class MainFrame extends JFrame {
 		
 		
     }
+
+	@Override
+	public Dimension getPreferredSize()
+	{
+		return new Dimension((int)(screenSize.width/1.5),(int)(screenSize.height/1.5));
+	}
     
 	
 	
-
+	
 	
 
 	public static void main(String[] args)
