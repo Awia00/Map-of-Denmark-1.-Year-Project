@@ -1,3 +1,4 @@
+
 #ant specific
 dist/
 build/
@@ -20,3 +21,4 @@ nbproject/*
 *.DS_Store
 *.lock
 /MapOfDenmark/nbproject/private/
+
