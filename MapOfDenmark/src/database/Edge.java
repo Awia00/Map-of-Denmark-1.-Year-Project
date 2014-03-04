@@ -14,13 +14,15 @@ public class Edge {
 	
 	private final Node fromNode;
 	private final Node toNode;
+	private final int roadType;
 	
 	// Mangler TYPE
 	
-	public Edge(Node fromNode, Node toNode)
+	public Edge(Node fromNode, Node toNode, int roadType)
 	{
 		this.fromNode = fromNode;
 		this.toNode = toNode;
+		this.roadType = roadType;
 	}
 
 	public Node getFromNode()
