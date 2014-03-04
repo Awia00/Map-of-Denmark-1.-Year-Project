@@ -17,5 +17,5 @@ package database;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-
+    String getEdges(); 
 }

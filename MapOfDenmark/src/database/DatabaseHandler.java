@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
 
+
+
 /**
  * If you are looking for more details on the methods of this class, please
  * refer to the Interface that this class implements<p>
@@ -26,9 +28,9 @@ import java.util.ArrayList;
 public class DatabaseHandler implements DatabaseInterface {
 
     //DB & SQL fields
-    private static final String user = "aljon";
+    private static final String user = "jonovic_dk";
     private static final String pass = "Jegeradministratorher123";
-    private static final String jdbcurl = "jdbc:sqlserver://localhost;databaseName=MapofDenmark;integratedSecurity=true;";
+    private static final String jdbcurl = "jdbc:sqlserver://db.jonovic.dk;databaseName=jonovic_dk_db;";
 
     ArrayList<PreparedStatement> pstatements = new ArrayList();
     ArrayList<ResultSet> resultsets = new ArrayList();
@@ -41,7 +43,7 @@ public class DatabaseHandler implements DatabaseInterface {
      * this class, please refer to:
      * {@link MapOfDenmark.database.DatabaseInterface DatabaseInterface}
      */
-    public DatabaseHandler() {
+    protected DatabaseHandler() {
         try {
             //contructor method to initiate (combo)DataSource for pooled connections on spawning an object.
             //initiateDataSource();
@@ -212,5 +214,32 @@ public class DatabaseHandler implements DatabaseInterface {
         }
     }
     
+    @Override
+    public String getEdges(){
+        String nodes = "";
+        
+        try {
+            String sql = "SELECT FNODE#, TNODE#, LENGTH FROM jonovic_dk_db.dbo.edges;";
+            
+            Connection con = cpds.getConnection();
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            getNumCon();
+            
+            //Tidy up the conneciton
+            cons.add(con);
+            pstatements.add(pstatement);
+            resultsets.add(rs);
+            
+            
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        
+        
+        return nodes;
+    }
     
 }

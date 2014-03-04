@@ -6,6 +6,9 @@
 
 package mapofdenmark;
 
+import database.Database;
+import database.DatabaseInterface;
+
 /**
  *
  * @author Anders
@@ -17,7 +20,10 @@ public class MapOfDenmark {
      */
     public static void main(String[] args)
     {
-        // TODO code application logic here
+       DatabaseInterface db = Database.db();
+       
+       db.getEdges();
+       
     }
     
 }
