@@ -232,19 +232,19 @@ public class DatabaseHandler implements DatabaseInterface {
             ResultSet rs = executeQuery(pstatement);
             time -= System.currentTimeMillis();
             int streetid;
-             
+
             while (rs.next()) {
                 int fromnode = rs.getInt(1);
                 int tonode = rs.getInt(2);
                 int length = rs.getInt(3);
                 streetid = rs.getInt(4);
-                
+
                 int currentStreetId = streetIdExists(streetid);
-                if(currentStreetId != 0){
+                if (currentStreetId != 0) {
                     Street s = streets.get(currentStreetId);
-                    s.addEdge(new Edge(getNode(fromnode),getNode(tonode),length));
+                    s.addEdge(new Edge(getNode(fromnode), getNode(tonode), length));
                 } else {
-                   // ArrayList<Edge>
+                    // ArrayList<Edge>
                     //streets.add(new Street(streetid,new ArrayList<Edge>()));
                 }
             }
@@ -275,8 +275,8 @@ public class DatabaseHandler implements DatabaseInterface {
 
         return 0;
     }
-    
-    private Node getNode(int id){
+
+    private Node getNode(int id) {
         Node node = null;
         try {
             String sql = "SELECT \"X-COORD\", \"Y-COORD\" FROM [jonovic_dk_db].[dbo].[nodes] WHERE \"KDV-ID\" = ?;";
@@ -285,14 +285,66 @@ public class DatabaseHandler implements DatabaseInterface {
             PreparedStatement pstatement = con.prepareStatement(sql);
             pstatement.setInt(1, id);
             ResultSet rs = executeQuery(pstatement);
-            while(rs.next()){
-            node = new Node(rs.getDouble(1),rs.getDouble(2),id);
+
+            while (rs.next()) {
+                node = new Node(rs.getDouble(1), rs.getDouble(2), id);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return node;
+    }
+
+    @Override
+    public String getString() {
+        String node = "";
+        try {
+            Long time = System.currentTimeMillis();
+            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[road2id];";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            int i = 0;
+            while (rs.next()) {
+                i++;
+                
+                System.out.println(getNodeIDs(rs.getString(1),rs.getInt(2))[0]);
+                System.out.println(getNodeIDs(rs.getString(1),rs.getInt(2))[1]);
+
+            }
+            System.out.println(i + " elements fetched.");
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return node;
+    }
+
+    @Override
+    public double[] getNodeIDs(String vejnavn, int vejkode) {
+        double[] nodeIDs = new double[2];
+        try {
+            Connection con = cpds.getConnection();
+            
+            String sql = "SELECT TNODE#, FNODE# FROM [jonovic_dk_db].[dbo].[edges] WHERE VEJNAVN = ? AND VEJKODE = ?;";
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            pstatement.setString(1, vejnavn);
+            pstatement.setInt(2, vejkode);
+            ResultSet rs = executeQuery(pstatement);
+            while(rs.next()){
+                nodeIDs[0] = rs.getFloat(1);
+                nodeIDs[1] = rs.getFloat(2);
+            }
+
+        } catch (SQLException ex){
+            printSQLException(ex);
+        }
+        return nodeIDs;
+
     }
 
     @Override

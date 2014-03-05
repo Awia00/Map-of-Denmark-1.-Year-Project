@@ -18,4 +18,6 @@ package database;
  */
 public interface DatabaseInterface {
     String getEdges(); 
+    String getString();
+    public double[] getNodeIDs(String vejnavn, int vejkode);
 }
