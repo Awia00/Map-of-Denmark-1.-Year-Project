@@ -5,6 +5,8 @@
  */
 package database;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Anders
@@ -13,9 +15,9 @@ public class Street {
 
 	private String name = "";
 	private final int ID;
-	private final Edge[] edges;
+	private ArrayList<Edge> edges;
 
-	public Street(int ID, Edge[] edges)
+	public Street(int ID, ArrayList<Edge> edges)
 	{
 		this.ID = ID;
 		this.edges = edges;
@@ -44,8 +46,11 @@ public class Street {
 		return ID;
 	}
 
-	public Edge[] getEdges()
+	public ArrayList<Edge> getEdges()
 	{
 		return edges;
 	}
+        public void addEdge(Edge e){
+            edges.add(e);
+        }
 }

@@ -12,8 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
-
-
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * If you are looking for more details on the methods of this class, please
@@ -37,6 +38,11 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<Connection> cons = new ArrayList();
     ArrayList<SQLWarning> warnings = new ArrayList();
     ComboPooledDataSource cpds = new ComboPooledDataSource();
+
+    //Fields for Streets, Edges and Nodes.
+    ArrayList<Street> streets = new ArrayList<>();
+    ArrayList<Edge> edges = new ArrayList<>();
+    ArrayList<Node> nodes = new ArrayList<>();
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -66,8 +72,7 @@ public class DatabaseHandler implements DatabaseInterface {
         cpds.setIdleConnectionTestPeriod(10);
         cpds.setTestConnectionOnCheckin(true);
         cpds.setMaxIdleTimeExcessConnections(5);
-        
-        
+
     }
 
     private Connection getConnection() throws SQLException {
@@ -213,33 +218,88 @@ public class DatabaseHandler implements DatabaseInterface {
             printSQLException(ex);
         }
     }
-    
-    @Override
-    public String getEdges(){
-        String nodes = "";
-        
+
+    public ArrayList<Street> getStreets() {
+
         try {
-            String sql = "SELECT FNODE#, TNODE#, LENGTH FROM jonovic_dk_db.dbo.edges;";
-            
+
+            String sql = "SELECT FNODE#, TNODE#, LENGTH, VEJKODE FROM jonovic_dk_db.dbo.edges;";
+            Long time = System.currentTimeMillis();
             Connection con = cpds.getConnection();
+
             PreparedStatement pstatement = con.prepareStatement(sql);
+
             ResultSet rs = executeQuery(pstatement);
-            getNumCon();
-            
+            time -= System.currentTimeMillis();
+            int streetid;
+             
+            while (rs.next()) {
+                int fromnode = rs.getInt(1);
+                int tonode = rs.getInt(2);
+                int length = rs.getInt(3);
+                streetid = rs.getInt(4);
+                
+                int currentStreetId = streetIdExists(streetid);
+                if(currentStreetId != 0){
+                    Street s = streets.get(currentStreetId);
+                    s.addEdge(new Edge(getNode(fromnode),getNode(tonode),length));
+                } else {
+                   // ArrayList<Edge>
+                    //streets.add(new Street(streetid,new ArrayList<Edge>()));
+                }
+            }
+
             //Tidy up the conneciton
             cons.add(con);
             pstatements.add(pstatement);
             resultsets.add(rs);
-            
-            
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+
         } catch (SQLException ex) {
             printSQLException(ex);
         } finally {
             closeConnection(cons, pstatements, resultsets);
         }
-        
-        
-        return nodes;
+
+        return streets;
+    }
+
+    private int streetIdExists(int id) {
+
+        for (Street street : streets) {
+            if (street.getID() == id) {
+                return streets.indexOf(street);
+            }
+        }
+
+        return 0;
     }
     
+    private Node getNode(int id){
+        Node node = null;
+        try {
+            String sql = "SELECT \"X-COORD\", \"Y-COORD\" FROM [jonovic_dk_db].[dbo].[nodes] WHERE \"KDV-ID\" = ?;";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            pstatement.setInt(1, id);
+            ResultSet rs = executeQuery(pstatement);
+            while(rs.next()){
+            node = new Node(rs.getDouble(1),rs.getDouble(2),id);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return node;
+    }
+
+    @Override
+    public String getEdges() {
+        String s = "";
+
+        return s;
+    }
+
 }
