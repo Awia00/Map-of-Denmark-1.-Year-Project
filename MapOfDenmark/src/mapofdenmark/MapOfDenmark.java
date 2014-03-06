@@ -22,7 +22,8 @@ public class MapOfDenmark {
     {
        DatabaseInterface db = Database.db();
        
-       db.getString();
+       db.getNodes();
+       db.getEdges();
        
     }
     

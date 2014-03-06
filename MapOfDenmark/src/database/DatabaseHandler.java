@@ -66,9 +66,9 @@ public class DatabaseHandler implements DatabaseInterface {
         cpds.setUser(user);
         cpds.setPassword(pass);
         cpds.setJdbcUrl(jdbcurl);
-        cpds.setMinPoolSize(1);
+        cpds.setMinPoolSize(30);
         cpds.setAcquireIncrement(3);
-        cpds.setMaxPoolSize(100);
+        cpds.setMaxPoolSize(1000);
         cpds.setIdleConnectionTestPeriod(10);
         cpds.setTestConnectionOnCheckin(true);
         cpds.setMaxIdleTimeExcessConnections(5);
@@ -242,7 +242,7 @@ public class DatabaseHandler implements DatabaseInterface {
                 int currentStreetId = streetIdExists(streetid);
                 if (currentStreetId != 0) {
                     Street s = streets.get(currentStreetId);
-                    s.addEdge(new Edge(getNode(fromnode), getNode(tonode), length));
+                    //s.addEdge(new Edge(getNode(fromnode), getNode(tonode), length));
                 } else {
                     // ArrayList<Edge>
                     //streets.add(new Street(streetid,new ArrayList<Edge>()));
@@ -278,22 +278,70 @@ public class DatabaseHandler implements DatabaseInterface {
 
     private Node getNode(int id) {
         Node node = null;
+        for (Node currentNode : nodes) {
+            if (currentNode.getID() == id) {
+                node = currentNode;
+            }
+        }
+        return node;
+    }
+
+    @Override
+    public void getNodes() {
+        Node node = null;
         try {
-            String sql = "SELECT \"X-COORD\", \"Y-COORD\" FROM [jonovic_dk_db].[dbo].[nodes] WHERE \"KDV-ID\" = ?;";
+            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[nodes];";
             Connection con = cpds.getConnection();
 
             PreparedStatement pstatement = con.prepareStatement(sql);
-            pstatement.setInt(1, id);
             ResultSet rs = executeQuery(pstatement);
-
+            int i = 0;
             while (rs.next()) {
-                node = new Node(rs.getDouble(1), rs.getDouble(2), id);
+                node = new Node(rs.getDouble(2), rs.getDouble(3), rs.getInt(1));
+                nodes.add(node);
+                i++;
+                System.out.println(i);
             }
+            System.out.println("Total: " + i);
 
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return node;
+
+    }
+
+    public void getEdges2() {
+        Edge edge = null;
+        try {
+            String sql = "SELECT FNODE#, TNODE#, TYP FROM [jonovic_dk_db].[dbo].[edges];";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            int i = 0;
+            Node node1 = null;
+            Node node2 = null;
+            while (rs.next()) {
+                for (Node node : nodes) {
+
+                    if (node.getID() == rs.getInt(1)) {
+                        node1 = node;
+                    } else if (node.getID() == rs.getInt(2)) {
+                        node2 = node;
+                    }
+
+                    //edge = new Edge(node1, node2, rs.getInt(3));
+                    edges.add(edge);
+                }
+                i++;
+                System.out.println(i);
+            }
+            System.out.println("Total: " + i);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
@@ -312,9 +360,10 @@ public class DatabaseHandler implements DatabaseInterface {
             int i = 0;
             while (rs.next()) {
                 i++;
-                
-                System.out.println(getNodeIDs(rs.getString(1),rs.getInt(2))[0]);
-                System.out.println(getNodeIDs(rs.getString(1),rs.getInt(2))[1]);
+                System.out.println(i);
+                getNodeIDs(rs.getString(1), rs.getInt(2));
+                // getNodeIDs(rs.getString(1),rs.getInt(2));
+                //getNumCon();
 
             }
             System.out.println(i + " elements fetched.");
@@ -325,33 +374,61 @@ public class DatabaseHandler implements DatabaseInterface {
     }
 
     @Override
-    public double[] getNodeIDs(String vejnavn, int vejkode) {
-        double[] nodeIDs = new double[2];
+    //Broken, might fix, might not need.
+    public double[][] getNodeIDs(String vejnavn, int vejkode) {
+        double[][] nodeIDs = new double[2][2];
         try {
             Connection con = cpds.getConnection();
-            
+
             String sql = "SELECT TNODE#, FNODE# FROM [jonovic_dk_db].[dbo].[edges] WHERE VEJNAVN = ? AND VEJKODE = ?;";
             PreparedStatement pstatement = con.prepareStatement(sql);
             pstatement.setString(1, vejnavn);
             pstatement.setInt(2, vejkode);
             ResultSet rs = executeQuery(pstatement);
-            while(rs.next()){
-                nodeIDs[0] = rs.getFloat(1);
-                nodeIDs[1] = rs.getFloat(2);
+            int i = 0;
+            int j = 0;
+            while (rs.next()) {
+                System.out.println(i++);
+
+                nodeIDs[i][i] = rs.getFloat(1);
+                nodeIDs[j][j] = rs.getFloat(2);
+
             }
 
-        } catch (SQLException ex){
+            //Tidy up connection
+            cons.add(con);
+            pstatements.add(pstatement);
+            resultsets.add(rs);
+
+        } catch (SQLException ex) {
             printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
         }
         return nodeIDs;
 
     }
 
     @Override
-    public String getEdges() {
-        String s = "";
+    public void getEdges() {
+        try {
+            Edge edge = null;
+            String sql = "SELECT FNODE#, TNODE#, TYP FROM [jonovic_dk_db].[dbo].[edges];";
+            Connection con = cpds.getConnection();
 
-        return s;
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            int i = 0;
+            while (rs.next()) {
+
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+                edges.add(edge);
+                System.out.println(i++);
+            }
+
+            System.out.println("Total: " + i);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
 }

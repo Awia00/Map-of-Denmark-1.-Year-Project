@@ -12,25 +12,25 @@ package database;
  */
 public class Edge {
 	
-	private final Node fromNode;
-	private final Node toNode;
+	private final int fromNode;
+	private final int toNode;
 	private final int roadType;
 	
 	// Mangler TYPE
 	
-	public Edge(Node fromNode, Node toNode, int roadType)
+	public Edge(int fromNode, int toNode, int roadType)
 	{
 		this.fromNode = fromNode;
 		this.toNode = toNode;
 		this.roadType = roadType;
 	}
 
-	public Node getFromNode()
+	public int getFromNode()
 	{
 		return fromNode;
 	}
 
-	public Node getToNode()
+	public int getToNode()
 	{
 		return toNode;
 	}

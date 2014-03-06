@@ -17,7 +17,9 @@ package database;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-    String getEdges(); 
+    void getEdges(); 
     String getString();
-    public double[] getNodeIDs(String vejnavn, int vejkode);
+    public double[][] getNodeIDs(String vejnavn, int vejkode);
+    public void getNodes();
+     public void getEdges2();
 }
