@@ -5,7 +5,6 @@
  */
 package database;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -23,7 +22,6 @@ public interface DatabaseInterface {
     ArrayList<Edge> getEdges(); 
     String getString();
     public double[][] getNodeIDs(String vejnavn, int vejkode);
-    public ArrayList<Point2D> getNodes();
-   // public void getEdges2();
+    public ArrayList<Node> getNodes();
     void printNodes();
 }

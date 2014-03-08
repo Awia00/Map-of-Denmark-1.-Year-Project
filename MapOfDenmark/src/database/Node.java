@@ -6,6 +6,8 @@
 
 package database;
 
+import java.awt.geom.Point2D;
+
 /**
  *
  * @author Anders
@@ -15,10 +17,10 @@ public class Node {
 	private final double xCoord,yCoord;
 	private final int ID;
 	
-	public Node(double xCoord, double yCoord, int ID)
+	public Node(Point2D coords, int ID)
 	{
-		this.xCoord = xCoord;
-		this.yCoord = yCoord;
+		this.xCoord = coords.getX();
+		this.yCoord = coords.getY();
 		this.ID = ID;
 	}
 

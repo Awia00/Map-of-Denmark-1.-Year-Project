@@ -23,8 +23,8 @@ public class MapOfDenmark {
        DatabaseInterface db = Database.db();
        
        db.getNodes();
-       db.printNodes();
-       //db.getEdges();
+       //db.printNodes();
+       db.getEdges();
        
       
     }

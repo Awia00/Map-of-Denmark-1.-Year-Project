@@ -32,7 +32,7 @@ public class QuadTree implements Iterable<QuadTree> {
           SWPoints = new ArrayList<Point2D>(),
           SEPoints = new ArrayList<Point2D>();
       for (Point2D point : pointData) {
-        
+          System.out.println(pointData.size());
         if (point.getX() <= length/2 && point.getX() > x && point.getY() <= length/2 && point.getY() > y) {
           NWPoints.add(point);
         }

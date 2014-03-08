@@ -40,7 +40,7 @@ public class DatabaseHandler implements DatabaseInterface {
     //Fields for Streets, Edges and Nodes.
     ArrayList<Street> streets = new ArrayList<>();
     ArrayList<Edge> edges = new ArrayList<>();
-    ArrayList<Point2D> nodes = new ArrayList<>();
+    ArrayList<Node> nodes = new ArrayList<>();
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -285,13 +285,13 @@ public class DatabaseHandler implements DatabaseInterface {
     }
 */
     @Override
-    public ArrayList<Point2D> getNodes() {
-        Point2D.Double node = null;
+    public ArrayList<Node> getNodes() {
+        Node node = null;
         try {
-            
+            Long time = System.currentTimeMillis();
             String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[nodes];";
             Connection con = cpds.getConnection();
-            Long time = System.currentTimeMillis();
+            
             PreparedStatement pstatement = con.prepareStatement(sql);
             ResultSet rs = executeQuery(pstatement);
             time -= System.currentTimeMillis();
@@ -300,7 +300,7 @@ public class DatabaseHandler implements DatabaseInterface {
             
             int i = 0;
             while (rs.next()) {
-                node = new Point2D.Double(rs.getDouble(2), rs.getDouble(3));
+                node = new Node(new Point2D.Double(rs.getDouble(2), rs.getDouble(3)), rs.getInt(1));
                 nodes.add(node);
                 i++;
             }
@@ -314,8 +314,8 @@ public class DatabaseHandler implements DatabaseInterface {
         return nodes;
     }
     public void printNodes(){
-        for (Point2D node : nodes){
-            System.out.println(node.getX());
+        for (Node node : nodes){
+            System.out.println(node.getxCoord());
         }
     }
 /*
@@ -421,10 +421,11 @@ public class DatabaseHandler implements DatabaseInterface {
     @Override
     public ArrayList<Edge> getEdges() {
         try {
+            Long time = System.currentTimeMillis();
             Edge edge = null;
             String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
-            Long time = System.currentTimeMillis();
+           
             PreparedStatement pstatement = con.prepareStatement(sql);
             ResultSet rs = executeQuery(pstatement);
             time -= System.currentTimeMillis();
