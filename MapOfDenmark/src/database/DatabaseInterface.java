@@ -5,6 +5,9 @@
  */
 package database;
 
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
 /**
  * This interface states all public methods available for interaction with the
  * database, and should provide sufficient coverage for developers wishing to
@@ -17,9 +20,10 @@ package database;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-    void getEdges(); 
+    ArrayList<Edge> getEdges(); 
     String getString();
     public double[][] getNodeIDs(String vejnavn, int vejkode);
-    public void getNodes();
-     public void getEdges2();
+    public ArrayList<Point2D> getNodes();
+   // public void getEdges2();
+    void printNodes();
 }

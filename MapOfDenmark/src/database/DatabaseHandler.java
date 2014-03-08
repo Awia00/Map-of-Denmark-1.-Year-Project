@@ -6,15 +6,13 @@
 package database;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * If you are looking for more details on the methods of this class, please
@@ -42,7 +40,7 @@ public class DatabaseHandler implements DatabaseInterface {
     //Fields for Streets, Edges and Nodes.
     ArrayList<Street> streets = new ArrayList<>();
     ArrayList<Edge> edges = new ArrayList<>();
-    ArrayList<Node> nodes = new ArrayList<>();
+    ArrayList<Point2D> nodes = new ArrayList<>();
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -275,7 +273,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
         return 0;
     }
-
+/*
     private Node getNode(int id) {
         Node node = null;
         for (Node currentNode : nodes) {
@@ -285,31 +283,42 @@ public class DatabaseHandler implements DatabaseInterface {
         }
         return node;
     }
-
+*/
     @Override
-    public void getNodes() {
-        Node node = null;
+    public ArrayList<Point2D> getNodes() {
+        Point2D.Double node = null;
         try {
+            
             String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[nodes];";
             Connection con = cpds.getConnection();
-
+            Long time = System.currentTimeMillis();
             PreparedStatement pstatement = con.prepareStatement(sql);
             ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            
             int i = 0;
             while (rs.next()) {
-                node = new Node(rs.getDouble(2), rs.getDouble(3), rs.getInt(1));
+                node = new Point2D.Double(rs.getDouble(2), rs.getDouble(3));
                 nodes.add(node);
                 i++;
-                System.out.println(i);
             }
-            System.out.println("Total: " + i);
+            System.out.println("Total nodes: " + i);
 
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
         }
-
+        return nodes;
     }
-
+    public void printNodes(){
+        for (Point2D node : nodes){
+            System.out.println(node.getX());
+        }
+    }
+/*
     public void getEdges2() {
         Edge edge = null;
         try {
@@ -343,7 +352,7 @@ public class DatabaseHandler implements DatabaseInterface {
         }
 
     }
-
+*/
     @Override
     public String getString() {
         String node = "";
@@ -368,7 +377,7 @@ public class DatabaseHandler implements DatabaseInterface {
             }
             System.out.println(i + " elements fetched.");
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            closeConnection(cons, pstatements, resultsets);
         }
         return node;
     }
@@ -410,25 +419,31 @@ public class DatabaseHandler implements DatabaseInterface {
     }
 
     @Override
-    public void getEdges() {
+    public ArrayList<Edge> getEdges() {
         try {
             Edge edge = null;
-            String sql = "SELECT FNODE#, TNODE#, TYP FROM [jonovic_dk_db].[dbo].[edges];";
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
-
+            Long time = System.currentTimeMillis();
             PreparedStatement pstatement = con.prepareStatement(sql);
             ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
             int i = 0;
             while (rs.next()) {
 
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4));
                 edges.add(edge);
-                System.out.println(i++);
+                i++;
             }
 
-            System.out.println("Total: " + i);
+            System.out.println("Total edges: " + i);
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
         }
+        return edges;
     }
 }
