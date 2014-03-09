@@ -71,7 +71,7 @@ public class MainFrame extends JFrame {
                 List<Point2D> nodes = new ArrayList<>();
                 for(Node node : points){
 					//System.out.println(node.getxCoord() + " " + node.getyCoord());
-                    nodes.add(new Point2D.Double((node.getxCoord() - 6049910)/1000 ,(node.getyCoord()- 442250)/1000));
+                    nodes.add(new Point2D.Double((node.getxCoord() - 6040000)/800 ,(node.getyCoord()- 440000)/1000));
                 }
                 
 		drawMapComponent = new MapComponent(new QuadTree(nodes,0,0,460500/1000)); //892658.21706,6402050.98297,1000000));
