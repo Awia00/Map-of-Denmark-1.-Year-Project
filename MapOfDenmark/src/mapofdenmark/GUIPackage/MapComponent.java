@@ -45,7 +45,7 @@ public class MapComponent extends JComponent {
 		g.setColor(Color.blue);
 		for(Point2D point : quadTreeToDraw.getPoints())
 		{
-			g.fillRect((int)(point.getY()/quadTreeToDraw.length*getWidth()), (int)(point.getX()/quadTreeToDraw.length*getHeight()), 2, 2);
+			g.fillRect((int)(point.getY()/quadTreeToDraw.length*getWidth()), getSize().height-(int)(point.getX()/quadTreeToDraw.length*getHeight()), 2, 2);
 		}
 	}
 }
