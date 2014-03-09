@@ -301,7 +301,7 @@ public class DatabaseHandler implements DatabaseInterface {
             int i = 0;
             Point2D x = new Point2D.Double();
             while (rs.next()) {
-                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2), rs.getDouble(3)));
+                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(3), rs.getDouble(2)));
                 nodes.add(node);
                 i++;
             }
