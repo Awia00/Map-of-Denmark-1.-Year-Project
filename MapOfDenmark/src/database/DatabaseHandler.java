@@ -6,6 +6,7 @@
 package database;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,9 +27,9 @@ import java.util.ArrayList;
 public class DatabaseHandler implements DatabaseInterface {
 
     //DB & SQL fields
-    private static final String user = "aljon";
+    private static final String user = "jonovic_dk";
     private static final String pass = "Jegeradministratorher123";
-    private static final String jdbcurl = "jdbc:sqlserver://localhost;databaseName=MapofDenmark;integratedSecurity=true;";
+    private static final String jdbcurl = "jdbc:sqlserver://db.jonovic.dk;databaseName=jonovic_dk_db;";
 
     ArrayList<PreparedStatement> pstatements = new ArrayList();
     ArrayList<ResultSet> resultsets = new ArrayList();
@@ -36,12 +37,17 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<SQLWarning> warnings = new ArrayList();
     ComboPooledDataSource cpds = new ComboPooledDataSource();
 
+    //Fields for Streets, Edges and Nodes.
+    ArrayList<Street> streets = new ArrayList<>();
+    ArrayList<Edge> edges = new ArrayList<>();
+    ArrayList<Node> nodes = new ArrayList<>();
+
     /**
      * Constructor for this object. For more detail about the API methods of
      * this class, please refer to:
      * {@link MapOfDenmark.database.DatabaseInterface DatabaseInterface}
      */
-    public DatabaseHandler() {
+    protected DatabaseHandler() {
         try {
             //contructor method to initiate (combo)DataSource for pooled connections on spawning an object.
             //initiateDataSource();
@@ -58,14 +64,13 @@ public class DatabaseHandler implements DatabaseInterface {
         cpds.setUser(user);
         cpds.setPassword(pass);
         cpds.setJdbcUrl(jdbcurl);
-        cpds.setMinPoolSize(1);
+        cpds.setMinPoolSize(30);
         cpds.setAcquireIncrement(3);
-        cpds.setMaxPoolSize(100);
+        cpds.setMaxPoolSize(1000);
         cpds.setIdleConnectionTestPeriod(10);
         cpds.setTestConnectionOnCheckin(true);
         cpds.setMaxIdleTimeExcessConnections(5);
-        
-        
+
     }
 
     private Connection getConnection() throws SQLException {
@@ -211,6 +216,235 @@ public class DatabaseHandler implements DatabaseInterface {
             printSQLException(ex);
         }
     }
-    
-    
+
+    public ArrayList<Street> getStreets() {
+
+        try {
+
+            String sql = "SELECT FNODE#, TNODE#, LENGTH, VEJKODE FROM jonovic_dk_db.dbo.edges;";
+            Long time = System.currentTimeMillis();
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+            int streetid;
+
+            while (rs.next()) {
+                int fromnode = rs.getInt(1);
+                int tonode = rs.getInt(2);
+                int length = rs.getInt(3);
+                streetid = rs.getInt(4);
+
+                int currentStreetId = streetIdExists(streetid);
+                if (currentStreetId != 0) {
+                    Street s = streets.get(currentStreetId);
+                    //s.addEdge(new Edge(getNode(fromnode), getNode(tonode), length));
+                } else {
+                    // ArrayList<Edge>
+                    //streets.add(new Street(streetid,new ArrayList<Edge>()));
+                }
+            }
+
+            //Tidy up the conneciton
+            cons.add(con);
+            pstatements.add(pstatement);
+            resultsets.add(rs);
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+
+        return streets;
+    }
+
+    private int streetIdExists(int id) {
+
+        for (Street street : streets) {
+            if (street.getID() == id) {
+                return streets.indexOf(street);
+            }
+        }
+
+        return 0;
+    }
+/*
+    private Node getNode(int id) {
+        Node node = null;
+        for (Node currentNode : nodes) {
+            if (currentNode.getID() == id) {
+                node = currentNode;
+            }
+        }
+        return node;
+    }
+*/
+    @Override
+    public ArrayList<Node> getNodes() {
+        Node node = null;
+        try {
+            Long time = System.currentTimeMillis();
+            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[nodes];";
+            Connection con = cpds.getConnection();
+            
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            
+            int i = 0;
+            while (rs.next()) {
+                node = new Node(new Point2D.Double(rs.getDouble(2), rs.getDouble(3)), rs.getInt(1));
+                nodes.add(node);
+                i++;
+            }
+            System.out.println("Total nodes: " + i);
+
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        return nodes;
+    }
+    public void printNodes(){
+        for (Node node : nodes){
+            System.out.println(node.getxCoord());
+        }
+    }
+/*
+    public void getEdges2() {
+        Edge edge = null;
+        try {
+            String sql = "SELECT FNODE#, TNODE#, TYP FROM [jonovic_dk_db].[dbo].[edges];";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            int i = 0;
+            Node node1 = null;
+            Node node2 = null;
+            while (rs.next()) {
+                for (Node node : nodes) {
+
+                    if (node.getID() == rs.getInt(1)) {
+                        node1 = node;
+                    } else if (node.getID() == rs.getInt(2)) {
+                        node2 = node;
+                    }
+
+                    //edge = new Edge(node1, node2, rs.getInt(3));
+                    edges.add(edge);
+                }
+                i++;
+                System.out.println(i);
+            }
+            System.out.println("Total: " + i);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+*/
+    @Override
+    public String getString() {
+        String node = "";
+        try {
+            Long time = System.currentTimeMillis();
+            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[road2id];";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            int i = 0;
+            while (rs.next()) {
+                i++;
+                System.out.println(i);
+                getNodeIDs(rs.getString(1), rs.getInt(2));
+                // getNodeIDs(rs.getString(1),rs.getInt(2));
+                //getNumCon();
+
+            }
+            System.out.println(i + " elements fetched.");
+        } catch (SQLException ex) {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        return node;
+    }
+
+    @Override
+    //Broken, might fix, might not need.
+    public double[][] getNodeIDs(String vejnavn, int vejkode) {
+        double[][] nodeIDs = new double[2][2];
+        try {
+            Connection con = cpds.getConnection();
+
+            String sql = "SELECT TNODE#, FNODE# FROM [jonovic_dk_db].[dbo].[edges] WHERE VEJNAVN = ? AND VEJKODE = ?;";
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            pstatement.setString(1, vejnavn);
+            pstatement.setInt(2, vejkode);
+            ResultSet rs = executeQuery(pstatement);
+            int i = 0;
+            int j = 0;
+            while (rs.next()) {
+                System.out.println(i++);
+
+                nodeIDs[i][i] = rs.getFloat(1);
+                nodeIDs[j][j] = rs.getFloat(2);
+
+            }
+
+            //Tidy up connection
+            cons.add(con);
+            pstatements.add(pstatement);
+            resultsets.add(rs);
+
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        return nodeIDs;
+
+    }
+
+    @Override
+    public ArrayList<Edge> getEdges() {
+        try {
+            Long time = System.currentTimeMillis();
+            Edge edge = null;
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN FROM [jonovic_dk_db].[dbo].[edges];";
+            Connection con = cpds.getConnection();
+           
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            int i = 0;
+            while (rs.next()) {
+
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4));
+                edges.add(edge);
+                i++;
+            }
+
+            System.out.println("Total edges: " + i);
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        return edges;
+    }
 }

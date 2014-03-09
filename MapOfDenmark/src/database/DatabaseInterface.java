@@ -5,6 +5,8 @@
  */
 package database;
 
+import java.util.ArrayList;
+
 /**
  * This interface states all public methods available for interaction with the
  * database, and should provide sufficient coverage for developers wishing to
@@ -17,5 +19,9 @@ package database;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-
+    ArrayList<Edge> getEdges(); 
+    String getString();
+    public double[][] getNodeIDs(String vejnavn, int vejkode);
+    public ArrayList<Node> getNodes();
+    void printNodes();
 }

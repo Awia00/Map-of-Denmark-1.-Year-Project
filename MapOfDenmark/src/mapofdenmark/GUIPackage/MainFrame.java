@@ -6,7 +6,10 @@
 
 package mapofdenmark.GUIPackage;
 
-import java.awt.BorderLayout;
+import database.Database;
+import database.DatabaseInterface;
+import database.Edge;
+import database.Node;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -54,12 +57,23 @@ public class MainFrame extends JFrame {
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 		
 		// Components
-		List<Point2D> points = new ArrayList<>();
-		for (int i = 0; i < 50; i++)
+		//List<Point2D> points = new ArrayList<>();
+		/*
+                for (int i = 0; i < 600; i++)
 		{
 			points.add(new Point2D.Double(QuadTree.randomInRange(10.0, 200.0), QuadTree.randomInRange(10.0, 200.0)));
-		}
-		drawMapComponent = new MapComponent(new QuadTree(points,0,0,200));
+		}*/
+                
+                DatabaseInterface db = Database.db();
+                
+                List<Node> points = db.getNodes();
+                //List<Edge> edges = db.getEdges();
+                List<Point2D> nodes = new ArrayList<>();
+                for(Node node : points){
+                    nodes.add(new Point2D.Double(node.getxCoord(),node.getyCoord()));
+                }
+                
+		drawMapComponent = new MapComponent(new QuadTree(nodes,892658.21706,6402050.98297,1000000));
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
