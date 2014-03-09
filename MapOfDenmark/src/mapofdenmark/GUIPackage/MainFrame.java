@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
                     nodes.add(new Point2D.Double((node.getxCoord() - 442250)/1000 ,(node.getyCoord()- 6049910)/1000));
                 }
                 
-		drawMapComponent = new MapComponent(new QuadTree(nodes,0,0,500500/1000)); //892658.21706,6402050.98297,1000000));
+		drawMapComponent = new MapComponent(new QuadTree(nodes,0,0,460500/1000)); //892658.21706,6402050.98297,1000000));
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
