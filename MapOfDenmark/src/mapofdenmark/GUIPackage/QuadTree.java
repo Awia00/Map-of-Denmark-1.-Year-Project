@@ -25,30 +25,30 @@ public class QuadTree implements Iterable<QuadTree> {
     this.y = y;
     this.length = length;
     this.points = pointData;
-    if (pointData.size() > 5) {
+    if (pointData.size() > 1000) {
       List<Point2D> 
           NWPoints = new ArrayList<Point2D>(), 
           NEPoints = new ArrayList<Point2D>(),
           SWPoints = new ArrayList<Point2D>(),
           SEPoints = new ArrayList<Point2D>();
       for (Point2D point : pointData) {
-          System.out.println(pointData.size());
+          //System.out.println(pointData.size());
         if (point.getX() <= length/2 && point.getX() > x && point.getY() <= length/2 && point.getY() > y) {
           NWPoints.add(point);
         }
-        if (point.getX() > length/2 && point.getX() < length && point.getY() <= length/2 && point.getY() > y) {
+		else if (point.getX() > length/2 && point.getX() < length && point.getY() <= length/2 && point.getY() > y) {
           NEPoints.add(point);
         }
-        if (point.getX() <= length/2 && point.getX() > x && point.getY() > length/2 && point.getY() <= length) {
+		else if (point.getX() <= length/2 && point.getX() > x && point.getY() > length/2 && point.getY() <= length) {
           SWPoints.add(point);
         }
-        if (point.getX() > length/2 && point.getX() < length && point.getY() > length/2 && point.getY() <= length) {
+		else if (point.getX() > length/2 && point.getX() < length && point.getY() > length/2 && point.getY() <= length) {
           SEPoints.add(point);
         }
-        this.NW = new QuadTree(NWPoints, x, y, length / 2);
-        this.NE = new QuadTree(NEPoints, length / 2, y, length /2);
-        this.SW = new QuadTree(SWPoints, x, length / 2, length / 2);
-        this.SE = new QuadTree(SEPoints, length / 2, length / 2, length / 2);
+        //this.NW = new QuadTree(NWPoints, x, y, length / 2);
+        //this.NE = new QuadTree(NEPoints, length / 2, y, length /2);
+        //this.SW = new QuadTree(SWPoints, x, length / 2, length / 2);
+        //this.SE = new QuadTree(SEPoints, length / 2, length / 2, length / 2);
       } 
     } 
   } 
