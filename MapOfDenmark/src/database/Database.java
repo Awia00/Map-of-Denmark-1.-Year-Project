@@ -13,7 +13,7 @@ public class Database
     /**
      * This method gets the database interface for use.
      * @return DatabaseHandler as DatabaseInterface.
-     */
+     */ 
     public static DatabaseInterface db()
     {
         return db;
