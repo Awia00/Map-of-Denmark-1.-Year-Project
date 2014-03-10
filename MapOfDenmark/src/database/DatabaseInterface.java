@@ -19,9 +19,6 @@ import java.util.ArrayList;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-    ArrayList<Edge> getEdges(); 
-    String getString();
-    public double[][] getNodeIDs(String vejnavn, int vejkode);
-    public ArrayList<Node> getNodes();
-    void printNodes();
+    //public 
+    
 }

@@ -18,13 +18,12 @@ package mapofdenmark.GUIPackage;
 public class VisibleArea {
 
 	private double xCoord, yCoord, xLength, yLength;
-	private final QuadTree quadTree;
 	
-	public VisibleArea(QuadTree quadTree)
+	public VisibleArea()
 	{
-		this.quadTree = quadTree;
 		initialize();
 	}
+	
 	
 	private void initialize()
 	{	
@@ -34,12 +33,14 @@ public class VisibleArea {
 		yLength = 0;
 	}
 	
-	public void setCoord(double xCoord, double yCoord, double xLength, double yLength)
+	public void setCoord(double xCoord, double yCoord, double xLength, double yLength, QuadTree quadTree)
 	{
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.xLength = xLength;
 		this.yLength = yLength;
+		//update
+		setQuadTreesVisible(quadTree);
 	}
 	
 	public void setVisibleEdgeTypes(int acceptedType)
@@ -47,15 +48,60 @@ public class VisibleArea {
 		// do something.
 	}
 	
-	private void setQuadTreesVisible()
+	
+	private void setQuadTreesVisible(QuadTree quadTree)
 	{
-		if (quadTree.getPoints().equals(null))
+		// iterate over the quadtree untill you get to the lowest level
+		if (quadTree.getPoints().isEmpty() == true) // change this to getEdges instead.
 		{
-			//
+			setQuadTreesVisible(quadTree.getNW());
+			setQuadTreesVisible(quadTree.getNE());
+			setQuadTreesVisible(quadTree.getSW());
+			setQuadTreesVisible(quadTree.getSE());
 		}
+		else
+		{
+			if((quadTree.getQuadTreeX()+quadTree.length >= xCoord &&  quadTree.getQuadTreeY()+quadTree.length>=yCoord))
+			{
+				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
+				{
+					quadTree.setDrawable(true);
+				}
+				else
+				{
+					quadTree.setDrawable(false);
+				}
+			}
+			else
+			{
+				quadTree.setDrawable(false);
+			}		
+		}
+		
+		//IMPLEMENTATION
 		// take our quadTree
-		// go through the quadtree until you find the bottom once.
+		// go through the quadtree until you find the bottom ones.
 		// check if their coordinates start or end coordinates are inside of these coordinates
 		// set their drawThis field to either true or false.
+	}
+
+	public double getxCoord()
+	{
+		return xCoord;
+	}
+
+	public double getyCoord()
+	{
+		return yCoord;
+	}
+
+	public double getxLength()
+	{
+		return xLength;
+	}
+
+	public double getyLength()
+	{
+		return yLength;
 	}
 }
