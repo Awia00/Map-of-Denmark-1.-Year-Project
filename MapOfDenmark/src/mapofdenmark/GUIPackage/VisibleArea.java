@@ -40,6 +40,8 @@ public class VisibleArea {
 		this.yCoord = yCoord;
 		this.xLength = xLength;
 		this.yLength = yLength;
+		//update
+		setQuadTreesVisible(quadTree);
 	}
 	
 	public void setVisibleEdgeTypes(int acceptedType)
@@ -47,14 +49,27 @@ public class VisibleArea {
 		// do something.
 	}
 	
-	private void setQuadTreesVisible()
+	
+	private void setQuadTreesVisible(QuadTree quadTree)
 	{
-		if (quadTree.getPoints().equals(null))
+		// iterate over the quadtree untill you get to the lowest level
+		if (quadTree.getPoints().isEmpty() == true) // change this to getEdges instead.
 		{
-			//
+			// recursive call
 		}
+		else
+		{
+			if((quadTree.getQuadTreeX()+quadTree.length >= xCoord &&  quadTree.getQuadTreeY()+quadTree.length>=yCoord))
+			{
+				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
+				{
+				}
+			}
+		}
+		
+		//IMPLEMENTATION
 		// take our quadTree
-		// go through the quadtree until you find the bottom once.
+		// go through the quadtree until you find the bottom ones.
 		// check if their coordinates start or end coordinates are inside of these coordinates
 		// set their drawThis field to either true or false.
 	}
