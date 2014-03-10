@@ -14,9 +14,9 @@ public class Edge {
     private final int fromNode;
     private final int toNode;
 	
-	private final Node fromNodeTrue = null;
-	private final Node toNodeTrue = null;
-	private final Node midNodeTrue = null;
+	private Node fromNodeTrue = null;
+	private Node toNodeTrue = null;
+	private Node midNodeTrue = null;
 	
     private final int roadType;
     private final String roadName;
@@ -59,4 +59,21 @@ public class Edge {
 	{
 		return midNodeTrue;
 	}
+
+	public void setFromNodeTrue(Node fromNodeTrue)
+	{
+		this.fromNodeTrue = fromNodeTrue;
+	}
+
+	public void setToNodeTrue(Node toNodeTrue)
+	{
+		this.toNodeTrue = toNodeTrue;
+	}
+
+	public void setMidNodeTrue(Node midNodeTrue)
+	{
+		this.midNodeTrue = midNodeTrue;
+	}
+	
+	
 }
