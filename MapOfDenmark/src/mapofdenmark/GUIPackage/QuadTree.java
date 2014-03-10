@@ -17,6 +17,7 @@ public class QuadTree implements Iterable<QuadTree> {
   QuadTree NW, NE, SW, SE;
   List<Point2D> points;
   double x, y, length;
+  boolean isDrawable = false;
   static Set<QuadTree> quadTrees = new LinkedHashSet<>();
   static Random random = new Random(); // For testing purposes...
 
@@ -55,6 +56,14 @@ public class QuadTree implements Iterable<QuadTree> {
        // this.points = pointData;
     }  
   } 
+
+  public boolean isDrawable() {
+    return this.isDrawable;
+  }
+
+  public void setDrawable(boolean isDrawable) {
+    this.isDrawable = isDrawable;
+  }
 
   public double getQuadTreeX() {
     return this.x;
@@ -156,5 +165,6 @@ public class QuadTree implements Iterable<QuadTree> {
     }
   }
 }
+
 
 
