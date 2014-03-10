@@ -17,7 +17,7 @@ public class Road {
     //The name of the road.
     private final String roadName;
     // The type of the road.
-    //private enum roadType{HIGHWAY, MAINROAD, PATH, OTHER}; 
+    private RoadTypeEnum roadType;
     // The coordinate for the 1st end of the road.
     private final Point2D position1;
     // The coordinate of the 2nd end of the road.
@@ -30,26 +30,27 @@ public class Road {
     //"TF" is one way in the direction To-From.
     //"FT" is one way in the direction From-To.
     //"N" is no driving allowed.        
-    //private enum roadDirection{TF,FT,N};
+    private RoadDirectionEnum roadDirection;
     
-public Road(String roadName, String roadType, Point2D position1, Point2D position2, double speed, double driveTime, String roadDirection)
+public Road(String roadName, int roadType, Point2D position1, Point2D position2, double speed, double driveTime, String roadDirection)
 {
     this.roadName = roadName;
     //this.roadtype = roadType;
+    this.roadType = RoadTypeEnum.createEnumWithInt(roadType);
     this.position1 = position1;
     this.position2 = position2;
     this.speed = speed;
     this.driveTime = driveTime;
-    //this.roadDirection = roadDirection;
+    this.roadDirection = RoadDirectionEnum.createEnumWithString(roadDirection);
 }
 public String getRoadName()
 {
     return roadName;
 }
 
-public String getRoadType()
+public RoadTypeEnum getRoadType()
 {
-    return "broken";//roadType;
+    return roadType;
 }
 
 public double getPosition1X()
@@ -82,9 +83,9 @@ public double getDriveTime()
     return driveTime;
 }
 
-public String getRoadDirection()
+public RoadDirectionEnum getRoadDirection()
 {
-    return "also broken";//roadDirection;
+    return roadDirection;
 }
 
 }
