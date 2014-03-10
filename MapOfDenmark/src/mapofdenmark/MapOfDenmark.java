@@ -22,7 +22,6 @@ public class MapOfDenmark {
     {
        DatabaseInterface db = Database.db();
        
-      
     }
     
 }
