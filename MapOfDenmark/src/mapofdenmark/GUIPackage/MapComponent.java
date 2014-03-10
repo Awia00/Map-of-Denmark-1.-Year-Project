@@ -40,6 +40,7 @@ public class MapComponent extends JComponent {
 	
 	private void initialize(Street[] streets)
 	{
+		/*
 		DatabaseInterface db = Database.db();
 
 		List<Node> points = db.getNodes();
@@ -50,10 +51,12 @@ public class MapComponent extends JComponent {
 			//System.out.println(node.getxCoord() + " " + node.getyCoord());
 			nodes.add(new Point2D.Double((node.getxCoord() - 6020000), (node.getyCoord() - 438000)));
 		}
+				
 		
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(nodes, 0, 0, 460500);
 		visibleArea.setCoord(0, 0, 460500, 460500, quadTreeToDraw);
+				*/
 	}
 	
 	@Override
