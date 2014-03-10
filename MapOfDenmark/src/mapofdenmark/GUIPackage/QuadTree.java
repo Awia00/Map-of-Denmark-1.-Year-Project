@@ -118,6 +118,23 @@ public class QuadTree implements Iterable<QuadTree> {
     }
     return quadTrees;
   }
+
+    public QuadTree getNW() {
+        return NW;
+    }
+
+    public QuadTree getNE() {
+        return NE;
+    }
+
+    public QuadTree getSE() {
+        return SE;
+    }
+
+    public QuadTree getSW() {
+        return SW;
+    }
+  
   
   // For testing purposes...
   public static double randomInRange(double min, double max) {
