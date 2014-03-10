@@ -47,5 +47,8 @@ public class MapComponent extends JComponent {
 		{
 			g.fillRect((int)(point.getY()/quadTreeToDraw.length*getWidth()), getSize().height-(int)(point.getX()/quadTreeToDraw.length*getHeight()), 1, 1);
 		}
+		
+		// when drawing: take the coord, substract its value with the startCoord from visible area
+		// then divide by the length. that way you get values from 0-1.
 	}
 }

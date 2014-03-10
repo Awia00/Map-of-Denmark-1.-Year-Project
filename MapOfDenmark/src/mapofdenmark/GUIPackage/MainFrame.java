@@ -71,10 +71,10 @@ public class MainFrame extends JFrame {
                 List<Point2D> nodes = new ArrayList<>();
                 for(Node node : points){
 					//System.out.println(node.getxCoord() + " " + node.getyCoord());
-                    nodes.add(new Point2D.Double((node.getxCoord() - 6040000)/800 ,(node.getyCoord()- 440000)/1000));
+                    nodes.add(new Point2D.Double((node.getxCoord() - 6020000) ,(node.getyCoord()- 438000)));
                 }
                 
-		drawMapComponent = new MapComponent(new QuadTree(nodes,0,0,460500/1000)); //892658.21706,6402050.98297,1000000));
+		drawMapComponent = new MapComponent(new QuadTree(nodes,0,0,460500)); //892658.21706,6402050.98297,1000000));
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");

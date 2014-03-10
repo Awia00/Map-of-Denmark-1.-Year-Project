@@ -13,6 +13,11 @@ public class Edge {
 
     private final int fromNode;
     private final int toNode;
+	
+	private Node fromNodeTrue = null;
+	private Node toNodeTrue = null;
+	private Node midNodeTrue = null;
+	
     private final int roadType;
     private final String roadName;
 
@@ -39,4 +44,36 @@ public class Edge {
     public int getRoadType() {
         return roadType;
     }
+	
+		public Node getFromNodeTrue()
+	{
+		return fromNodeTrue;
+	}
+
+	public Node getToNodeTrue()
+	{
+		return toNodeTrue;
+	}
+
+	public Node getMidNodeTrue()
+	{
+		return midNodeTrue;
+	}
+
+	public void setFromNodeTrue(Node fromNodeTrue)
+	{
+		this.fromNodeTrue = fromNodeTrue;
+	}
+
+	public void setToNodeTrue(Node toNodeTrue)
+	{
+		this.toNodeTrue = toNodeTrue;
+	}
+
+	public void setMidNodeTrue(Node midNodeTrue)
+	{
+		this.midNodeTrue = midNodeTrue;
+	}
+	
+	
 }
