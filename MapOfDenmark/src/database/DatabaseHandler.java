@@ -316,20 +316,55 @@ public class DatabaseHandler implements DatabaseInterface {
         return streets;
     }
 
-    private ArrayList<Edge> getEdge(int id) {
+    private ArrayList<Edge> getEdge(int id, String streetName) {
         ArrayList<Edge> edgeResults = new ArrayList<>();
-
-        Edge e = new Edge(1, 1, 1, "1", id);
-        int index = Collections.binarySearch(edges, e, ec);
-        int indexVar = index;
-        while (edges.get(--indexVar).getRoadcode() == id) {
-            edgeResults.add(edges.get(indexVar));
-        }
+		Edge e = new Edge(1, 1, 1, "1", id);
+		int index = Collections.binarySearch(edges, e, ec);
+		int indexVar = index;
+		int topIndex = 0;
+		int botIndex = 0;
+		// go right
+		do
+		{
+			
+			//edgeResults.add(edges.get(indexVar-indexDif));
+			//edges.remove(indexVar-indexDif);
+			indexVar -= 10;
+			if(indexVar < 0){ indexVar = 0;}
+			if(edges.get(indexVar).getRoadcode() != id)
+			{
+				while(edges.get(++indexVar).getRoadcode() != id)
+				{
+				}
+				botIndex = indexVar;
+				break;
+			}
+		}
+        while (true);
+		
         indexVar = index;
-        while (edges.get(++indexVar).getRoadcode() == id) {
-            edgeResults.add(edges.get(indexVar));
-        }
-        edgeResults.add(edges.get(index));
+		do
+		{
+			indexVar += 10;
+			if(indexVar >= edges.size()){indexVar = edges.size()-1;}
+			if(edges.get(indexVar).getRoadcode() != id)
+			{
+				while(edges.get(--indexVar).getRoadcode() != id)
+				{
+				}
+				topIndex = indexVar;
+				break;
+			}
+		}
+        while (true);
+		
+		for (int i = botIndex ; i <= topIndex ; i++)
+		{
+			if (edges.get(i).getRoadName().equals(streetName))
+			{
+				edgeResults.add(edges.get(i));
+			}
+		}
         return edgeResults;
     }
 
@@ -345,14 +380,12 @@ public class DatabaseHandler implements DatabaseInterface {
         }
         System.out.println("Node-to-Edge joining complete.");
         for (Street street : streets) {
-            ArrayList<Edge> el = getEdge(street.getID());
+            ArrayList<Edge> el = getEdge(street.getID(), street.getStreetName());
             for (Edge e : el) {
-                if (e.getRoadName().equals(street.getStreetName())) {
-                    System.out.println(e.getRoadName());
                     street.addEdge(e);
-                }
             }
         }
+		
         for (Street street : streets) {
             System.out.println(street.toString());
         }
