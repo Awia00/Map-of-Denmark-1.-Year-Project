@@ -13,6 +13,11 @@ public class Edge {
 
     private final int fromNode;
     private final int toNode;
+	
+	private final Node fromNodeTrue = null;
+	private final Node toNodeTrue = null;
+	private final Node midNodeTrue = null;
+	
     private final int roadType;
     private final String roadName;
 
@@ -39,4 +44,19 @@ public class Edge {
     public int getRoadType() {
         return roadType;
     }
+	
+		public Node getFromNodeTrue()
+	{
+		return fromNodeTrue;
+	}
+
+	public Node getToNodeTrue()
+	{
+		return toNodeTrue;
+	}
+
+	public Node getMidNodeTrue()
+	{
+		return midNodeTrue;
+	}
 }
