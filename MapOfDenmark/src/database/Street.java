@@ -15,12 +15,12 @@ public class Street {
 
 	private String name = "";
 	private final int ID;
-	private ArrayList<Edge> edges;
+	private ArrayList<Edge> edges = new ArrayList<>();
 
-	public Street(int ID, ArrayList<Edge> edges)
+	public Street(int ID, String name)
 	{
 		this.ID = ID;
-		this.edges = edges;
+                this.name = name;
 	}
 
 	/**
@@ -52,5 +52,16 @@ public class Street {
 	}
         public void addEdge(Edge e){
             edges.add(e);
+        }
+        
+        @Override
+        public String toString(){
+            String edgeString = "";
+            //System.out.println("NEW ROAD HERE ---------------------------------------------------");
+            for(Edge edge : edges)
+            {
+                edgeString += edge.toString();
+            }
+            return "VEJKODE: " + ID + " VEJNAVN: " + name + edgeString;
         }
 }

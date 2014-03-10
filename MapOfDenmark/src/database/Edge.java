@@ -9,24 +9,24 @@ package database;
  *
  * @author Anders
  */
-public class Edge {
+public class Edge implements Comparable<Edge>{
 
     private final int fromNode;
     private final int toNode;
-	
-	private Node fromNodeTrue = null;
-	private Node toNodeTrue = null;
-	private Node midNodeTrue = null;
-	
+    private final int roadcode;
+    private Node fromNodeTrue = null;
+    private Node toNodeTrue = null;
+    private Node midNodeTrue = null;
     private final int roadType;
     private final String roadName;
 
     // Mangler TYPE
-    public Edge(int fromNode, int toNode, int roadType, String roadName) {
+    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode) {
         this.fromNode = fromNode;
         this.toNode = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
+        this.roadcode = roadcode;
     }
 
     public int getFromNode() {
@@ -44,36 +44,41 @@ public class Edge {
     public int getRoadType() {
         return roadType;
     }
-	
-		public Node getFromNodeTrue()
-	{
-		return fromNodeTrue;
-	}
 
-	public Node getToNodeTrue()
-	{
-		return toNodeTrue;
-	}
+    public Node getFromNodeTrue() {
+        return fromNodeTrue;
+    }
 
-	public Node getMidNodeTrue()
-	{
-		return midNodeTrue;
-	}
+    public Node getToNodeTrue() {
+        return toNodeTrue;
+    }
 
-	public void setFromNodeTrue(Node fromNodeTrue)
-	{
-		this.fromNodeTrue = fromNodeTrue;
-	}
+    public Node getMidNodeTrue() {
+        return midNodeTrue;
+    }
 
-	public void setToNodeTrue(Node toNodeTrue)
-	{
-		this.toNodeTrue = toNodeTrue;
-	}
+    public void setFromNodeTrue(Node fromNodeTrue) {
+        this.fromNodeTrue = fromNodeTrue;
+    }
 
-	public void setMidNodeTrue(Node midNodeTrue)
-	{
-		this.midNodeTrue = midNodeTrue;
-	}
-	
-	
+    public void setToNodeTrue(Node toNodeTrue) {
+        this.toNodeTrue = toNodeTrue;
+    }
+
+    public void setMidNodeTrue(Node midNodeTrue) {
+        this.midNodeTrue = midNodeTrue;
+    }
+
+    public int getRoadcode() {
+        return roadcode;
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        return this.getRoadcode() - o.getRoadcode();
+    }
+    @Override
+    public String toString(){
+        return "\n    E-VEJKODE: " + roadcode + "\n   E-VEJNAVN: " + roadName;
+    }
 }
