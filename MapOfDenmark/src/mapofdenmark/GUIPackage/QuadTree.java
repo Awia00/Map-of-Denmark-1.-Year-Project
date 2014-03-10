@@ -16,7 +16,8 @@ import java.awt.geom.Point2D;
 public class QuadTree implements Iterable<QuadTree> {
   QuadTree NW, NE, SW, SE;
   List<Point2D> points;
-  double x, y, length;
+  double x, y, length;  
+  boolean isDrawable = false;
   static Set<QuadTree> quadTrees = new LinkedHashSet<>();
   static Random random = new Random(); // For testing purposes...
 
@@ -64,6 +65,15 @@ public class QuadTree implements Iterable<QuadTree> {
   public double getQuadTreeLength() {
     return this.length;
   }
+  
+    public boolean isDrawable() {
+    return this.isDrawable;
+  }
+
+  public void setDrawable(boolean isDrawable) {
+    this.isDrawable = isDrawable;
+  }
+  
   public QuadTree[] getQuadTrees() {
     if (NW == null && NE == null && SW == null && SE == null) return new QuadTree[0];
     else return new QuadTree[]{NW, NE, SW, SE};
