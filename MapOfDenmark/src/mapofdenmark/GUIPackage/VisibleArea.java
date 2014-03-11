@@ -52,7 +52,7 @@ public class VisibleArea {
 	private void setQuadTreesVisible(QuadTree quadTree)
 	{
 		// iterate over the quadtree untill you get to the lowest level
-		if (quadTree.getPoints().isEmpty() == true) // change this to getEdges instead.
+		if (quadTree.getEdges().isEmpty() == true) // change this to getEdges instead.
 		{
 			setQuadTreesVisible(quadTree.getNW());
 			setQuadTreesVisible(quadTree.getNE());

@@ -10,51 +10,53 @@ package mapofdenmark.GUIPackage;
  *
  * @author Christian
  */
+import database.Edge;
+import database.Node;
 import java.util.*;
 import java.awt.geom.Point2D;
 
 public class QuadTree implements Iterable<QuadTree> {
   private QuadTree NW, NE, SW, SE;
-  private List<Point2D> points;
+  private List<Edge> edges;
   private final double x, y, length;
-  private boolean isDrawable = false;
+  private boolean isDrawable = true;
   static Set<QuadTree> quadTrees = new LinkedHashSet<>();
   static Random random = new Random(); // For testing purposes...
 
-  public QuadTree(List<Point2D> pointData, double x, double y, double length) {
+  public QuadTree(List<Edge> edges, double x, double y, double length) {
     this.x = x;
     this.y = y;
     this.length = length;
-    this.points = pointData;
+    this.edges = edges;
 	double h = length/2;
     
-    if (points.size() > 4) {
-      List<Point2D> 
-          NWPoints = new ArrayList<>(), 
-          NEPoints = new ArrayList<>(),
-          SWPoints = new ArrayList<>(),
-          SEPoints = new ArrayList<>();
-      for (Point2D point : points) {
-		  double px = point.getX();
-		  double py = point.getY();
+    if (edges.size() > 5) {
+      List<Edge> 
+          NWEdges = new ArrayList<>(), 
+          NEEdges = new ArrayList<>(),
+          SWEdges = new ArrayList<>(),
+          SEEdges = new ArrayList<>();
+      for (Edge edge : edges) {
+		  double px = edge.getMidNodeTrue().getxCoord();
+		  double py = edge.getMidNodeTrue().getyCoord();
         if (px >= x && px < x+h && py > y+h && py <= y+length) {
-          NWPoints.add(point);
+          NWEdges.add(edge);
         }
         if (px > x+h && px <= x+length && py > y+h && py <= y+length) {
-          NEPoints.add(point);
+          NEEdges.add(edge);
         }
         if (px >= x && px < x+h && py >= y && py < y+h) {
-          SWPoints.add(point);
+          SWEdges.add(edge);
         }
         if (px >= x+h && px <= x+length && py >= y && py <= y+h) {
-          SEPoints.add(point);
+          SEEdges.add(edge);
         } 
       } 
-	  this.NW = new QuadTree(NWPoints, x, y+h,h);
-        this.NE = new QuadTree(NEPoints, x+h,y+h,h);
-        this.SW = new QuadTree(SWPoints, x, y, h);
-        this.SE = new QuadTree(SEPoints, x+h,y, h);
-        this.points = Collections.emptyList();
+	  this.NW = new QuadTree(NWEdges, x, y+h,h);
+        this.NE = new QuadTree(NEEdges, x+h,y+h,h);
+        this.SW = new QuadTree(SWEdges, x, y, h);
+        this.SE = new QuadTree(SEEdges, x+h,y, h);
+        this.edges = Collections.emptyList();
     } else {
        // this.points = pointData;
     }  
@@ -85,10 +87,10 @@ public class QuadTree implements Iterable<QuadTree> {
   }
 
 
-  public List<Point2D> getPoints() {
-    if (this.points.isEmpty()) {
+  public List<Edge> getEdges() {
+    if (this.edges.isEmpty()) {
       return Collections.emptyList();
-    } else return this.points;
+    } else return this.edges;
   } 
   
   // Iterator iterates through trees within current trees if any
@@ -111,13 +113,13 @@ public class QuadTree implements Iterable<QuadTree> {
   public void printTrees(QuadTree tree) {
     // Include parent tree
    // System.out.println(tree);  
-   // for (Point2D p : tree.getPoints()) {
+   // for (Point2D p : tree.getEdges()) {
      //   System.out.println(p.getX() + ", " + p.getY());
       //}
     // Child trees
     for (QuadTree t : tree) {
       System.out.println(t);  
-      //for (Point2D p : t.getPoints()) {
+      //for (Point2D p : t.getEdges()) {
         //System.out.println(p.getX() + ", " + p.getY());
       //}
       t.printTrees(t);
@@ -166,11 +168,15 @@ public class QuadTree implements Iterable<QuadTree> {
 
   // Class testing
   public static void main(String[] args) {
-    List<Point2D> points = new ArrayList<>();
+    List<Edge> edges = new ArrayList<>();
     for (int i = 0; i < 35; i++) {
-      points.add(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199)));
+		Edge edge = new Edge(0, 0, 0, null, 0);
+		edge.setFromNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199),QuadTree.randomInRange(0, 199))));
+		edge.setToNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199),QuadTree.randomInRange(0, 199))));
+		edge.setMidNodeTrue();
+		edges.add(edge);
     }
-    QuadTree q = new QuadTree(points, 0, 0, 200);
+    QuadTree q = new QuadTree(edges, 0, 0, 200);
 
     //q.printTrees(q);
     Set<QuadTree> qt = new LinkedHashSet<>();
@@ -179,10 +185,10 @@ public class QuadTree implements Iterable<QuadTree> {
     for (QuadTree t : qt) {
       System.out.println(t);
       System.out.println("Tree x: " + t.getQuadTreeX() + " y: " + t.getQuadTreeY() + " length: " + t.getQuadTreeLength());
-      System.out.println("Tree has: " + t.getPoints().size() + " points");
+      System.out.println("Tree has: " + t.getEdges().size() + " points");
 
-      for (Point2D p : t.getPoints()) {
-        System.out.println(p.getX() + ", " + p.getY());
+      for (Edge edge : t.getEdges()) {
+        System.out.println(edge.getMidNodeTrue().getxCoord() + ", " + edge.getMidNodeTrue().getyCoord());
       }
       System.out.println("\n####\n");
     }

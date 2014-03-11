@@ -8,6 +8,7 @@ package mapofdenmark.GUIPackage;
 
 import database.Database;
 import database.DatabaseInterface;
+import database.Edge;
 import database.Node;
 import database.Street;
 import java.awt.Color;
@@ -40,23 +41,17 @@ public class MapComponent extends JComponent {
 	
 	private void initialize(Street[] streets)
 	{
-		/*
+		
 		DatabaseInterface db = Database.db();
 
-		List<Node> points = db.getNodes();
+		List<Edge> edges = db.getData();
 		//List<Edge> edges = db.getEdges();
-		List<Point2D> nodes = new ArrayList<>();
-		for (Node node : points)
-		{
-			//System.out.println(node.getxCoord() + " " + node.getyCoord());
-			nodes.add(new Point2D.Double((node.getxCoord() - 6020000), (node.getyCoord() - 438000)));
-		}
+
 				
 		
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
-		quadTreeToDraw = new QuadTree(nodes, 0, 0, 460500);
+		quadTreeToDraw = new QuadTree(edges, 0, 0, 460500);
 		visibleArea.setCoord(0, 0, 460500, 460500, quadTreeToDraw);
-				*/
 	}
 	
 	@Override
@@ -67,9 +62,16 @@ public class MapComponent extends JComponent {
 		g.setColor(Color.red);
 		g.drawRect(0, 0, getSize().width-1, getSize().height-1);
 		g.setColor(Color.blue);
-		for(Point2D point : quadTreeToDraw.getPoints())
+		quadTreeToDraw.getChildQuadTrees(quadTreeToDraw);
+		for(Edge edge : quadTreeToDraw.getEdges())
 		{
-			g.fillRect((int)(point.getY()/quadTreeToDraw.getQuadTreeLength()*getWidth()), getSize().height-(int)(point.getX()/quadTreeToDraw.getQuadTreeLength()*getHeight()), 1, 1);
+			double length = quadTreeToDraw.getQuadTreeLength();
+			double x1 = edge.getFromNodeTrue().getxCoord();
+			double y1 = edge.getFromNodeTrue().getyCoord();
+			double x2 = edge.getToNodeTrue().getxCoord();
+			double y2 = edge.getToNodeTrue().getyCoord();
+			g.drawLine((int)getWidth(), (int)getHeight(), (int)getWidth(), (int)getHeight());
+			//g.fillRect((int)(point.getY()/*), getSize().height-(int)(point.getX()/quadTreeToDraw.getQuadTreeLength()*), 1, 1);
 		}
 		
 		// when drawing: take the coord, substract its value with the startCoord from visible area
