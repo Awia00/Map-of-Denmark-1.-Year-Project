@@ -14,10 +14,10 @@ import java.util.*;
 import java.awt.geom.Point2D;
 
 public class QuadTree implements Iterable<QuadTree> {
-  QuadTree NW, NE, SW, SE;
-  List<Point2D> points;
-  double x, y, length;
-  boolean isDrawable = false;
+  private QuadTree NW, NE, SW, SE;
+  private List<Point2D> points;
+  private final double x, y, length;
+  private boolean isDrawable = false;
   static Set<QuadTree> quadTrees = new LinkedHashSet<>();
   static Random random = new Random(); // For testing purposes...
 
@@ -28,33 +28,32 @@ public class QuadTree implements Iterable<QuadTree> {
     this.points = pointData;
 	double h = length/2;
     
-    if (pointData.size() > 5) {
+    if (points.size() > 4) {
       List<Point2D> 
-          NWPoints = new ArrayList<Point2D>(), 
-          NEPoints = new ArrayList<Point2D>(),
-          SWPoints = new ArrayList<Point2D>(),
-          SEPoints = new ArrayList<Point2D>();
-      for (Point2D point : pointData) {
+          NWPoints = new ArrayList<>(), 
+          NEPoints = new ArrayList<>(),
+          SWPoints = new ArrayList<>(),
+          SEPoints = new ArrayList<>();
+      for (Point2D point : points) {
 		  double px = point.getX();
 		  double py = point.getY();
-		  double l = length;
-        if (px >= x && px < x+h && py > y+h && px <= y+l) {
+        if (px >= x && px < x+h && py > y+h && py <= y+length) {
           NWPoints.add(point);
         }
-        else if (px > x+h && px <= x+l && py > y+h && px <= y+l) {
+        if (px > x+h && px <= x+length && py > y+h && py <= y+length) {
           NEPoints.add(point);
         }
-        else if (px >= x && px < x+h && py >= y && py < y+h) {
+        if (px >= x && px < x+h && py >= y && py < y+h) {
           SWPoints.add(point);
         }
-        else if (px > x+h && px <= x+l && py >= y && py < y+h) {
+        if (px >= x+h && px <= x+length && py >= y && py <= y+h) {
           SEPoints.add(point);
         } 
       } 
-	  this.NW = new QuadTree(NWPoints, x, y + length / 2, length / 2);
-        this.NE = new QuadTree(NEPoints, x + length / 2, y + length / 2, length /2);
-        this.SW = new QuadTree(SWPoints, x, y, length / 2);
-        this.SE = new QuadTree(SEPoints, x + length / 2, y, length / 2);
+	  this.NW = new QuadTree(NWPoints, x, y+h,h);
+        this.NE = new QuadTree(NEPoints, x+h,y+h,h);
+        this.SW = new QuadTree(SWPoints, x, y, h);
+        this.SE = new QuadTree(SEPoints, x+h,y, h);
         this.points = Collections.emptyList();
     } else {
        // this.points = pointData;
@@ -147,10 +146,9 @@ public class QuadTree implements Iterable<QuadTree> {
   // Class testing
   public static void main(String[] args) {
     List<Point2D> points = new ArrayList<>();
-    for (int i = 0; i < 30; i++) {
-      points.add(new Point2D.Double(QuadTree.randomInRange(10.0, 200.0), QuadTree.randomInRange(10.0, 200.0)));
+    for (int i = 0; i < 35; i++) {
+      points.add(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199)));
     }
-    
     QuadTree q = new QuadTree(points, 0, 0, 200);
 
     //q.printTrees(q);
