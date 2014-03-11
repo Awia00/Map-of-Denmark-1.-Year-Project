@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Anders
  */
-public class Street {
+public class Street implements Comparable<Street>{
 
 	private String name = "";
 	private final int ID;
@@ -64,4 +64,11 @@ public class Street {
             }
             return "VEJKODE: " + ID + " VEJNAVN: " + name + edgeString;
         }
+
+    @Override
+    public int compareTo(Street o) {
+        return this.ID - o.ID;
+    }
+        
+        
 }

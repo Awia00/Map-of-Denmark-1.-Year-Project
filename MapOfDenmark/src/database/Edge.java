@@ -5,6 +5,8 @@
  */
 package database;
 
+import java.awt.geom.Point2D;
+
 /**
  *
  * @author Anders
@@ -64,9 +66,23 @@ public class Edge implements Comparable<Edge>{
     public void setToNodeTrue(Node toNodeTrue) {
         this.toNodeTrue = toNodeTrue;
     }
+    private Node calcMidNode(){
+        Node midNode;
+        
+        double midX;
+        double midY;
+        
+        midX = (fromNodeTrue.getxCoord() + toNodeTrue.getxCoord()) / 2;
+        midY = (fromNodeTrue.getyCoord() + toNodeTrue.getyCoord()) / 2;
+        midNode = new Node(new Point2D.Double(midX,midY));
+        
+        
+        return midNode;
+                
+    }
 
-    public void setMidNodeTrue(Node midNodeTrue) {
-        this.midNodeTrue = midNodeTrue;
+    protected void setMidNodeTrue() {
+        this.midNodeTrue = calcMidNode();
     }
 
     public int getRoadcode() {

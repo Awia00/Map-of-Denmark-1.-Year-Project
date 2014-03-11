@@ -19,6 +19,6 @@ import java.util.ArrayList;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-    //public 
+    public ArrayList<Edge> getData(); 
     
 }

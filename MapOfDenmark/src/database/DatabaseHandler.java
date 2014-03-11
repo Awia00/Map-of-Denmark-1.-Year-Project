@@ -42,6 +42,7 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<Node> nodes = new ArrayList<>();
     NodeComparer nc = new NodeComparer();
     EdgeComparer ec = new EdgeComparer();
+    StreetComparer sc = new StreetComparer();
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -313,59 +314,82 @@ public class DatabaseHandler implements DatabaseInterface {
         } finally {
             closeConnection(cons, pstatements, resultsets);
         }
+        Collections.sort(streets);
         return streets;
     }
 
     private ArrayList<Edge> getEdge(int id, String streetName) {
         ArrayList<Edge> edgeResults = new ArrayList<>();
-		Edge e = new Edge(1, 1, 1, "1", id);
-		int index = Collections.binarySearch(edges, e, ec);
-		int indexVar = index;
-		int topIndex = 0;
-		int botIndex = 0;
-		// go right
-		do
-		{
-			
-			//edgeResults.add(edges.get(indexVar-indexDif));
-			//edges.remove(indexVar-indexDif);
-			indexVar -= 10;
-			if(indexVar < 0){ indexVar = 0;}
-			if(edges.get(indexVar).getRoadcode() != id)
-			{
-				while(edges.get(++indexVar).getRoadcode() != id)
-				{
-				}
-				botIndex = indexVar;
-				break;
-			}
-		}
-        while (true);
-		
+        Edge e = new Edge(1, 1, 1, "1", id);
+        int index = Collections.binarySearch(edges, e, ec);
+        int indexVar = index;
+        int topIndex = 0;
+        int botIndex = 0;
+        // go right
+        do {
+
+            //edgeResults.add(edges.get(indexVar-indexDif));
+            //edges.remove(indexVar-indexDif);
+            indexVar -= 10;
+            if (indexVar < 0) {
+                indexVar = 0;
+            }
+            if (edges.get(indexVar).getRoadcode() != id) {
+                while (edges.get(++indexVar).getRoadcode() != id) {
+                }
+                botIndex = indexVar;
+                break;
+            }
+        } while (true);
+
         indexVar = index;
-		do
-		{
-			indexVar += 10;
-			if(indexVar >= edges.size()){indexVar = edges.size()-1;}
-			if(edges.get(indexVar).getRoadcode() != id)
-			{
-				while(edges.get(--indexVar).getRoadcode() != id)
-				{
-				}
-				topIndex = indexVar;
-				break;
-			}
-		}
-        while (true);
-		
-		for (int i = botIndex ; i <= topIndex ; i++)
-		{
-			if (edges.get(i).getRoadName().equals(streetName))
-			{
-				edgeResults.add(edges.get(i));
-			}
-		}
+        do {
+            indexVar += 10;
+            if (indexVar >= edges.size()) {
+                indexVar = edges.size() - 1;
+            }
+            if (edges.get(indexVar).getRoadcode() != id) {
+                while (edges.get(--indexVar).getRoadcode() != id) {
+                }
+                topIndex = indexVar;
+                break;
+            }
+        } while (true);
+
+        for (int i = botIndex; i <= topIndex; i++) {
+            if (edges.get(i).getRoadName().equals(streetName)) {
+                edgeResults.add(edges.get(i));
+            }
+        }
         return edgeResults;
+    }
+    
+    private ArrayList<Street> getStreet(int id){
+    ArrayList<Street> streetResults = new ArrayList<>();
+    
+    Street s = new Street(id, "N/A");
+    int index = Collections.binarySearch(streets, s, sc);
+    int indexTemp = index;
+    int indexMax;
+    int indexMin;
+    while(streets.get(indexTemp).getID() == id && indexTemp != streets.size()-1)
+    {
+        indexTemp++;
+    }
+    indexMax = indexTemp;
+    
+    indexTemp = index;
+    while(streets.get(indexTemp).getID() == id && indexTemp > 0)
+    {
+        indexTemp--;
+    }
+    indexMin = indexTemp;
+    
+    for(int i = indexMin; i <= indexMax; i++){
+        streetResults.add(streets.get(i));
+    }
+    
+    return streetResults;
     }
 
     private void initDataStructure() {
@@ -376,19 +400,44 @@ public class DatabaseHandler implements DatabaseInterface {
         for (Edge edge : edges) {
             edge.setFromNodeTrue(getNode(edge.getFromNode()));
             edge.setToNodeTrue(getNode(edge.getToNode()));
+            edge.setMidNodeTrue();
             //System.out.println(i++);
         }
         System.out.println("Node-to-Edge joining complete.");
-        for (Street street : streets) {
+        /*for (Street street : streets) {
             ArrayList<Edge> el = getEdge(street.getID(), street.getStreetName());
             for (Edge e : el) {
-                    street.addEdge(e);
+                street.addEdge(e);
+            }
+        }*/
+        /*
+        for(Edge edge : edges){
+            
+            ArrayList<Street> s = getStreet(edge.getRoadcode());
+            for(Street street : s){
+            if(edge.getRoadName().equals(street.getStreetName()))
+            {
+            //System.out.println("Added edge!");
+            street.addEdge(edge);
+            }
             }
         }
-		
+        
         for (Street street : streets) {
-            System.out.println(street.toString());
-        }
-        System.out.println("Edge-to-Street joining complete.");
+            ArrayList<Edge> e = street.getEdges();
+            
+            if ( e.size() != 0){
+            i += e.size();
+            }
+        }*/
+        //System.out.println(i);
+        
+        //System.out.println("Edge-to-Street joining complete.");
+        
+        
+    }
+    @Override
+        public ArrayList<Edge> getData(){
+        return edges;
     }
 }
