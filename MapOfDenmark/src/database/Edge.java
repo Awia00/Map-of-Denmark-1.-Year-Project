@@ -81,7 +81,7 @@ public class Edge implements Comparable<Edge>{
                 
     }
 
-    protected void setMidNodeTrue() {
+    public void setMidNodeTrue() {
         this.midNodeTrue = calcMidNode();
     }
 
