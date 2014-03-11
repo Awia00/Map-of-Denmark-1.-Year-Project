@@ -69,7 +69,7 @@ public class MapComponent extends JComponent {
 		g.setColor(Color.blue);
 		for(Point2D point : quadTreeToDraw.getPoints())
 		{
-			g.fillRect((int)(point.getY()/quadTreeToDraw.length*getWidth()), getSize().height-(int)(point.getX()/quadTreeToDraw.length*getHeight()), 1, 1);
+			g.fillRect((int)(point.getY()/quadTreeToDraw.getQuadTreeLength()*getWidth()), getSize().height-(int)(point.getX()/quadTreeToDraw.getQuadTreeLength()*getHeight()), 1, 1);
 		}
 		
 		// when drawing: take the coord, substract its value with the startCoord from visible area
