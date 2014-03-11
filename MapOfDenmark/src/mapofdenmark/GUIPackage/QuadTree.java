@@ -26,6 +26,7 @@ public class QuadTree implements Iterable<QuadTree> {
     this.y = y;
     this.length = length;
     this.points = pointData;
+	double h = length/2;
     
     if (pointData.size() > 5) {
       List<Point2D> 
@@ -34,24 +35,27 @@ public class QuadTree implements Iterable<QuadTree> {
           SWPoints = new ArrayList<Point2D>(),
           SEPoints = new ArrayList<Point2D>();
       for (Point2D point : pointData) {
-        if (point.getX() <= length/2 && point.getX() > x && point.getY() <= length && point.getY() > length/2) {
+		  double px = point.getX();
+		  double py = point.getY();
+		  double l = length;
+        if (px >= x && px < x+h && py > y+h && px <= y+l) {
           NWPoints.add(point);
         }
-        else if (point.getX() > length/2 && point.getX() < length && point.getY() <= length && point.getY() > length/2) {
+        else if (px > x+h && px <= x+l && py > y+h && px <= y+l) {
           NEPoints.add(point);
         }
-        else if (point.getX() <= length/2 && point.getX() > x && point.getY() > y && point.getY() <= length/2) {
+        else if (px >= x && px < x+h && py >= y && py < y+h) {
           SWPoints.add(point);
         }
-        else if (point.getX() > length/2 && point.getX() < length && point.getY() > y && point.getY() <= length/2) {
+        else if (px > x+h && px <= x+l && py >= y && py < y+h) {
           SEPoints.add(point);
         } 
-        this.NW = new QuadTree(NWPoints, x, y + length / 2, length / 2);
+      } 
+	  this.NW = new QuadTree(NWPoints, x, y + length / 2, length / 2);
         this.NE = new QuadTree(NEPoints, x + length / 2, y + length / 2, length /2);
         this.SW = new QuadTree(SWPoints, x, y, length / 2);
         this.SE = new QuadTree(SEPoints, x + length / 2, y, length / 2);
-        // this.points = Collections.emptyList();
-      } 
+        this.points = Collections.emptyList();
     } else {
        // this.points = pointData;
     }  
