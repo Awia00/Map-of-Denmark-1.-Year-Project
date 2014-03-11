@@ -61,7 +61,7 @@ public class VisibleArea {
 		}
 		else
 		{
-			if((quadTree.getQuadTreeX()+quadTree.length >= xCoord &&  quadTree.getQuadTreeY()+quadTree.length>=yCoord))
+			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength() >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()>=yCoord))
 			{
 				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
 				{

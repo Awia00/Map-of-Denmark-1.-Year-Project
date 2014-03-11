@@ -142,6 +142,27 @@ public class QuadTree implements Iterable<QuadTree> {
     return shifted; // == (rand.nextDouble() * (max-min)) + min;
   }
 
+	public QuadTree getNW()
+	{
+		return NW;
+	}
+
+	public QuadTree getNE()
+	{
+		return NE;
+	}
+
+	public QuadTree getSW()
+	{
+		return SW;
+	}
+
+	public QuadTree getSE()
+	{
+		return SE;
+	}
+
+  
 
   // Class testing
   public static void main(String[] args) {
