@@ -57,9 +57,9 @@ public class VisibleArea {
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		for(QuadTree quadTree : bottomTrees)
 		{
-			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength()-6000000 >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()-440000>=yCoord))
+			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength() >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()>=yCoord))
 			{
-				if((quadTree.getQuadTreeX()-6000000<= xCoord+xLength && quadTree.getQuadTreeY()-440000<=yCoord+yLength))
+				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
 				{
 					quadTree.setDrawable(true);
 				}

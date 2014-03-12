@@ -47,8 +47,9 @@ public class MapComponent extends JComponent {
 		//List<Edge> edges = db.getEdges();
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
-		quadTreeToDraw = new QuadTree(edges, 0, 0, 600000);
-		visibleArea.setCoord(0, 0, 600000, 600000, quadTreeToDraw);
+		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
+		visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
+		//visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
 	}
 
 	@Override
@@ -62,18 +63,20 @@ public class MapComponent extends JComponent {
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		for (QuadTree quadTree : bottomTrees)
 		{
-			//if (quadTree.isDrawable())
+			if (quadTree.isDrawable())
 			{
 				for (Edge edge : quadTree.getEdges())
 				{
 					double xlength = visibleArea.getxLength();
 					double ylength = visibleArea.getyLength();
+					double xVArea = visibleArea.getxCoord();
+					double yVArea = visibleArea.getyCoord();
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
-					//g.drawLine((int) (((x1 - 6000000) / xlength) * getWidth()), (int) (((y1 - 440000) / ylength) * getHeight()), (int) (((x2 - 6000000) / xlength) * getWidth()), (int) (((y2 - 440000) / ylength) * getHeight()));
-					g.drawLine((int) (((y1 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x1 - 6000000) / xlength) * getWidth()), (int) (((y2 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x2 - 6000000) / xlength) * getWidth()));					
+					g.drawLine((int) (((x1-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
+					//g.drawLine((int) (((y1 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x1 - 6000000) / xlength) * getWidth()), (int) (((y2 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x2 - 6000000) / xlength) * getWidth()));					
 					//g.fillRect((int)(point.getY()/*), getSize().height-(int)(point.getX()/quadTreeToDraw.getQuadTreeLength()*), 1, 1);
 				}
 			}

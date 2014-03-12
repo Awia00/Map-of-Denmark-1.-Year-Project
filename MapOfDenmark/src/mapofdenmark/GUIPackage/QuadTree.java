@@ -40,8 +40,8 @@ public class QuadTree implements Iterable<QuadTree> {
 					SEEdges = new ArrayList<>();
 			for (Edge edge : edges)
 			{
-				double px = edge.getMidNodeTrue().getxCoord()-6000000;
-				double py = edge.getMidNodeTrue().getyCoord()-440000;
+				double px = edge.getMidNodeTrue().getxCoord();
+				double py = edge.getMidNodeTrue().getyCoord();
 				if (px >= x && px < x + h && py > y + h && py <= y + length)
 				{
 					NWEdges.add(edge);
