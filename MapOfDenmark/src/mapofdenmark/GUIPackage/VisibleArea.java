@@ -6,6 +6,8 @@
 
 package mapofdenmark.GUIPackage;
 
+import java.util.ArrayList;
+
 /**
  * Class description:
  *
@@ -40,7 +42,7 @@ public class VisibleArea {
 		this.xLength = xLength;
 		this.yLength = yLength;
 		//update
-		setQuadTreesVisible(quadTree);
+		setQuadTreesVisible();
 	}
 	
 	public void setVisibleEdgeTypes(int acceptedType)
@@ -49,21 +51,15 @@ public class VisibleArea {
 	}
 	
 	
-	private void setQuadTreesVisible(QuadTree quadTree)
+	private void setQuadTreesVisible()
 	{
 		// iterate over the quadtree untill you get to the lowest level
-		if (quadTree.getEdges().isEmpty() == true) // change this to getEdges instead.
+		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
+		for(QuadTree quadTree : bottomTrees)
 		{
-			setQuadTreesVisible(quadTree.getNW());
-			setQuadTreesVisible(quadTree.getNE());
-			setQuadTreesVisible(quadTree.getSW());
-			setQuadTreesVisible(quadTree.getSE());
-		}
-		else
-		{
-			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength() >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()>=yCoord))
+			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength()-6000000 >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()-440000>=yCoord))
 			{
-				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
+				if((quadTree.getQuadTreeX()-6000000<= xCoord+xLength && quadTree.getQuadTreeY()-440000<=yCoord+yLength))
 				{
 					quadTree.setDrawable(true);
 				}
@@ -77,6 +73,7 @@ public class VisibleArea {
 				quadTree.setDrawable(false);
 			}		
 		}
+		
 		
 		//IMPLEMENTATION
 		// take our quadTree

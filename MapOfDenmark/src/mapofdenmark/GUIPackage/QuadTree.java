@@ -22,6 +22,7 @@ public class QuadTree implements Iterable<QuadTree> {
 	private boolean isDrawable = true;
 	static Set<QuadTree> quadTrees = new LinkedHashSet<>();
 	static Random random = new Random(); // For testing purposes...
+	private static ArrayList<QuadTree> bottomTrees = new ArrayList<>();
 
 	public QuadTree(List<Edge> edges, double x, double y, double length)
 	{
@@ -39,8 +40,8 @@ public class QuadTree implements Iterable<QuadTree> {
 					SEEdges = new ArrayList<>();
 			for (Edge edge : edges)
 			{
-				double px = edge.getMidNodeTrue().getxCoord();
-				double py = edge.getMidNodeTrue().getyCoord();
+				double px = edge.getMidNodeTrue().getxCoord()-6000000;
+				double py = edge.getMidNodeTrue().getyCoord()-440000;
 				if (px >= x && px < x + h && py > y + h && py <= y + length)
 				{
 					NWEdges.add(edge);
@@ -65,6 +66,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			this.edges = Collections.emptyList();
 		} else
 		{
+			bottomTrees.add(this);
 			// this.points = pointData;
 		}
 	}
@@ -82,6 +84,11 @@ public class QuadTree implements Iterable<QuadTree> {
 	public double getQuadTreeX()
 	{
 		return this.x;
+	}
+
+	public static ArrayList<QuadTree> getBottomTrees()
+	{
+		return bottomTrees;
 	}
 
 	public double getQuadTreeY()
