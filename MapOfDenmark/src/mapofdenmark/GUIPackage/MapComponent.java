@@ -48,8 +48,8 @@ public class MapComponent extends JComponent {
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
-		//visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
+		//visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
+		visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
 	}
 
 	@Override
@@ -57,9 +57,8 @@ public class MapComponent extends JComponent {
 	{
 		g.setColor(Color.white);
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
-		g.setColor(Color.red);
+		g.setColor(Color.black);
 		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
-		g.setColor(Color.blue);
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		for (QuadTree quadTree : bottomTrees)
 		{
@@ -67,6 +66,11 @@ public class MapComponent extends JComponent {
 			{
 				for (Edge edge : quadTree.getEdges())
 				{
+					if(edge.getRoadType() == 1 || edge.getRoadType() == 2 || edge.getRoadType() == 3 || edge.getRoadType() == 21|| edge.getRoadType() == 22|| edge.getRoadType() == 23 || edge.getRoadType() == 31 || edge.getRoadType() == 32 || edge.getRoadType() == 41 || edge.getRoadType() == 42){g.setColor(Color.black);}
+					else if(edge.getRoadType() == 4 || edge.getRoadType() == 5 || edge.getRoadType() == 24 || edge.getRoadType() == 25){g.setColor(Color.red);}
+					else if(edge.getRoadType() == 8 || edge.getRoadType() == 10 || edge.getRoadType() == 11 || edge.getRoadType() == 28){g.setColor(Color.green);}
+					else{g.setColor(Color.gray);}
+					
 					double xlength = visibleArea.getxLength();
 					double ylength = visibleArea.getyLength();
 					double xVArea = visibleArea.getxCoord();
@@ -76,8 +80,8 @@ public class MapComponent extends JComponent {
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
-					//g.drawLine((int) (((y1 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x1 - 6000000) / xlength) * getWidth()), (int) (((y2 - 440000) / ylength) * getHeight()), (int) (getSize().width-((x2 - 6000000) / xlength) * getWidth()));					
-					//g.fillRect((int)(point.getY()/*), getSize().height-(int)(point.getX()/quadTreeToDraw.getQuadTreeLength()*), 1, 1);
+					g.drawLine((int) (((x1-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (1+((x2-xVArea) / xlength) * getWidth()), (int) (1+getSize().height - ((y2-yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (1+((x1-xVArea) / xlength) * getWidth()), (int) (1+getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
 				}
 			}
 		}
