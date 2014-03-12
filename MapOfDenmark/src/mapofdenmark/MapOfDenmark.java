@@ -20,8 +20,8 @@ public class MapOfDenmark {
      */
     public static void main(String[] args)
     {
-       DatabaseInterface db = Database.db();
-       
+        DatabaseInterface db = Database.db();
+
     }
     
 }

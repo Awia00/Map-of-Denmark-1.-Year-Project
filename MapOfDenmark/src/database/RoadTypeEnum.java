@@ -8,40 +8,35 @@ package database;
 
 /**
  *
- * @author Christian Grøn
+ * @author Aleksandar Jonovic
  */
-public enum RoadTypeEnum {
-    HIGHWAY(1), 
-    MAINROAD(2), 
-    PATH(3), 
-    OTHER(4);
 
-    RoadTypeEnum(int roadTypeNumber)
-    {
-        this.roadTypeNumber = roadTypeNumber;
+public enum RoadTypeEnum {
+    
+    
+    ROAD(new int[] {3,4,5,6,5,10,23,24,25,26,33,34,35,43,44,45,46,48}),
+    HIGHWAY(new int[] {1,2,21,22,31,32,41,42}),
+    PATHWAY(new int[] {8,11,28,48}),
+    FERRYWAY(new int[] {80}),
+    PLACENAME(new int[] {99});
+    
+    private final int[] types;
+    
+    RoadTypeEnum(int[] types){
+        this.types = types;
     }
     
-    private final int roadTypeNumber;
-    
-    public int getRoadTypeNumber()
-    {
-        return roadTypeNumber;
+    public int[] getTypes(){
+        return types;
     }
-    /**
-    * This method returns the RoadTypeEnum corresponding the roadTypeNumber.
-    * @param roadTypeNumber. The number corresponding to the roadtype.
-    * @return RoadTypeEnum. The roadtype.
-    * @throws RuntimeException.
-    */
-    public static RoadTypeEnum createEnumWithInt(int roadTypeNumber)
-    {
-        for(RoadTypeEnum roadTypeEnum:RoadTypeEnum.values())
-        {
-            if(roadTypeEnum.getRoadTypeNumber()==roadTypeNumber)
-            {
-                return roadTypeEnum;
+    
+    public Boolean checkType(int type){
+        
+        for(int i=0; i<types.length;i++){
+            if (type == types[i]){
+                return true;
             }
         }
-        throw new RuntimeException("Invalid Value");
+        return false;
     }
 }
