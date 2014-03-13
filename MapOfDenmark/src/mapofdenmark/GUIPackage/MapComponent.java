@@ -31,7 +31,7 @@ public class MapComponent extends JComponent{
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
 	
-	private final double zoomInConstant = 0.9;
+	private final double zoomInConstant = 0.85;
 	private final double zoomOutConstant = 1.1;
 
 	public MapComponent(VisibleArea visibleArea, Street[] streets)
@@ -64,7 +64,7 @@ public class MapComponent extends JComponent{
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 	{
 		double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double centerYCoord = visibleArea.getyCoord() + mouseYCoord/getHeight()*visibleArea.getyLength();
+		double centerYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
 		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
 		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
 		double v2x = centerXCoord - xlengthZoom/2;
@@ -75,13 +75,17 @@ public class MapComponent extends JComponent{
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-            	double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double centerYCoord = visibleArea.getyCoord() + mouseYCoord/getHeight()*visibleArea.getyLength();
-
+        double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
+		double centerYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double oldCenterx =  visibleArea.getxCoord()+visibleArea.getxLength()/2;
+		double oldCentery =  visibleArea.getyCoord()+visibleArea.getyLength()/2;
+		double avCenterx = (centerXCoord + oldCenterx)/2;
+		double avCentery = (centerYCoord + oldCentery)/2;
+		
 		double xlengthZoom = visibleArea.getxLength() * zoomInConstant;
 		double ylengthZoom = visibleArea.getyLength() * zoomInConstant;
-		double v2x = centerXCoord - xlengthZoom/2;
-		double v2y = centerYCoord - ylengthZoom/2;
+		double v2x = avCenterx - xlengthZoom/2;
+		double v2y = avCentery - ylengthZoom/2;
 		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
 	}
 	
