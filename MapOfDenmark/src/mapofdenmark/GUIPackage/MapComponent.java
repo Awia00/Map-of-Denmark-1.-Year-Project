@@ -53,8 +53,8 @@ public class MapComponent extends JComponent{
 
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
-		double xMapCoord = xCoord*visibleArea.getxLength()/125;
-		double yMapCoord = yCoord*visibleArea.getyLength()/125;
+		double xMapCoord = xCoord/getWidth()*visibleArea.getxLength()*1.2;
+		double yMapCoord = yCoord/getHeight()*visibleArea.getyLength()*1.2;
 		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
 	
