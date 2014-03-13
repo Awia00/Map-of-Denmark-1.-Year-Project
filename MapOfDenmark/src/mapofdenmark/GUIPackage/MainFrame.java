@@ -27,7 +27,7 @@ import net.miginfocom.swing.MigLayout;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements MouseListener{
 
 	private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
@@ -43,6 +43,7 @@ public class MainFrame extends JFrame {
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
 		initialize();
+                this.drawMapComponent.addMouseListener(this);
 	}
 
 	private void initialize()
@@ -54,7 +55,7 @@ public class MainFrame extends JFrame {
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
-
+                
 		// 
 		drawMapComponent = new MapComponent(visibleArea,streets);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
@@ -81,41 +82,41 @@ public class MainFrame extends JFrame {
 
 	}
 	
-	private void addListeners()
-	{
-		drawMapComponent.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				System.out.println("CLICKED");
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-				System.out.println("PRESSED");
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				System.out.println("RELEASED");
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				System.out.println("ENTERED");
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				System.out.println("EXITED");
-			}
-		});
-	}
+//	private void addListeners()
+//	{
+//		drawMapComponent.addMouseListener(new MouseListener() {
+//
+//			@Override
+//			public void mouseClicked(MouseEvent e)
+//			{
+//				System.out.println("CLICKED");
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent e)
+//			{
+//				System.out.println("PRESSED");
+//			}
+//
+//			@Override
+//			public void mouseReleased(MouseEvent e)
+//			{
+//				System.out.println("RELEASED");
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent e)
+//			{
+//				System.out.println("ENTERED");
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e)
+//			{
+//				System.out.println("EXITED");
+//			}
+//		});
+//	}
 
 	@Override
 	public Dimension getPreferredSize()
@@ -127,5 +128,30 @@ public class MainFrame extends JFrame {
 	{
 		new MainFrame();
 	}
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Mouse Clicked at " + e.getX() + ", " + e.getY());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+       
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+       
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("Mouse Entered");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+       
+    }
 
 }

@@ -11,6 +11,8 @@ import database.Edge;
 import database.Street;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -91,4 +93,5 @@ public class MapComponent extends JComponent{
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
 	}
+
 }
