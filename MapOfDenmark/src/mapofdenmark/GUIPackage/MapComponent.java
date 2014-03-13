@@ -8,11 +8,9 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
-import database.Node;
 import database.Street;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -26,9 +24,8 @@ import javax.swing.JComponent;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MapComponent extends JComponent {
+public class MapComponent extends JComponent{
 
-	private MapComponent drawMapComponent;
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
 
@@ -48,10 +45,15 @@ public class MapComponent extends JComponent {
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		//visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
-		visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
+		visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
+		//visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
 	}
 
+	public double convertToCoord(double coord)
+	{
+		return coord;
+	}
+	
 	@Override
 	public void paint(Graphics g)
 	{

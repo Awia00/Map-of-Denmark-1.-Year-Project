@@ -9,6 +9,8 @@ import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -49,10 +51,10 @@ public class MainFrame extends JFrame {
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
+		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 
-		
 		// 
 		drawMapComponent = new MapComponent(visibleArea,streets);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
@@ -77,6 +79,42 @@ public class MainFrame extends JFrame {
 		pack();
 		setVisible(true);
 
+	}
+	
+	private void addListeners()
+	{
+		drawMapComponent.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				System.out.println("CLICKED");
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				System.out.println("PRESSED");
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				System.out.println("RELEASED");
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				System.out.println("ENTERED");
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				System.out.println("EXITED");
+			}
+		});
 	}
 
 	@Override
