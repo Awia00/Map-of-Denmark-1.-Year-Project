@@ -35,7 +35,7 @@ public class VisibleArea {
 		yLength = 0;
 	}
 	
-	public void setCoord(double xCoord, double yCoord, double xLength, double yLength, QuadTree quadTree)
+	public void setCoord(double xCoord, double yCoord, double xLength, double yLength)
 	{
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
