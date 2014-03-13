@@ -30,6 +30,8 @@ public class MapComponent extends JComponent{
 
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
+	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
+	private boolean drawRectangle = false;
 	
 	private final double zoomInConstant = 0.85;
 	private final double zoomOutConstant = 1.1;
@@ -61,10 +63,47 @@ public class MapComponent extends JComponent{
 		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
 	
+	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
+	{
+		double mapXStartCoord = convertMouseXToMap(xStartCoord);
+		double mapYStartCoord = convertMouseYToMap(yStartCoord);
+		double mapXEndCoord = convertMouseXToMap(xEndCoord);
+		double mapYEndCoord = convertMouseYToMap(yEndCoord);
+		
+		double zoomconstant;
+		if(mapXEndCoord-mapXStartCoord > mapYEndCoord-mapYStartCoord)
+		{
+			zoomconstant = (mapXEndCoord-mapXStartCoord)/visibleArea.getxLength();
+		}
+		else
+		{
+			zoomconstant = (mapYEndCoord-mapYStartCoord)/visibleArea.getyLength();
+		}
+		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength()*zoomconstant, visibleArea.getyLength()*zoomconstant);
+	}
+	
+	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
+	{
+		this.drawRectangle = drawRectangle;
+		this.xStartCoord = xStartCoord;
+		this.xEndCoord = xEndCoord;
+		this.yStartCoord = getHeight() - yStartCoord;
+		this.yEndCoord = getHeight() - yEndCoord;
+	}
+	
+	private double convertMouseXToMap(double xCoord)
+	{
+		return visibleArea.getxCoord() + xCoord/getWidth()*visibleArea.getxLength();
+	}
+	private double convertMouseYToMap(double xCoord)
+	{
+		return visibleArea.getyCoord() + (getHeight() - xCoord)/getHeight()*visibleArea.getyLength();
+	}
+	
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 {
-		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
+		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
 		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
@@ -82,8 +121,8 @@ public class MapComponent extends JComponent{
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
+		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
 		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
@@ -131,6 +170,14 @@ public class MapComponent extends JComponent{
 					g.drawLine((int) (1+((x1-xVArea) / xlength) * getWidth()), (int) (1+getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
 				}
 			}
+		}
+		
+		if(drawRectangle)
+		{
+			g.setColor(Color.black);
+			g.drawRect(xStartCoord, yStartCoord, xEndCoord, yEndCoord);
+			g.drawRect(xStartCoord+1, yStartCoord+1, xEndCoord-1, yEndCoord-1);
+			g.drawRect(xStartCoord+2, yStartCoord+2, xEndCoord-2, yEndCoord-2);
 		}
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
