@@ -32,7 +32,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		this.edges = edges;
 		double h = length / 2;
 
-		if (edges.size() > 5)
+		if (edges.size() > 500)
 		{
 			List<Edge> NWEdges = new ArrayList<>(),
 					NEEdges = new ArrayList<>(),
