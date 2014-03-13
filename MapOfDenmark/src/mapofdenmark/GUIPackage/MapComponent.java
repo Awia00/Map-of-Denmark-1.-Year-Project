@@ -75,13 +75,9 @@ public class MapComponent extends JComponent{
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-<<<<<<< HEAD
-		double centerXCoord = visibleArea.getxCoord() + mouseXCoord*visibleArea.getxLength();
-		double centerYCoord = visibleArea.getyCoord() + mouseYCoord*visibleArea.getyLength();
-=======
-		double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
+            	double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
 		double centerYCoord = visibleArea.getyCoord() + mouseYCoord/getHeight()*visibleArea.getyLength();
->>>>>>> 8acffa3fb403c841112c387a5b936adda30c11bf
+
 		double xlengthZoom = visibleArea.getxLength() * zoomInConstant;
 		double ylengthZoom = visibleArea.getyLength() * zoomInConstant;
 		double v2x = centerXCoord - xlengthZoom/2;
