@@ -33,7 +33,7 @@ import net.miginfocom.swing.MigLayout;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
+public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
 	private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
@@ -44,22 +44,22 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private Dimension screenSize;
 	private VisibleArea visibleArea;
 	private Street[] streets;
-        
-        private Point oldPosition;
-        private Point newPosition;
-        
-        private boolean mapInFocus;
-        private int pressedKeyCode;
+
+	private Point oldPosition;
+	private Point newPosition;
+
+	private boolean mapInFocus;
+	private int pressedKeyCode;
 
 	public MainFrame()
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
 		initialize();
-                this.drawMapComponent.addMouseListener(this);
-                this.drawMapComponent.addMouseMotionListener(this);
-                this.drawMapComponent.addMouseWheelListener(this);
-                this.drawMapComponent.addKeyListener(this);
-                
+		this.drawMapComponent.addMouseListener(this);
+		this.drawMapComponent.addMouseMotionListener(this);
+		this.drawMapComponent.addMouseWheelListener(this);
+		this.drawMapComponent.addKeyListener(this);
+
 	}
 
 	private void initialize()
@@ -71,9 +71,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
-                
+
 		// 
-		drawMapComponent = new MapComponent(visibleArea,streets);
+		drawMapComponent = new MapComponent(visibleArea, streets);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
@@ -88,7 +88,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
-                
 
 		// Action listeners
 		// rdy up
@@ -98,7 +97,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setVisible(true);
 
 	}
-	
+
 	private void addListeners()
 	{
 
@@ -115,96 +114,114 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		new MainFrame();
 	}
 
-    private Point getDeltaPoint(Point p1, Point p2) {
-     int deltaX = (int) (p1.getX() - p2.getX());
-     int deltaY = (int) (p2.getY() - p1.getY());
-     
-     return new Point(deltaX, deltaY);
-    
-    }
-    
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
+	private Point getDeltaPoint(Point p1, Point p2)
+	{
+		int deltaX = (int) (p1.getX() - p2.getX());
+		int deltaY = (int) (p2.getY() - p1.getY());
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-       System.out.println("Mouse pressed at " + e.getX() + ", " + e.getY());
-       oldPosition = e.getPoint();
-       
-    }
+		return new Point(deltaX, deltaY);
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-     System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
-     
-     drawMapComponent.drawRectangle(0, 0, 0, (int) newPosition.getY(), false);
-     drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
-     oldPosition = null;
-     newPosition = null;
-     repaint();
-     
-    
-    }
+	}
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        System.out.println("Mouse Entered");
-        this.drawMapComponent.requestFocusInWindow();
-    }
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+	}
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-       
-    }
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		System.out.println("Mouse pressed at " + e.getX() + ", " + e.getY());
+		oldPosition = e.getPoint();
+	}
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if (pressedKeyCode == 17) {
-            newPosition = e.getPoint();
-            drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
-        } else {
-            System.out.println(e.getPoint());
-            oldPosition = newPosition;
-            newPosition = e.getPoint();
-            System.out.println("old " + oldPosition);
-            System.out.println("new " + newPosition);
-            int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
-            int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
-            drawMapComponent.moveVisibleArea(x, y);
-            
-        }
-        repaint();
-    
-    }
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
+		if (pressedKeyCode == 17)
+		{
+			drawMapComponent.drawRectangle(0, 0, 0, (int) newPosition.getY(), false);
+			drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
+		}
+		oldPosition = null;
+		newPosition = null;
+		repaint();
+	}
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        
-    }
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+		System.out.println("Mouse Entered");
+		this.drawMapComponent.requestFocusInWindow();
+	}
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        System.out.println(e.getWheelRotation());
-        if (e.getWheelRotation() > 0) drawMapComponent.zoomIn(e.getX(), e.getY());
-        else drawMapComponent.zoomOut(e.getX(), e.getY());
-        repaint();
-    }
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
+	}
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        pressedKeyCode = e.getKeyCode();
-        System.out.println(e.getKeyCode());
-    }
+	@Override
+	public void mouseDragged(MouseEvent e)
+	{
+		if (pressedKeyCode == 17)
+		{
+			newPosition = e.getPoint();
+			drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
+		} else
+		{
+			System.out.println(e.getPoint());
+			oldPosition = newPosition;
+			newPosition = e.getPoint();
+			System.out.println("old " + oldPosition);
+			System.out.println("new " + newPosition);
+			int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
+			int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
+			drawMapComponent.moveVisibleArea(x, y);
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        pressedKeyCode = 0;
-    }
-    
+		}
+		repaint();
+
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e)
+	{
+		System.out.println(e.getWheelRotation());
+		if (e.getWheelRotation() > 0)
+		{
+			drawMapComponent.zoomIn(e.getX(), e.getY());
+		} else
+		{
+			drawMapComponent.zoomOut(e.getX(), e.getY());
+		}
+		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e)
+	{
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+		pressedKeyCode = e.getKeyCode();
+		System.out.println(e.getKeyCode());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		pressedKeyCode = 0;
+	}
+
 }
