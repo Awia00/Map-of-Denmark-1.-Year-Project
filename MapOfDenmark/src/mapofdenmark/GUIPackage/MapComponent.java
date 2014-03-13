@@ -31,8 +31,8 @@ public class MapComponent extends JComponent{
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
 	
-	private final double zoomInConstant = 0.009;
-	private final double zoomOutConstant = 1.001;
+	private final double zoomInConstant = 0.9999;
+	private final double zoomOutConstant = 1.0001;
 
 	public MapComponent(VisibleArea visibleArea, Street[] streets)
 	{
