@@ -47,12 +47,15 @@ public class MapComponent extends JComponent{
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(0, 0, 470000, 370000, quadTreeToDraw); // HELE DANMARK
-		//visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
+		//visibleArea.setCoord(0, 0, 470000, 370000); // HELE DANMARK
+		visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
 	}
 
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
+		double xMapCoord = xCoord*visibleArea.getxLength();
+		double yMapCoord = yCoord*visibleArea.getyLength();
+		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
 	
 	@Override
