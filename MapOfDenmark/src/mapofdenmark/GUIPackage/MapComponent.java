@@ -32,7 +32,7 @@ public class MapComponent extends JComponent{
 	private VisibleArea visibleArea;
 	
 	private final double zoomInConstant = 0.9;
-	private final double zoomOutConstant = 2;
+	private final double zoomOutConstant = 1.1;
 
 	public MapComponent(VisibleArea visibleArea, Street[] streets)
 	{
