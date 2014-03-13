@@ -62,23 +62,22 @@ public class MapComponent extends JComponent{
 	}
 	
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
-	{
-		double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double centerYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
-		double oldCenterx =  visibleArea.getxCoord()+visibleArea.getxLength()/2;
-		double oldCentery =  visibleArea.getyCoord()+visibleArea.getyLength()/2;
-		double avCenterx = (centerXCoord + oldCenterx)/2;
-		double avCentery = (centerYCoord + oldCentery)/2;
-		double newxCoord = oldCenterx+oldCenterx-avCenterx;
-		double newyCoord = oldCentery+oldCentery-avCentery;
+{
+		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
+		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
+		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
+		double xPct = mouseLengthX/visibleArea.getxLength();
+		double yPct = mouseLengthY/visibleArea.getyLength();
 		
-		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
-		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
-		double v2x = newxCoord - xlengthZoom/2;
-		double v2y = newyCoord - ylengthZoom/2;
-		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
+		double xZoomLength = visibleArea.getxLength()*zoomOutConstant;
+		double yZoomLength = visibleArea.getyLength()*zoomOutConstant;
 		
+		double deltaXLength = visibleArea.getxLength()-xZoomLength;
+		double deltaYLength = visibleArea.getyLength()-yZoomLength;
+
+		visibleArea.setCoord(visibleArea.getxCoord()+deltaXLength*xPct, visibleArea.getyCoord()+deltaYLength*yPct, xZoomLength, yZoomLength);
 	}
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
