@@ -10,6 +10,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -31,7 +33,7 @@ import net.miginfocom.swing.MigLayout;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener{
+public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener{
 
 	private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
@@ -53,6 +55,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 this.drawMapComponent.addMouseListener(this);
                 this.drawMapComponent.addMouseMotionListener(this);
                 this.drawMapComponent.addMouseWheelListener(this);
+                this.drawMapComponent.addKeyListener(this);
+                this.drawMapComponent.requestFocusInWindow();
 	}
 
 	private void initialize()
@@ -81,6 +85,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
+                
 
 		// Action listeners
 		// rdy up
@@ -170,6 +175,21 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         if (e.getWheelRotation() > 0) drawMapComponent.zoomIn(e.getX(), e.getY());
         else drawMapComponent.zoomOut(e.getX(), e.getY());
         repaint();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
     }
     
 }
