@@ -138,12 +138,12 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     public void mouseReleased(MouseEvent e) {
      System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
      
-     drawMapComponent.drawRectangle(0, 0, 0, 0, false);
+     drawMapComponent.drawRectangle(0, 0, 0, (int) newPosition.getY(), false);
      drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
      oldPosition = null;
      newPosition = null;
      repaint();
-     repaint();
+     
     
     }
 
