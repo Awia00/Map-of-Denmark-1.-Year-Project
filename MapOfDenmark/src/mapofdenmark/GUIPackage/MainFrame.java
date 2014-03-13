@@ -137,12 +137,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseReleased(MouseEvent e) {
      System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
+     
+     drawMapComponent.drawRectangle(0, 0, 0, 0, false);
+     drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
      oldPosition = null;
      newPosition = null;
-     drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), false);
-     drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
-     
-     
+     repaint();
+     repaint();
     
     }
 
@@ -203,7 +204,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void keyReleased(KeyEvent e) {
-        
+        pressedKeyCode = 0;
     }
     
 }
