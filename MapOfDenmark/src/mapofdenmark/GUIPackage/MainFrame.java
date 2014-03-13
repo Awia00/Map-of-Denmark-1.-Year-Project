@@ -12,6 +12,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +29,7 @@ import net.miginfocom.swing.MigLayout;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame extends JFrame implements MouseListener{
+public class MainFrame extends JFrame implements MouseListener, MouseMotionListener{
 
 	private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
@@ -40,14 +41,15 @@ public class MainFrame extends JFrame implements MouseListener{
 	private VisibleArea visibleArea;
 	private Street[] streets;
         
-        private Point mouseEntered;
-        private Point mouseReleased;
+        private Point oldPosition;
+        private Point newPosition;
 
 	public MainFrame()
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
 		initialize();
                 this.drawMapComponent.addMouseListener(this);
+                this.drawMapComponent.addMouseMotionListener(this);
 	}
 
 	private void initialize()
@@ -118,18 +120,16 @@ public class MainFrame extends JFrame implements MouseListener{
     @Override
     public void mousePressed(MouseEvent e) {
        System.out.println("Mouse pressed at " + e.getX() + ", " + e.getY());
-       this.mouseEntered = e.getPoint();
+       oldPosition = e.getPoint();
+       
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
      System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
-     this.mouseReleased = e.getPoint();
      
-    int x = (int) getDeltaPoint(mouseEntered, mouseReleased).getX();
-    int y = (int) getDeltaPoint(mouseEntered, mouseReleased).getY();
-    drawMapComponent.moveVisibleArea(x, y);
-    repaint();
+     
+    
     }
 
     @Override
@@ -140,6 +140,24 @@ public class MainFrame extends JFrame implements MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
        
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    System.out.println(e.getPoint());
+    oldPosition = newPosition;
+    newPosition = e.getPoint();
+        System.out.println("old " + oldPosition);
+        System.out.println("new " + newPosition);
+    int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
+    int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
+    drawMapComponent.moveVisibleArea(x, y);
+    repaint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        
     }
     
 }
