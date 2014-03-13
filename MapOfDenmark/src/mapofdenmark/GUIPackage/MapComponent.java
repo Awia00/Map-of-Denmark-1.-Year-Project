@@ -51,9 +51,8 @@ public class MapComponent extends JComponent{
 		//visibleArea.setCoord(120000, 80000, 50000, 25000, quadTreeToDraw); // ODENSE
 	}
 
-	public double convertToCoord(double coord)
+	public void moveVisibleArea(double xCoord, double yCoord)
 	{
-		return coord;
 	}
 	
 	@Override

@@ -82,41 +82,10 @@ public class MainFrame extends JFrame implements MouseListener{
 
 	}
 	
-//	private void addListeners()
-//	{
-//		drawMapComponent.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseClicked(MouseEvent e)
-//			{
-//				System.out.println("CLICKED");
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent e)
-//			{
-//				System.out.println("PRESSED");
-//			}
-//
-//			@Override
-//			public void mouseReleased(MouseEvent e)
-//			{
-//				System.out.println("RELEASED");
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent e)
-//			{
-//				System.out.println("ENTERED");
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e)
-//			{
-//				System.out.println("EXITED");
-//			}
-//		});
-//	}
+	private void addListeners()
+	{
+
+	}
 
 	@Override
 	public Dimension getPreferredSize()
