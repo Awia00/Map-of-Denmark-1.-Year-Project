@@ -167,7 +167,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         System.out.println(e.getWheelRotation());
-        if (e.getWheelRotation() > 1) drawMapComponent.zoomIn(e.getX(), e.getY());
+        if (e.getWheelRotation() > 0) drawMapComponent.zoomIn(e.getX(), e.getY());
         else drawMapComponent.zoomOut(e.getX(), e.getY());
         repaint();
     }
