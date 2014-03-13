@@ -65,10 +65,31 @@ public class MapComponent extends JComponent{
 	
 	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
 	{
-		double mapXStartCoord = convertMouseXToMap(xStartCoord);
-		double mapYStartCoord = convertMouseYToMap(yStartCoord);
-		double mapXEndCoord = convertMouseXToMap(xEndCoord);
-		double mapYEndCoord = convertMouseYToMap(yEndCoord);
+		double mapXStartCoord;
+		double mapYStartCoord;
+		double mapXEndCoord;
+		double mapYEndCoord;
+				
+		if(xStartCoord<xEndCoord)
+		{
+			mapXStartCoord = convertMouseXToMap(xStartCoord);
+			mapXEndCoord = convertMouseXToMap(xEndCoord);
+		}
+		else
+		{
+			mapXStartCoord = convertMouseXToMap(xEndCoord);
+			mapXEndCoord = convertMouseXToMap(xStartCoord);
+		}
+		if(yStartCoord<yEndCoord)
+		{
+			mapYStartCoord = convertMouseYToMap(yStartCoord);
+			mapYEndCoord = convertMouseYToMap(yEndCoord);
+		}
+		else
+		{
+			mapYStartCoord = convertMouseYToMap(yEndCoord);
+			mapYEndCoord = convertMouseYToMap(yStartCoord);
+		}
 		
 		double zoomconstant;
 		if(mapXEndCoord-mapXStartCoord > mapYEndCoord-mapYStartCoord)
