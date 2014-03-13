@@ -8,6 +8,7 @@ package mapofdenmark.GUIPackage;
 import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -38,6 +39,9 @@ public class MainFrame extends JFrame implements MouseListener{
 	private Dimension screenSize;
 	private VisibleArea visibleArea;
 	private Street[] streets;
+        
+        private Point mouseEntered;
+        private Point mouseReleased;
 
 	public MainFrame()
 	{
@@ -98,19 +102,33 @@ public class MainFrame extends JFrame implements MouseListener{
 		new MainFrame();
 	}
 
+    private Point getDeltaPoint(Point p1, Point p2) {
+     int deltaX = (int) (p1.getX() - p2.getX());
+     int deltaY = (int) (p1.getY() - p2.getY());
+     
+     return new Point(deltaX, deltaY);
+    
+    }
+    
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Mouse Clicked at " + e.getX() + ", " + e.getY());
+        
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-       
+       System.out.println("Mouse pressed at " + e.getX() + ", " + e.getY());
+       this.mouseEntered = e.getPoint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-       
+     System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
+     this.mouseReleased = e.getPoint();
+     
+    int x = (int) getDeltaPoint(mouseEntered, mouseReleased).getX();
+    int y = (int) getDeltaPoint(mouseEntered, mouseReleased).getY();
+    drawMapComponent.moveVisibleArea(x, y);
     }
 
     @Override
@@ -122,5 +140,5 @@ public class MainFrame extends JFrame implements MouseListener{
     public void mouseExited(MouseEvent e) {
        
     }
-
+    
 }
