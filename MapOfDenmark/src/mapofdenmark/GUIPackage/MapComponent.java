@@ -77,8 +77,8 @@ public class MapComponent extends JComponent{
 	{
 		double centerXCoord = visibleArea.getxCoord() + mouseXCoord*visibleArea.getxLength();
 		double centerYCoord = visibleArea.getyCoord() + mouseYCoord*visibleArea.getyLength();
-		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
-		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
+		double xlengthZoom = visibleArea.getxLength() * zoomInConstant;
+		double ylengthZoom = visibleArea.getyLength() * zoomInConstant;
 		double v2x = centerXCoord - xlengthZoom/2;
 		double v2y = centerYCoord - ylengthZoom/2;
 		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);

@@ -117,7 +117,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        
     }
 
     @Override
@@ -130,6 +129,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseReleased(MouseEvent e) {
      System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
+     oldPosition = null;
+     newPosition = null;
      
      
     
@@ -166,7 +167,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         System.out.println(e.getWheelRotation());
-        if (e.getWheelRotation() == 1) drawMapComponent.zoomIn(e.getX(), e.getY());
+        if (e.getWheelRotation() > 1) drawMapComponent.zoomIn(e.getX(), e.getY());
+        else drawMapComponent.zoomOut(e.getX(), e.getY());
         repaint();
     }
     
