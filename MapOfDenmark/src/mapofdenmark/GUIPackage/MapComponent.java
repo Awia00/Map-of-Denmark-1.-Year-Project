@@ -85,10 +85,26 @@ public class MapComponent extends JComponent{
 	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
 	{
 		this.drawRectangle = drawRectangle;
+		if(xStartCoord < xEndCoord)
+		{
 		this.xStartCoord = xStartCoord;
 		this.xEndCoord = xEndCoord;
-		this.yStartCoord = yStartCoord;
-		this.yEndCoord = yEndCoord;
+		}
+		else 
+		{
+			this.xStartCoord = xEndCoord;
+			this.xEndCoord = xStartCoord;
+		}
+		if(yStartCoord < yEndCoord)
+		{
+			this.yStartCoord = yStartCoord;
+			this.yEndCoord = yEndCoord;
+		}
+		else
+		{
+			this.yStartCoord = yEndCoord;
+			this.yEndCoord = yStartCoord;
+		}
 	}
 	
 	private double convertMouseXToMap(double xCoord)
