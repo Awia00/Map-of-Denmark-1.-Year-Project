@@ -47,6 +47,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         
         private Point oldPosition;
         private Point newPosition;
+        
+        private boolean mapInFocus;
+        private int pressedKeyCode;
 
 	public MainFrame()
 	{
@@ -56,7 +59,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 this.drawMapComponent.addMouseMotionListener(this);
                 this.drawMapComponent.addMouseWheelListener(this);
                 this.drawMapComponent.addKeyListener(this);
-                this.drawMapComponent.requestFocusInWindow();
+                
 	}
 
 	private void initialize()
@@ -136,6 +139,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
      System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
      oldPosition = null;
      newPosition = null;
+     drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), false);
+     drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
      
      
     
@@ -144,6 +149,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseEntered(MouseEvent e) {
         System.out.println("Mouse Entered");
+        this.drawMapComponent.requestFocusInWindow();
     }
 
     @Override
@@ -153,15 +159,22 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-    System.out.println(e.getPoint());
-    oldPosition = newPosition;
-    newPosition = e.getPoint();
-        System.out.println("old " + oldPosition);
-        System.out.println("new " + newPosition);
-    int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
-    int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
-    drawMapComponent.moveVisibleArea(x, y);
-    repaint();
+        if (pressedKeyCode == 17) {
+            newPosition = e.getPoint();
+            drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
+        } else {
+            System.out.println(e.getPoint());
+            oldPosition = newPosition;
+            newPosition = e.getPoint();
+            System.out.println("old " + oldPosition);
+            System.out.println("new " + newPosition);
+            int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
+            int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
+            drawMapComponent.moveVisibleArea(x, y);
+            
+        }
+        repaint();
+    
     }
 
     @Override
@@ -184,6 +197,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
     @Override
     public void keyPressed(KeyEvent e) {
+        pressedKeyCode = e.getKeyCode();
         System.out.println(e.getKeyCode());
     }
 
