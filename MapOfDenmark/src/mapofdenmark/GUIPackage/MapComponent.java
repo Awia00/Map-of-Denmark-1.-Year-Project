@@ -61,10 +61,38 @@ public class MapComponent extends JComponent{
 		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
 	
+	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
+	{
+		double mapXStartCoord = convertMouseXToMap(xStartCoord);
+		double mapYStartCoord = convertMouseYToMap(yStartCoord);
+		double mapXEndCoord = convertMouseXToMap(xEndCoord);
+		double mapYEndCoord = convertMouseYToMap(yEndCoord);
+		
+		double zoomconstant;
+		if(mapXEndCoord-mapXStartCoord > mapYEndCoord-mapYStartCoord)
+		{
+			zoomconstant = (mapXEndCoord-mapXStartCoord)/visibleArea.getxLength();
+		}
+		else
+		{
+			zoomconstant = (mapYEndCoord-mapYStartCoord)/visibleArea.getyLength();
+		}
+		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength()*zoomconstant, visibleArea.getyLength()*zoomconstant);
+	}
+	
+	private double convertMouseXToMap(double xCoord)
+	{
+		return visibleArea.getxCoord() + xCoord/getWidth()*visibleArea.getxLength();
+	}
+	private double convertMouseYToMap(double xCoord)
+	{
+		return visibleArea.getyCoord() + (getHeight() - xCoord)/getHeight()*visibleArea.getyLength();
+	}
+	
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 {
-		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
+		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
 		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
@@ -82,8 +110,8 @@ public class MapComponent extends JComponent{
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
+		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
 		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
