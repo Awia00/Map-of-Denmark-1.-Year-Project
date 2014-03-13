@@ -13,6 +13,8 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,7 +31,7 @@ import net.miginfocom.swing.MigLayout;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MainFrame extends JFrame implements MouseListener, MouseMotionListener{
+public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener{
 
 	private MapComponent drawMapComponent;
 	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
@@ -50,6 +52,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		initialize();
                 this.drawMapComponent.addMouseListener(this);
                 this.drawMapComponent.addMouseMotionListener(this);
+                this.drawMapComponent.addMouseWheelListener(this);
 	}
 
 	private void initialize()
@@ -158,6 +161,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     @Override
     public void mouseMoved(MouseEvent e) {
         
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        System.out.println(e.getWheelRotation());
+        if (e.getWheelRotation() == 1) drawMapComponent.zoomIn(e.getX(), e.getY());
+        repaint();
     }
     
 }
