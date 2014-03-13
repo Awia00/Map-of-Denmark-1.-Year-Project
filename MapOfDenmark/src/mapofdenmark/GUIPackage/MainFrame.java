@@ -104,7 +104,7 @@ public class MainFrame extends JFrame implements MouseListener{
 
     private Point getDeltaPoint(Point p1, Point p2) {
      int deltaX = (int) (p1.getX() - p2.getX());
-     int deltaY = (int) (p1.getY() - p2.getY());
+     int deltaY = (int) (p2.getY() - p1.getY());
      
      return new Point(deltaX, deltaY);
     
@@ -129,6 +129,7 @@ public class MainFrame extends JFrame implements MouseListener{
     int x = (int) getDeltaPoint(mouseEntered, mouseReleased).getX();
     int y = (int) getDeltaPoint(mouseEntered, mouseReleased).getY();
     drawMapComponent.moveVisibleArea(x, y);
+    repaint();
     }
 
     @Override
