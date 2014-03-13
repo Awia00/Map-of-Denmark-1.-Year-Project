@@ -141,7 +141,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
 		if (pressedKeyCode == 17)
 		{
-			drawMapComponent.drawRectangle(0, 0, 0, (int) newPosition.getY(), false);
+			drawMapComponent.drawRectangle(0, 0, 0, 0, false);
 			drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
 		}
 		oldPosition = null;
