@@ -30,6 +30,9 @@ public class MapComponent extends JComponent{
 
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
+	
+	private final double zoomInConstant = 0.9;
+	private final double zoomOutConstant = 1.1;
 
 	public MapComponent(VisibleArea visibleArea, Street[] streets)
 	{
@@ -53,9 +56,32 @@ public class MapComponent extends JComponent{
 
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
-		double xMapCoord = xCoord*visibleArea.getxLength()/125;
-		double yMapCoord = yCoord*visibleArea.getyLength()/125;
+		double xMapCoord = xCoord/getWidth()*visibleArea.getxLength()*1.2;
+		double yMapCoord = yCoord/getHeight()*visibleArea.getyLength()*1.2;
 		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
+	}
+	
+	public void zoomOut(double mouseXCoord, double mouseYCoord)
+	{
+		double centerXCoord = visibleArea.getxCoord() + mouseXCoord*visibleArea.getxLength();
+		double centerYCoord = visibleArea.getyCoord() + mouseYCoord*visibleArea.getyLength();
+		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
+		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
+		double v2x = centerXCoord - xlengthZoom/2;
+		double v2y = centerYCoord - ylengthZoom/2;
+		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
+		
+	}
+	
+	public void zoomIn(double mouseXCoord, double mouseYCoord)
+	{
+		double centerXCoord = visibleArea.getxCoord() + mouseXCoord*visibleArea.getxLength();
+		double centerYCoord = visibleArea.getyCoord() + mouseYCoord*visibleArea.getyLength();
+		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
+		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
+		double v2x = centerXCoord - xlengthZoom/2;
+		double v2y = centerYCoord - ylengthZoom/2;
+		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
 	}
 	
 	@Override
