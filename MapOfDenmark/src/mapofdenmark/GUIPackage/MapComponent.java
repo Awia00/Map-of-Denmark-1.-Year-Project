@@ -65,28 +65,39 @@ public class MapComponent extends JComponent{
 	{
 		double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
 		double centerYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double oldCenterx =  visibleArea.getxCoord()+visibleArea.getxLength()/2;
+		double oldCentery =  visibleArea.getyCoord()+visibleArea.getyLength()/2;
+		double avCenterx = (centerXCoord + oldCenterx)/2;
+		double avCentery = (centerYCoord + oldCentery)/2;
+		double newxCoord = oldCenterx+oldCenterx-avCenterx;
+		double newyCoord = oldCentery+oldCentery-avCentery;
+		
+		
 		double xlengthZoom = visibleArea.getxLength() * zoomOutConstant;
 		double ylengthZoom = visibleArea.getyLength() * zoomOutConstant;
-		double v2x = centerXCoord - xlengthZoom/2;
-		double v2y = centerYCoord - ylengthZoom/2;
+		double v2x = newxCoord - xlengthZoom/2;
+		double v2y = newyCoord - ylengthZoom/2;
 		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
 		
 	}
 	
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-        double centerXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
-		double centerYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
-		double oldCenterx =  visibleArea.getxCoord()+visibleArea.getxLength()/2;
-		double oldCentery =  visibleArea.getyCoord()+visibleArea.getyLength()/2;
-		double avCenterx = (centerXCoord + oldCenterx)/2;
-		double avCentery = (centerYCoord + oldCentery)/2;
+		double mouseMapXCoord = visibleArea.getxCoord() + mouseXCoord/getWidth()*visibleArea.getxLength();
+		double mouseMapYCoord = visibleArea.getyCoord() + (getHeight() - mouseYCoord)/getHeight()*visibleArea.getyLength();
+		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
+		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
 		
-		double xlengthZoom = visibleArea.getxLength() * zoomInConstant;
-		double ylengthZoom = visibleArea.getyLength() * zoomInConstant;
-		double v2x = avCenterx - xlengthZoom/2;
-		double v2y = avCentery - ylengthZoom/2;
-		visibleArea.setCoord(v2x, v2y, xlengthZoom, ylengthZoom);
+		double xPct = mouseLengthX/visibleArea.getxLength();
+		double yPct = mouseLengthY/visibleArea.getyLength();
+		
+		double xZoomLength = visibleArea.getxLength()*zoomInConstant;
+		double yZoomLength = visibleArea.getyLength()*zoomInConstant;
+		
+		double deltaXLength = visibleArea.getxLength()-xZoomLength;
+		double deltaYLength = visibleArea.getyLength()-yZoomLength;
+
+		visibleArea.setCoord(visibleArea.getxCoord()+deltaXLength*xPct, visibleArea.getyCoord()+deltaYLength*yPct, xZoomLength, yZoomLength);
 	}
 	
 	@Override
