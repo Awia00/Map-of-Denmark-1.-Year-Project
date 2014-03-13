@@ -87,8 +87,8 @@ public class MapComponent extends JComponent{
 		this.drawRectangle = drawRectangle;
 		this.xStartCoord = xStartCoord;
 		this.xEndCoord = xEndCoord;
-		this.yStartCoord = getHeight() - yStartCoord;
-		this.yEndCoord = getHeight() - yEndCoord;
+		this.yStartCoord = yStartCoord;
+		this.yEndCoord = yEndCoord;
 	}
 	
 	private double convertMouseXToMap(double xCoord)
@@ -176,8 +176,8 @@ public class MapComponent extends JComponent{
 		{
 			g.setColor(Color.black);
 			g.drawRect(xStartCoord, yStartCoord, xEndCoord, yEndCoord);
-			g.drawRect(xStartCoord+1, yStartCoord+1, xEndCoord-1, yEndCoord-1);
-			g.drawRect(xStartCoord+2, yStartCoord+2, xEndCoord-2, yEndCoord-2);
+			g.drawRect(xStartCoord+1, yStartCoord+1, xEndCoord-2, yEndCoord-2);
+			g.drawRect(xStartCoord+2, yStartCoord+2, xEndCoord-4, yEndCoord-4);
 		}
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
