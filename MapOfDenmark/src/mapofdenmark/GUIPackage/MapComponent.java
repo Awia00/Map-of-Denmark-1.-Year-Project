@@ -26,13 +26,13 @@ import javax.swing.JComponent;
  * @buildDate 27-02-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class MapComponent extends JComponent{
+public class MapComponent extends JComponent {
 
 	private QuadTree quadTreeToDraw;
 	private VisibleArea visibleArea;
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-	
+
 	private final double zoomInConstant = 0.85;
 	private final double zoomOutConstant = 1.1;
 
@@ -58,123 +58,119 @@ public class MapComponent extends JComponent{
 
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
-		double xMapCoord = xCoord/getWidth()*visibleArea.getxLength()*1.2;
-		double yMapCoord = yCoord/getHeight()*visibleArea.getyLength()*1.2;
-		visibleArea.setCoord(visibleArea.getxCoord()+xMapCoord, visibleArea.getyCoord()+yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
+		double xMapCoord = xCoord / getWidth() * visibleArea.getxLength() * 1.2;
+		double yMapCoord = yCoord / getHeight() * visibleArea.getyLength() * 1.2;
+		visibleArea.setCoord(visibleArea.getxCoord() + xMapCoord, visibleArea.getyCoord() + yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
-	
+
 	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
 	{
 		double mapXStartCoord;
 		double mapYStartCoord;
 		double mapXEndCoord;
 		double mapYEndCoord;
-				
-		if(xStartCoord<xEndCoord)
+
+		if (xStartCoord < xEndCoord)
 		{
 			mapXStartCoord = convertMouseXToMap(xStartCoord);
 			mapXEndCoord = convertMouseXToMap(xEndCoord);
-		}
-		else
+		} else
 		{
 			mapXStartCoord = convertMouseXToMap(xEndCoord);
 			mapXEndCoord = convertMouseXToMap(xStartCoord);
 		}
-		if(yStartCoord<yEndCoord)
+		if (yStartCoord < yEndCoord)
 		{
-			mapYStartCoord = convertMouseYToMap(yStartCoord);
-			mapYEndCoord = convertMouseYToMap(yEndCoord);
+			mapYStartCoord = convertMouseYToMap(getHeight() -yStartCoord);
+			mapYEndCoord = convertMouseYToMap(getHeight() -yEndCoord);
+		} else
+		{ // visibleArea.getyCoord() + (getHeight() - xCoord) / getHeight() * visibleArea.getyLength();
+			mapYStartCoord = convertMouseYToMap(getHeight() -yEndCoord);
+			mapYEndCoord = convertMouseYToMap(getHeight() -yStartCoord);
 		}
-		else
-		{
-			mapYStartCoord = convertMouseYToMap(yEndCoord);
-			mapYEndCoord = convertMouseYToMap(yStartCoord);
-		}
-		
+
 		double zoomconstant;
-		if(mapXEndCoord-mapXStartCoord > mapYEndCoord-mapYStartCoord)
+		if (mapXEndCoord - mapXStartCoord > mapYEndCoord - mapYStartCoord)
 		{
-			zoomconstant = (mapXEndCoord-mapXStartCoord)/visibleArea.getxLength();
-		}
-		else
+			zoomconstant = (mapXEndCoord - mapXStartCoord) / visibleArea.getxLength();
+		} else
 		{
-			zoomconstant = (mapYEndCoord-mapYStartCoord)/visibleArea.getyLength();
+			zoomconstant = (mapYEndCoord - mapYStartCoord) / visibleArea.getyLength();
 		}
-		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength()*zoomconstant, visibleArea.getyLength()*zoomconstant);
+		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
 	}
-	
+
 	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
 	{
 		this.drawRectangle = drawRectangle;
-		if(xStartCoord < xEndCoord)
+		if (xStartCoord < xEndCoord)
 		{
-		this.xStartCoord = xStartCoord;
-		this.xEndCoord = xEndCoord;
-		}
-		else 
+			this.xStartCoord = xStartCoord;
+			this.xEndCoord = xEndCoord;
+		} else
 		{
 			this.xStartCoord = xEndCoord;
 			this.xEndCoord = xStartCoord;
 		}
-		if(yStartCoord < yEndCoord)
+		if (yStartCoord < yEndCoord)
 		{
 			this.yStartCoord = yStartCoord;
 			this.yEndCoord = yEndCoord;
-		}
-		else
+		} else
 		{
 			this.yStartCoord = yEndCoord;
 			this.yEndCoord = yStartCoord;
 		}
 	}
-	
+
 	private double convertMouseXToMap(double xCoord)
 	{
-		return visibleArea.getxCoord() + xCoord/getWidth()*visibleArea.getxLength();
+		return visibleArea.getxCoord() + xCoord / getWidth() * visibleArea.getxLength();
 	}
-	private double convertMouseYToMap(double xCoord)
+
+	private double convertMouseYToMap(double yCoord)
 	{
-		return visibleArea.getyCoord() + (getHeight() - xCoord)/getHeight()*visibleArea.getyLength();
+		return visibleArea.getyCoord() + (getHeight() - yCoord) / getHeight() * visibleArea.getyLength();
 	}
-	
+
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
-{
+	{
 		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
 		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
-		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
-		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
-		
-		double xPct = mouseLengthX/visibleArea.getxLength();
-		double yPct = mouseLengthY/visibleArea.getyLength();
-		
-		double xZoomLength = visibleArea.getxLength()*zoomOutConstant;
-		double yZoomLength = visibleArea.getyLength()*zoomOutConstant;
-		
-		double deltaXLength = visibleArea.getxLength()-xZoomLength;
-		double deltaYLength = visibleArea.getyLength()-yZoomLength;
+		double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
+		double mouseLengthY = mouseMapYCoord - visibleArea.getyCoord();
 
-		visibleArea.setCoord(visibleArea.getxCoord()+deltaXLength*xPct, visibleArea.getyCoord()+deltaYLength*yPct, xZoomLength, yZoomLength);
+		double xPct = mouseLengthX / visibleArea.getxLength();
+		double yPct = mouseLengthY / visibleArea.getyLength();
+
+		double xZoomLength = visibleArea.getxLength() * zoomOutConstant;
+		double yZoomLength = visibleArea.getyLength() * zoomOutConstant;
+
+		double deltaXLength = visibleArea.getxLength() - xZoomLength;
+		double deltaYLength = visibleArea.getyLength() - yZoomLength;
+
+		visibleArea.setCoord(visibleArea.getxCoord() + deltaXLength * xPct, visibleArea.getyCoord() + deltaYLength * yPct, xZoomLength, yZoomLength);
 	}
-	
+
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
 		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
 		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
-		double mouseLengthX = mouseMapXCoord-visibleArea.getxCoord();
-		double mouseLengthY = mouseMapYCoord-visibleArea.getyCoord();
-		
-		double xPct = mouseLengthX/visibleArea.getxLength();
-		double yPct = mouseLengthY/visibleArea.getyLength();
-		
-		double xZoomLength = visibleArea.getxLength()*zoomInConstant;
-		double yZoomLength = visibleArea.getyLength()*zoomInConstant;
-		
-		double deltaXLength = visibleArea.getxLength()-xZoomLength;
-		double deltaYLength = visibleArea.getyLength()-yZoomLength;
+		double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
+		double mouseLengthY = mouseMapYCoord - visibleArea.getyCoord();
 
-		visibleArea.setCoord(visibleArea.getxCoord()+deltaXLength*xPct, visibleArea.getyCoord()+deltaYLength*yPct, xZoomLength, yZoomLength);
+		double xPct = mouseLengthX / visibleArea.getxLength();
+		double yPct = mouseLengthY / visibleArea.getyLength();
+
+		double xZoomLength = visibleArea.getxLength() * zoomInConstant;
+		double yZoomLength = visibleArea.getyLength() * zoomInConstant;
+
+		double deltaXLength = visibleArea.getxLength() - xZoomLength;
+		double deltaYLength = visibleArea.getyLength() - yZoomLength;
+
+		visibleArea.setCoord(visibleArea.getxCoord() + deltaXLength * xPct, visibleArea.getyCoord() + deltaYLength * yPct, xZoomLength, yZoomLength);
 	}
-	
+
 	@Override
 	public void paint(Graphics g)
 	{
@@ -189,11 +185,20 @@ public class MapComponent extends JComponent{
 			{
 				for (Edge edge : quadTree.getEdges())
 				{
-					if(edge.getRoadType() == 1 || edge.getRoadType() == 2 || edge.getRoadType() == 3 || edge.getRoadType() == 21|| edge.getRoadType() == 22|| edge.getRoadType() == 23 || edge.getRoadType() == 31 || edge.getRoadType() == 32 || edge.getRoadType() == 41 || edge.getRoadType() == 42){g.setColor(Color.black);}
-					else if(edge.getRoadType() == 4 || edge.getRoadType() == 5 || edge.getRoadType() == 24 || edge.getRoadType() == 25){g.setColor(Color.red);}
-					else if(edge.getRoadType() == 8 || edge.getRoadType() == 10 || edge.getRoadType() == 11 || edge.getRoadType() == 28){g.setColor(Color.green);}
-					else{g.setColor(Color.gray);}
-					
+					if (edge.getRoadType() == 1 || edge.getRoadType() == 2 || edge.getRoadType() == 3 || edge.getRoadType() == 21 || edge.getRoadType() == 22 || edge.getRoadType() == 23 || edge.getRoadType() == 31 || edge.getRoadType() == 32 || edge.getRoadType() == 41 || edge.getRoadType() == 42)
+					{
+						g.setColor(Color.black);
+					} else if (edge.getRoadType() == 4 || edge.getRoadType() == 5 || edge.getRoadType() == 24 || edge.getRoadType() == 25)
+					{
+						g.setColor(Color.red);
+					} else if (edge.getRoadType() == 8 || edge.getRoadType() == 10 || edge.getRoadType() == 11 || edge.getRoadType() == 28)
+					{
+						g.setColor(Color.green);
+					} else
+					{
+						g.setColor(Color.gray);
+					}
+
 					double xlength = visibleArea.getxLength();
 					double ylength = visibleArea.getyLength();
 					double xVArea = visibleArea.getxCoord();
@@ -202,19 +207,18 @@ public class MapComponent extends JComponent{
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
-					g.drawLine((int) (((x1-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
-					g.drawLine((int) (((x1-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (1+((x2-xVArea) / xlength) * getWidth()), (int) (1+getSize().height - ((y2-yVArea) / ylength) * getHeight()));
-					g.drawLine((int) (1+((x1-xVArea) / xlength) * getWidth()), (int) (1+getSize().height - ((y1-yVArea) / ylength) * getHeight()), (int) (((x2-xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2-yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (1 + ((x2 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (1 + ((x1 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 				}
 			}
 		}
-		
-		if(drawRectangle)
+
+		if (drawRectangle)
 		{
 			g.setColor(Color.black);
-			g.drawRect(xStartCoord, yStartCoord, xEndCoord, yEndCoord);
-			g.drawRect(xStartCoord+1, yStartCoord+1, xEndCoord-2, yEndCoord-2);
-			g.drawRect(xStartCoord+2, yStartCoord+2, xEndCoord-4, yEndCoord-4);
+			g.drawRect(xStartCoord, yStartCoord, xEndCoord-xStartCoord, yEndCoord-yStartCoord);
+			g.drawRect(xStartCoord + 1, yStartCoord + 1, xEndCoord - 2-xStartCoord, yEndCoord - 2-yStartCoord);
 		}
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
