@@ -36,8 +36,7 @@ import net.miginfocom.swing.MigLayout;
 public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
 	private MapComponent drawMapComponent;
-	private Container EastContainer, WestContainer, East_SouthContainer, East_NorthContainer;
-	private Container mainContainer, mapContainer;
+	private Container mainContainer;
 	private JLabel mapOfDenmarkLabel;
 	private JTextField enterAddressField;
 	private JButton searchButton;
@@ -55,11 +54,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
 		initialize();
-		this.drawMapComponent.addMouseListener(this);
-		this.drawMapComponent.addMouseMotionListener(this);
-		this.drawMapComponent.addMouseWheelListener(this);
-		this.drawMapComponent.addKeyListener(this);
-
+		addListeners();
 	}
 
 	private void initialize()
@@ -72,7 +67,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 
-		// 
+		// components
 		drawMapComponent = new MapComponent(visibleArea, streets);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
@@ -100,7 +95,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private void addListeners()
 	{
-
+		this.drawMapComponent.addMouseListener(this);
+		this.drawMapComponent.addMouseMotionListener(this);
+		this.drawMapComponent.addMouseWheelListener(this);
+		this.drawMapComponent.addKeyListener(this);
 	}
 
 	@Override
@@ -131,16 +129,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		System.out.println("Mouse pressed at " + e.getX() + ", " + e.getY());
-		oldPosition = null;
 		oldPosition = e.getPoint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
-		System.out.println("Mouse released at " + e.getX() + ", " + e.getY());
-		if (pressedKeyCode == 17)
+		if (pressedKeyCode == 17) // ctrl key
 		{
 			newPosition = e.getPoint();
 			drawMapComponent.dragNDropZoom(oldPosition.getX(), oldPosition.getY(), newPosition.getX(), newPosition.getY());
@@ -173,11 +168,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
 		} else  // just move
 		{
-			//System.out.println(e.getPoint());
 			if (newPosition != null){oldPosition = newPosition;}
 			newPosition = e.getPoint();
-			// System.out.println("old " + oldPosition);
-			// System.out.println("new " + newPosition);
 			int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
 			int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
 			drawMapComponent.moveVisibleArea(x, y);
@@ -196,7 +188,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		System.out.println(e.getWheelRotation());
-		if (e.getWheelRotation() > 0)
+		if (e.getWheelRotation() < 0)
 		{
 			drawMapComponent.zoomIn(e.getX(), e.getY());
 		} else
@@ -216,7 +208,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	public void keyPressed(KeyEvent e)
 	{
 		pressedKeyCode = e.getKeyCode();
-		//System.out.println(e.getKeyCode());
 	}
 
 	@Override

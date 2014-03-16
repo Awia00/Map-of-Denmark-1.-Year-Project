@@ -81,8 +81,8 @@ public class MapComponent extends JComponent {
 		}
 		if (yStartCoord > yEndCoord)
 		{
-			mapYStartCoord = convertMouseYToMap(getHeight() -yStartCoord);
-			mapYEndCoord = convertMouseYToMap(getHeight() -yEndCoord);
+			mapYStartCoord = convertMouseYToMap(yStartCoord);
+			mapYEndCoord = convertMouseYToMap(yEndCoord);
 		} else
 		{
 			mapYStartCoord = convertMouseYToMap(yEndCoord);
