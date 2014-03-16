@@ -8,12 +8,14 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
+import database.RoadTypeEnum;
 import database.Street;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComponent;
 
@@ -89,7 +91,6 @@ public class MapComponent extends JComponent {
 			mapYEndCoord = convertMouseYToMap(yStartCoord);
 		}
 
-		
 		double zoomconstant;
 		if (mapXEndCoord - mapXStartCoord > mapYEndCoord - mapYStartCoord)
 		{
@@ -99,7 +100,7 @@ public class MapComponent extends JComponent {
 			zoomconstant = (mapYEndCoord - mapYStartCoord) / visibleArea.getyLength();
 		}
 		System.out.println("zoomconstant: " + zoomconstant);
-		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength()*zoomconstant, visibleArea.getyLength()*zoomconstant);
+		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
 	}
 
 	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
@@ -185,26 +186,56 @@ public class MapComponent extends JComponent {
 		{
 			if (quadTree.isDrawable())
 			{
+				outerLoop:
 				for (Edge edge : quadTree.getEdges())
 				{
-					if (edge.getRoadType() == 1 || edge.getRoadType() == 2 || edge.getRoadType() == 3 || edge.getRoadType() == 21 || edge.getRoadType() == 22 || edge.getRoadType() == 23 || edge.getRoadType() == 31 || edge.getRoadType() == 32 || edge.getRoadType() == 41 || edge.getRoadType() == 42)
-					{
-						g.setColor(Color.black);
-					} else if (edge.getRoadType() == 4 || edge.getRoadType() == 5 || edge.getRoadType() == 24 || edge.getRoadType() == 25)
-					{
-						g.setColor(Color.red);
-					} else if (edge.getRoadType() == 8 || edge.getRoadType() == 10 || edge.getRoadType() == 11 || edge.getRoadType() == 28)
-					{
-						g.setColor(Color.green);
-					} else
-					{
-						g.setColor(Color.gray);
-					}
-
 					double xlength = visibleArea.getxLength();
 					double ylength = visibleArea.getyLength();
+					
 					double xVArea = visibleArea.getxCoord();
 					double yVArea = visibleArea.getyCoord();
+					g.setColor(Color.gray);
+					for (int roadType : RoadTypeEnum.PLACENAME.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							g.setColor(Color.black);
+							g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
+							continue outerLoop;
+						}
+					}
+					for (int roadType : RoadTypeEnum.HIGHWAY.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							g.setColor(Color.black);
+							break;
+						}
+					}
+					for (int roadType : RoadTypeEnum.FERRYWAY.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							g.setColor(Color.blue);
+							break;
+						}
+					}
+					for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							g.setColor(Color.green);
+							break;
+						}
+					}
+					for (int roadType : RoadTypeEnum.ROAD.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							g.setColor(Color.red);
+							break;
+						}
+					}
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
@@ -219,8 +250,8 @@ public class MapComponent extends JComponent {
 		if (drawRectangle)
 		{
 			g.setColor(Color.black);
-			g.drawRect(xStartCoord, yStartCoord, xEndCoord-xStartCoord, yEndCoord-yStartCoord);
-			g.drawRect(xStartCoord + 1, yStartCoord + 1, xEndCoord - 2-xStartCoord, yEndCoord - 2-yStartCoord);
+			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
+			g.drawRect(xStartCoord + 1, yStartCoord + 1, xEndCoord - 2 - xStartCoord, yEndCoord - 2 - yStartCoord);
 		}
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
