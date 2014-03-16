@@ -194,11 +194,12 @@ public class MapComponent extends JComponent {
 					
 					double xVArea = visibleArea.getxCoord();
 					double yVArea = visibleArea.getyCoord();
-					g.setColor(Color.gray);
+					
 					for (int roadType : RoadTypeEnum.PLACENAME.getTypes())
 					{
 						if (roadType == edge.getRoadType())
 						{
+							if(xlength >= 10000){continue outerLoop;}
 							g.setColor(Color.black);
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
 							continue outerLoop;
@@ -220,10 +221,20 @@ public class MapComponent extends JComponent {
 							break;
 						}
 					}
+					for (int roadType : RoadTypeEnum.SECONDARYROAD.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							if(xlength >= 400000){continue outerLoop;}
+							g.setColor(Color.ORANGE);
+							break;
+						}
+					}
 					for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
 					{
 						if (roadType == edge.getRoadType())
 						{
+							if(xlength >= 20000){continue outerLoop;}
 							g.setColor(Color.green);
 							break;
 						}
@@ -232,7 +243,8 @@ public class MapComponent extends JComponent {
 					{
 						if (roadType == edge.getRoadType())
 						{
-							g.setColor(Color.red);
+							if(xlength >= 100000){continue outerLoop;}
+							g.setColor(Color.gray);
 							break;
 						}
 					}
