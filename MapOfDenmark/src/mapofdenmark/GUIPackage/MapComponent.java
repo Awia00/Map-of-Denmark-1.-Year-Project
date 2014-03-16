@@ -79,16 +79,17 @@ public class MapComponent extends JComponent {
 			mapXStartCoord = convertMouseXToMap(xEndCoord);
 			mapXEndCoord = convertMouseXToMap(xStartCoord);
 		}
-		if (yStartCoord < yEndCoord)
+		if (yStartCoord > yEndCoord)
 		{
 			mapYStartCoord = convertMouseYToMap(getHeight() -yStartCoord);
 			mapYEndCoord = convertMouseYToMap(getHeight() -yEndCoord);
 		} else
-		{ // visibleArea.getyCoord() + (getHeight() - xCoord) / getHeight() * visibleArea.getyLength();
-			mapYStartCoord = convertMouseYToMap(getHeight() -yEndCoord);
-			mapYEndCoord = convertMouseYToMap(getHeight() -yStartCoord);
+		{
+			mapYStartCoord = convertMouseYToMap(yEndCoord);
+			mapYEndCoord = convertMouseYToMap(yStartCoord);
 		}
 
+		
 		double zoomconstant;
 		if (mapXEndCoord - mapXStartCoord > mapYEndCoord - mapYStartCoord)
 		{
@@ -97,7 +98,8 @@ public class MapComponent extends JComponent {
 		{
 			zoomconstant = (mapYEndCoord - mapYStartCoord) / visibleArea.getyLength();
 		}
-		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
+		System.out.println("zoomconstant: " + zoomconstant);
+		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength()*zoomconstant, visibleArea.getyLength()*zoomconstant);
 	}
 
 	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
