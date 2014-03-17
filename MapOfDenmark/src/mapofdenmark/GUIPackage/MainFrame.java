@@ -17,6 +17,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -49,6 +51,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private boolean mapInFocus;
 	private int pressedKeyCode;
+	protected double timerDone = 0;
+	Timer timer = new Timer();
 
 	public MainFrame()
 	{
@@ -168,14 +172,16 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
 		} else  // just move
 		{
-			if (newPosition != null){oldPosition = newPosition;}
+			if (newPosition != null)
+			{
+				oldPosition = newPosition;
+			}
 			newPosition = e.getPoint();
 			int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
 			int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
 			drawMapComponent.moveVisibleArea(x, y);
 		}
 		repaint();
-
 	}
 
 	@Override
@@ -187,14 +193,50 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
+		final MouseWheelEvent m = e;
 		if (e.getWheelRotation() < 0)
 		{
-			drawMapComponent.zoomIn(e.getX(), e.getY());
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run()
+				{
+					drawMapComponent.zoomIn(m.getX(), m.getY());
+					callRepaint();
+				}
+			};
+			timer.scheduleAtFixedRate(task, 10, 10);
 		} else
 		{
-			drawMapComponent.zoomOut(e.getX(), e.getY());
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run()
+				{
+					drawMapComponent.zoomOut(m.getX(), m.getY());
+					callRepaint();
+				}
+			};
+			timer.scheduleAtFixedRate(task, 10, 10);
 		}
 		repaint();
+		Timer timerToStopTimer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run()
+			{
+				timer.cancel();
+				timer.purge();
+				timer = new Timer();
+				//timerToStopTimer.cancel();
+			}
+		};
+		timerToStopTimer.schedule(task, 500);
+
+	}
+
+	protected void callRepaint()
+	{
+		drawMapComponent.repaint();
+		this.repaint();
 	}
 
 	@Override
