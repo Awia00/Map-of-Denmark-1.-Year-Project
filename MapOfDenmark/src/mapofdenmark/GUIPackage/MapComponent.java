@@ -55,7 +55,7 @@ public class MapComponent extends JComponent {
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(-90000, 1000, 50000*12, 25000*12); // HELE DANMARK
+		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12); // HELE DANMARK
 		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
 	}
 
@@ -178,95 +178,113 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
+		// draw the map white and with a border
 		g.setColor(Color.white);
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
+
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
+		double xlength = visibleArea.getxLength();
+		double ylength = visibleArea.getyLength();
+
+		double xVArea = visibleArea.getxCoord();
+		double yVArea = visibleArea.getyCoord();
+
 		for (QuadTree quadTree : bottomTrees)
 		{
 			if (quadTree.isDrawable())
 			{
-				outerLoop:
-				for (Edge edge : quadTree.getEdges())
+				for (Edge edge : quadTree.getHighwayEdges())
 				{
-					double xlength = visibleArea.getxLength();
-					double ylength = visibleArea.getyLength();
-					
-					double xVArea = visibleArea.getxCoord();
-					double yVArea = visibleArea.getyCoord();
-					
-					for (int roadType : RoadTypeEnum.PLACENAME.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							if(xlength >= 10000){continue outerLoop;}
-							g.setColor(Color.black);
-							g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
-							continue outerLoop;
-						}
-					}
-					for (int roadType : RoadTypeEnum.HIGHWAY.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							g.setColor(Color.black);
-							break;
-						}
-					}
-					for (int roadType : RoadTypeEnum.FERRYWAY.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							g.setColor(Color.blue);
-							break;
-						}
-					}
-					for (int roadType : RoadTypeEnum.SECONDARYROAD.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							if(xlength >= 600000){continue outerLoop;}
-							g.setColor(Color.ORANGE);
-							break;
-						}
-					}
-					for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							if(xlength >= 20000){continue outerLoop;}
-							g.setColor(Color.green);
-							break;
-						}
-					}
-					for (int roadType : RoadTypeEnum.NORMALROAD.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							if(xlength >= 100000){continue outerLoop;}
-							g.setColor(Color.gray);
-							break;
-						}
-					}
-					for (int roadType : RoadTypeEnum.SMALLROAD.getTypes())
-					{
-						if (roadType == edge.getRoadType())
-						{
-							if(xlength >= 35000){continue outerLoop;}
-							g.setColor(Color.gray);
-							break;
-						}
-					}
+					g.setColor(Color.black);
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
-					
-					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (1 + ((x2 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
-					g.drawLine((int) (1 + ((x1 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 				}
+				if (xlength <= 550000)
+				{
+					for (Edge edge : quadTree.getSecondaryEdges())
+					{
+						g.setColor(Color.orange);
+						double x1 = edge.getFromNodeTrue().getxCoord();
+						double y1 = edge.getFromNodeTrue().getyCoord();
+						double x2 = edge.getToNodeTrue().getxCoord();
+						double y2 = edge.getToNodeTrue().getyCoord();
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					}
+				}
+				if (xlength <= 100000)
+				{
+					for (Edge edge : quadTree.getNormalEdges())
+					{
+						g.setColor(Color.gray);
+						double x1 = edge.getFromNodeTrue().getxCoord();
+						double y1 = edge.getFromNodeTrue().getyCoord();
+						double x2 = edge.getToNodeTrue().getxCoord();
+						double y2 = edge.getToNodeTrue().getyCoord();
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					}
+				}
+				if (xlength <= 100000)
+				{
+					for (Edge edge : quadTree.getNormalEdges())
+					{
+						g.setColor(Color.gray);
+						double x1 = edge.getFromNodeTrue().getxCoord();
+						double y1 = edge.getFromNodeTrue().getyCoord();
+						double x2 = edge.getToNodeTrue().getxCoord();
+						double y2 = edge.getToNodeTrue().getyCoord();
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					}
+				}
+				if (xlength <= 35000)
+				{
+					for (Edge edge : quadTree.getSmallEdges())
+					{
+						g.setColor(Color.gray);
+						double x1 = edge.getFromNodeTrue().getxCoord();
+						double y1 = edge.getFromNodeTrue().getyCoord();
+						double x2 = edge.getToNodeTrue().getxCoord();
+						double y2 = edge.getToNodeTrue().getyCoord();
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					}
+				}
+				if (xlength <= 20000)
+				{
+					for (Edge edge : quadTree.getPathEdges())
+					{
+						g.setColor(Color.green);
+						double x1 = edge.getFromNodeTrue().getxCoord();
+						double y1 = edge.getFromNodeTrue().getyCoord();
+						double x2 = edge.getToNodeTrue().getxCoord();
+						double y2 = edge.getToNodeTrue().getyCoord();
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					}
+				}
+				if (xlength <= 10000)
+				{
+					for (Edge edge : quadTree.getPlaceNameEdges())
+					{
+						g.setColor(Color.black);
+						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
+					}
+				}
+				for (Edge edge : quadTree.getFerryEdges())
+				{
+					g.setColor(Color.blue);
+					double x1 = edge.getFromNodeTrue().getxCoord();
+					double y1 = edge.getFromNodeTrue().getyCoord();
+					double x2 = edge.getToNodeTrue().getxCoord();
+					double y2 = edge.getToNodeTrue().getyCoord();
+					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+				}
+
+				// if we want to draw the roads more thich use these lines.
+				//g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (1 + ((x2 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+				//g.drawLine((int) (1 + ((x1 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 			}
 		}
 
@@ -281,15 +299,14 @@ public class MapComponent extends JComponent {
 		// then divide by the length. that way you get values from 0-1.
 	}
 
-
 	@Override
 	public void reshape(int x, int y, int w, int h)
 	{
 		//System.out.println("x: " + x + " y: " + y + " w: " + w + " h: " + h);
-		
+
 		//double constant = getWidth()/w;
 		//visibleArea.setCoord(visibleArea.getxCoord(), visibleArea.getyCoord(), w*(visibleArea.getxLength()/getWidth())*constant, h*(visibleArea.getyLength()/getHeight())*constant);
 		super.reshape(x, y, w, h); //To change body of generated methods, choose Tools | Templates.
 	}
-	
+
 }

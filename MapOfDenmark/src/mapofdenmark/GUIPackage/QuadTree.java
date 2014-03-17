@@ -11,6 +11,8 @@ package mapofdenmark.GUIPackage;
  */
 import database.Edge;
 import database.Node;
+import database.RoadTypeEnum;
+import java.awt.Color;
 import java.util.*;
 import java.awt.geom.Point2D;
 
@@ -27,7 +29,7 @@ public class QuadTree implements Iterable<QuadTree> {
 	private List<Edge> ferryEdges;
 	private List<Edge> placeNameEdges;
 	//
-	
+
 	private final double x, y, length;
 	private boolean isDrawable = true;
 	static Set<QuadTree> quadTrees = new LinkedHashSet<>();
@@ -76,22 +78,82 @@ public class QuadTree implements Iterable<QuadTree> {
 			this.allEdges = Collections.emptyList();
 		} else
 		{
+			highwayEdges = new ArrayList<>();
+			secondaryEdges = new ArrayList<>();
+			normalEdges = new ArrayList<>();
+			smallEdges = new ArrayList<>();
+			pathEdges = new ArrayList<>();
+			ferryEdges = new ArrayList<>();
+			placeNameEdges = new ArrayList<>();
+			splitEdgesIntoTypes();
 			bottomTrees.add(this);
 			// this.points = pointData;
 		}
 	}
 
-	/**
-	 * 
-	 * @param CompassArea 0 = NW, 1 = NE, 2 = SW, 3 = SE
-	 */
-	private void addEdgeToTree(int CompassArea, Edge edge)
+	private void splitEdgesIntoTypes()
 	{
-		
+		for (Edge edge : allEdges)
+		{
+			for (int roadType : RoadTypeEnum.HIGHWAY.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					highwayEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.SECONDARYROAD.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					secondaryEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.NORMALROAD.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					normalEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.SMALLROAD.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					smallEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					pathEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.FERRYWAY.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					ferryEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.PLACENAME.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					placeNameEdges.add(edge);
+					break;
+				}
+			}
+		}
 	}
-	
-	private 
-	
+
 	public boolean isDrawable()
 	{
 		return this.isDrawable;
@@ -181,8 +243,6 @@ public class QuadTree implements Iterable<QuadTree> {
 	{
 		return placeNameEdges;
 	}
-	
-	
 
 	// Iterator iterates through trees within current trees if any
 	private class TreeIterator implements Iterator<QuadTree> {
@@ -214,7 +274,7 @@ public class QuadTree implements Iterable<QuadTree> {
 	// Print all trees and their associated points - for testing purposes
 	public void printTrees(QuadTree tree)
 	{
-    // Include parent tree
+		// Include parent tree
 		// System.out.println(tree);  
 		// for (Point2D p : tree.getEdges()) {
 		//   System.out.println(p.getX() + ", " + p.getY());
@@ -223,7 +283,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		for (QuadTree t : tree)
 		{
 			System.out.println(t);
-      //for (Point2D p : t.getEdges()) {
+			//for (Point2D p : t.getEdges()) {
 			//System.out.println(p.getX() + ", " + p.getY());
 			//}
 			t.printTrees(t);
