@@ -55,7 +55,7 @@ public class MapComponent extends JComponent {
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(0, 0, 50000*8, 25000*8); // HELE DANMARK
+		visibleArea.setCoord(-90000, 1000, 50000*12, 25000*12); // HELE DANMARK
 		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
 	}
 
@@ -226,7 +226,7 @@ public class MapComponent extends JComponent {
 					{
 						if (roadType == edge.getRoadType())
 						{
-							if(xlength >= 400000){continue outerLoop;}
+							if(xlength >= 600000){continue outerLoop;}
 							g.setColor(Color.ORANGE);
 							break;
 						}
@@ -240,11 +240,20 @@ public class MapComponent extends JComponent {
 							break;
 						}
 					}
-					for (int roadType : RoadTypeEnum.ROAD.getTypes())
+					for (int roadType : RoadTypeEnum.NORMALROAD.getTypes())
 					{
 						if (roadType == edge.getRoadType())
 						{
 							if(xlength >= 100000){continue outerLoop;}
+							g.setColor(Color.gray);
+							break;
+						}
+					}
+					for (int roadType : RoadTypeEnum.SMALLROAD.getTypes())
+					{
+						if (roadType == edge.getRoadType())
+						{
+							if(xlength >= 35000){continue outerLoop;}
 							g.setColor(Color.gray);
 							break;
 						}

@@ -17,7 +17,17 @@ import java.awt.geom.Point2D;
 public class QuadTree implements Iterable<QuadTree> {
 
 	private QuadTree NW, NE, SW, SE;
-	private List<Edge> edges;
+	private List<Edge> allEdges;
+	// road type edges
+	private List<Edge> highwayEdges;
+	private List<Edge> secondaryEdges;
+	private List<Edge> normalEdges;
+	private List<Edge> smallEdges;
+	private List<Edge> pathEdges;
+	private List<Edge> ferryEdges;
+	private List<Edge> placeNameEdges;
+	//
+	
 	private final double x, y, length;
 	private boolean isDrawable = true;
 	static Set<QuadTree> quadTrees = new LinkedHashSet<>();
@@ -29,7 +39,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		this.x = x;
 		this.y = y;
 		this.length = length;
-		this.edges = edges;
+		this.allEdges = edges;
 		double h = length / 2;
 
 		if (edges.size() > 500)
@@ -63,7 +73,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			this.NE = new QuadTree(NEEdges, x + h, y + h, h);
 			this.SW = new QuadTree(SWEdges, x, y, h);
 			this.SE = new QuadTree(SEEdges, x + h, y, h);
-			this.edges = Collections.emptyList();
+			this.allEdges = Collections.emptyList();
 		} else
 		{
 			bottomTrees.add(this);
@@ -71,6 +81,17 @@ public class QuadTree implements Iterable<QuadTree> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param CompassArea 0 = NW, 1 = NE, 2 = SW, 3 = SE
+	 */
+	private void addEdgeToTree(int CompassArea, Edge edge)
+	{
+		
+	}
+	
+	private 
+	
 	public boolean isDrawable()
 	{
 		return this.isDrawable;
@@ -117,14 +138,51 @@ public class QuadTree implements Iterable<QuadTree> {
 
 	public List<Edge> getEdges()
 	{
-		if (this.edges.isEmpty())
+		if (this.allEdges.isEmpty())
 		{
 			return Collections.emptyList();
 		} else
 		{
-			return this.edges;
+			return this.allEdges;
 		}
 	}
+
+	public List<Edge> getHighwayEdges()
+	{
+		return highwayEdges;
+	}
+
+	public List<Edge> getSecondaryEdges()
+	{
+		return secondaryEdges;
+	}
+
+	public List<Edge> getNormalEdges()
+	{
+		return normalEdges;
+	}
+
+	public List<Edge> getSmallEdges()
+	{
+		return smallEdges;
+	}
+
+	public List<Edge> getPathEdges()
+	{
+		return pathEdges;
+	}
+
+	public List<Edge> getFerryEdges()
+	{
+		return ferryEdges;
+	}
+
+	public List<Edge> getPlaceNameEdges()
+	{
+		return placeNameEdges;
+	}
+	
+	
 
 	// Iterator iterates through trees within current trees if any
 	private class TreeIterator implements Iterator<QuadTree> {
