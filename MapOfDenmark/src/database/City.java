@@ -24,7 +24,7 @@ public class City {
     
     public String getCityName()
     {
-    return cityName;
+        return cityName;
     }
     
     public Integer getPostalCode()

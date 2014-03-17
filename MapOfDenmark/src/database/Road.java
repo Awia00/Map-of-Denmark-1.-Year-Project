@@ -36,7 +36,7 @@ public Road(String roadName, int roadType, Point2D position1, Point2D position2,
 {
     this.roadName = roadName;
     //this.roadtype = roadType;
-    this.roadType = RoadTypeEnum.createEnumWithInt(roadType);
+    //this.roadType = RoadTypeEnum.createEnumWithInt(roadType);
     this.position1 = position1;
     this.position2 = position2;
     this.speed = speed;
