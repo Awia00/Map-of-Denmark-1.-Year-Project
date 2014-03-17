@@ -11,6 +11,7 @@ import database.Edge;
 import database.RoadTypeEnum;
 import database.Street;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -54,8 +55,8 @@ public class MapComponent extends JComponent {
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		//visibleArea.setCoord(0, 0, 470000, 370000); // HELE DANMARK
-		visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
+		visibleArea.setCoord(0, 0, 50000*8, 25000*8); // HELE DANMARK
+		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
 	}
 
 	public void moveVisibleArea(double xCoord, double yCoord)
@@ -270,4 +271,15 @@ public class MapComponent extends JComponent {
 		// then divide by the length. that way you get values from 0-1.
 	}
 
+
+	@Override
+	public void reshape(int x, int y, int w, int h)
+	{
+		//System.out.println("x: " + x + " y: " + y + " w: " + w + " h: " + h);
+		
+		//double constant = getWidth()/w;
+		//visibleArea.setCoord(visibleArea.getxCoord(), visibleArea.getyCoord(), w*(visibleArea.getxLength()/getWidth())*constant, h*(visibleArea.getyLength()/getHeight())*constant);
+		super.reshape(x, y, w, h); //To change body of generated methods, choose Tools | Templates.
+	}
+	
 }
