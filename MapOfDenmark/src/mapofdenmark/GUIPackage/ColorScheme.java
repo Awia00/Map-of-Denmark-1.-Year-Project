@@ -30,7 +30,7 @@ public class ColorScheme {
     private final Color pathwayColor;
     // The color of the road.
     private final Color ferrywayColor;
-    // The color of the place name.'
+    // The color of the place name.
     private final Color placeNameColor;
     
     //Constructor for the ColorScheme class. This constructor takes Color 
