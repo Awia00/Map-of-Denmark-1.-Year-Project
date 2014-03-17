@@ -18,6 +18,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JComponent;
 
 /**
@@ -32,12 +34,14 @@ import javax.swing.JComponent;
 public class MapComponent extends JComponent {
 
 	private QuadTree quadTreeToDraw;
-	private VisibleArea visibleArea;
+	protected VisibleArea visibleArea;
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
 
-	private final double zoomInConstant = 0.85;
-	private final double zoomOutConstant = 1.1;
+	protected final double zoomInConstant = 0.99;
+	protected final double zoomOutConstant = 1.01;
+	
+	protected double doneTimer = 0;
 
 	public MapComponent(VisibleArea visibleArea, Street[] streets)
 	{
@@ -158,21 +162,34 @@ public class MapComponent extends JComponent {
 
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
-		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
-		double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
-		double mouseLengthY = mouseMapYCoord - visibleArea.getyCoord();
+		final double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
+		final double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
+		final double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
+		final double mouseLengthY = mouseMapYCoord - visibleArea.getyCoord();
 
-		double xPct = mouseLengthX / visibleArea.getxLength();
-		double yPct = mouseLengthY / visibleArea.getyLength();
+		final double xPct = mouseLengthX / visibleArea.getxLength();
+		final double yPct = mouseLengthY / visibleArea.getyLength();
 
-		double xZoomLength = visibleArea.getxLength() * zoomInConstant;
-		double yZoomLength = visibleArea.getyLength() * zoomInConstant;
+		final double xZoomLength = visibleArea.getxLength() * zoomInConstant;
+		final double yZoomLength = visibleArea.getyLength() * zoomInConstant;
 
-		double deltaXLength = visibleArea.getxLength() - xZoomLength;
-		double deltaYLength = visibleArea.getyLength() - yZoomLength;
-
-		visibleArea.setCoord(visibleArea.getxCoord() + deltaXLength * xPct, visibleArea.getyCoord() + deltaYLength * yPct, xZoomLength, yZoomLength);
+		final double deltaXLength = visibleArea.getxLength() - xZoomLength;
+		final double deltaYLength = visibleArea.getyLength() - yZoomLength;
+		
+		final double oldStartX = visibleArea.getxCoord();
+		final double oldStartY = visibleArea.getyCoord();
+		final double newStartX = visibleArea.getxCoord() + deltaXLength * xPct;
+		final double newStartY = visibleArea.getyCoord() + deltaYLength * yPct;
+		
+		final double oldxLength = visibleArea.getxLength();
+		final double oldyLength = visibleArea.getyLength();
+		
+		visibleArea.setCoord(newStartX, newStartY, xZoomLength, yZoomLength);
+		/*
+		visibleArea.setCoordWithoutUpdate(newStartX*doneTimer+oldStartX*(1-doneTimer),
+						newStartY*doneTimer + oldStartY*(1-doneTimer),
+						xZoomLength*doneTimer+oldxLength*(1-doneTimer), yZoomLength*doneTimer+oldyLength*(1-doneTimer));
+				*/
 	}
 
 	@Override
@@ -209,18 +226,6 @@ public class MapComponent extends JComponent {
 					for (Edge edge : quadTree.getSecondaryEdges())
 					{
 						g.setColor(Color.orange);
-						double x1 = edge.getFromNodeTrue().getxCoord();
-						double y1 = edge.getFromNodeTrue().getyCoord();
-						double x2 = edge.getToNodeTrue().getxCoord();
-						double y2 = edge.getToNodeTrue().getyCoord();
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
-					}
-				}
-				if (xlength <= 100000)
-				{
-					for (Edge edge : quadTree.getNormalEdges())
-					{
-						g.setColor(Color.gray);
 						double x1 = edge.getFromNodeTrue().getxCoord();
 						double y1 = edge.getFromNodeTrue().getyCoord();
 						double x2 = edge.getToNodeTrue().getxCoord();
