@@ -193,31 +193,51 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
+		System.out.println(e);
 		final MouseWheelEvent m = e;
 		if (e.getWheelRotation() < 0)
 		{
+			timerDone= 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
+					timerDone+= 0.05;
 					drawMapComponent.zoomIn(m.getX(), m.getY());
 					callRepaint();
+					if(timerDone >= 1)
+					{
+						timer.cancel();
+						timerDone = 0;
+						timer.purge();
+						timer = new Timer();
+					}
 				}
 			};
 			timer.scheduleAtFixedRate(task, 10, 10);
 		} else
 		{
+			timerDone= 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
+					timerDone+= 0.05;
 					drawMapComponent.zoomOut(m.getX(), m.getY());
 					callRepaint();
+					if(timerDone >= 1)
+					{
+						timer.cancel();
+						timerDone = 0;
+						timer.purge();
+						timer = new Timer();
+					}
 				}
 			};
 			timer.scheduleAtFixedRate(task, 10, 10);
 		}
 		repaint();
+		/*
 		Timer timerToStopTimer = new Timer();
 		TimerTask task = new TimerTask() {
 			@Override
@@ -230,6 +250,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			}
 		};
 		timerToStopTimer.schedule(task, 500);
+				*/
 
 	}
 

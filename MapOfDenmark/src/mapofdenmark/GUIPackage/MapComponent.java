@@ -38,8 +38,8 @@ public class MapComponent extends JComponent {
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
 
-	protected final double zoomInConstant = 0.99;
-	protected final double zoomOutConstant = 1.01;
+	protected final double zoomInConstant = 0.98;
+	protected final double zoomOutConstant = 1.02;
 	
 	protected double doneTimer = 0;
 
