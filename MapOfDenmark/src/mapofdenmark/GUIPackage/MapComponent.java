@@ -263,6 +263,7 @@ public class MapComponent extends JComponent {
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					
 					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (1 + ((x2 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 					g.drawLine((int) (1 + ((x1 - xVArea) / xlength) * getWidth()), (int) (1 + getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 				}
