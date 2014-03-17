@@ -45,6 +45,14 @@ public class VisibleArea {
 		setQuadTreesVisible();
 	}
 	
+	public void setCoordWithoutUpdate(double xCoord, double yCoord, double xLength, double yLength)
+	{
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
+		this.xLength = xLength;
+		this.yLength = yLength;
+	}
+	
 	public void setVisibleEdgeTypes(int acceptedType)
 	{
 		// do something.
