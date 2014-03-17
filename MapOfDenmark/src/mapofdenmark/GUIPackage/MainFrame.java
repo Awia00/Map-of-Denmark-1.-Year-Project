@@ -51,7 +51,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private boolean mapInFocus;
 	private int pressedKeyCode;
-	protected double timerDone = 0;
+	protected double timerDoneIn = 0;
+	protected double timerDoneOut = 0;
 	Timer timer = new Timer();
 
 	public MainFrame()
@@ -193,22 +194,28 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		System.out.println(e);
 		final MouseWheelEvent m = e;
 		if (e.getWheelRotation() < 0)
 		{
-			timerDone= 0;
+			if(timerDoneOut != 0)
+			{
+				timerDoneOut = 0;
+				timer.cancel();
+				timer.purge();
+				timer = new Timer();
+			}
+			timerDoneIn= 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
-					timerDone+= 0.05;
+					timerDoneIn+= 0.05;
 					drawMapComponent.zoomIn(m.getX(), m.getY());
 					callRepaint();
-					if(timerDone >= 1)
+					if(timerDoneIn >= 1.2)
 					{
 						timer.cancel();
-						timerDone = 0;
+						timerDoneIn = 0;
 						timer.purge();
 						timer = new Timer();
 					}
@@ -217,18 +224,25 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			timer.scheduleAtFixedRate(task, 10, 10);
 		} else
 		{
-			timerDone= 0;
+			if(timerDoneIn != 0)
+			{
+				timerDoneIn = 0;
+				timer.cancel();
+				timer.purge();
+				timer = new Timer();
+			}
+			timerDoneOut= 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
-					timerDone+= 0.05;
+					timerDoneOut+= 0.05;
 					drawMapComponent.zoomOut(m.getX(), m.getY());
 					callRepaint();
-					if(timerDone >= 1)
+					if(timerDoneOut >= 1.2)
 					{
 						timer.cancel();
-						timerDone = 0;
+						timerDoneOut = 0;
 						timer.purge();
 						timer = new Timer();
 					}

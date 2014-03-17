@@ -63,6 +63,11 @@ public class MapComponent extends JComponent {
 		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
 	}
 
+	/**
+	 * 
+	 * @param xCoord is negative if move map to the right
+	 * @param yCoord is negative if move map to the down
+	 */
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
 		double xMapCoord = xCoord / getWidth() * visibleArea.getxLength() * 1.2;
@@ -143,6 +148,7 @@ public class MapComponent extends JComponent {
 
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 	{
+		if (visibleArea.getyLength()+10000>= quadTreeToDraw.getQuadTreeLength()){return;}
 		double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
 		double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
@@ -162,6 +168,7 @@ public class MapComponent extends JComponent {
 
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
+		if (visibleArea.getyLength()<= 100){return;}
 		final double mouseMapXCoord = convertMouseXToMap(mouseXCoord);
 		final double mouseMapYCoord = convertMouseYToMap(mouseYCoord);
 		final double mouseLengthX = mouseMapXCoord - visibleArea.getxCoord();
@@ -176,13 +183,8 @@ public class MapComponent extends JComponent {
 		final double deltaXLength = visibleArea.getxLength() - xZoomLength;
 		final double deltaYLength = visibleArea.getyLength() - yZoomLength;
 		
-		final double oldStartX = visibleArea.getxCoord();
-		final double oldStartY = visibleArea.getyCoord();
 		final double newStartX = visibleArea.getxCoord() + deltaXLength * xPct;
 		final double newStartY = visibleArea.getyCoord() + deltaYLength * yPct;
-		
-		final double oldxLength = visibleArea.getxLength();
-		final double oldyLength = visibleArea.getyLength();
 		
 		visibleArea.setCoord(newStartX, newStartY, xZoomLength, yZoomLength);
 		/*
