@@ -109,6 +109,9 @@ public class MapComponent extends JComponent {
 		{
 			zoomconstant = (mapYEndCoord - mapYStartCoord) / visibleArea.getyLength();
 		}
+		int fixRounds = 0;
+		while(visibleArea.getxLength() * zoomconstant < 1000 && fixRounds != 20){zoomconstant+=0.02;fixRounds++;}
+		if (fixRounds >= 20){return;} 
 		System.out.println("zoomconstant: " + zoomconstant);
 		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
 	}
