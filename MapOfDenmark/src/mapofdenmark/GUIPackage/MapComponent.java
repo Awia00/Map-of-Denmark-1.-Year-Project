@@ -43,18 +43,14 @@ public class MapComponent extends JComponent {
 	
 	protected double doneTimer = 0;
 
-	public MapComponent(VisibleArea visibleArea, Street[] streets)
+	public MapComponent(VisibleArea visibleArea, Street[] streets, List<Edge> edges)
 	{
 		this.visibleArea = new VisibleArea();
-		initialize(streets);
+		initialize(streets, edges);
 	}
 
-	private void initialize(Street[] streets)
+	private void initialize(Street[] streets, List<Edge> edges)
 	{
-
-		DatabaseInterface db = Database.db();
-
-		List<Edge> edges = db.getData();
 		//List<Edge> edges = db.getEdges();
 
 		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.

@@ -5,6 +5,7 @@
  */
 package mapofdenmark.GUIPackage;
 
+import database.Edge;
 import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -17,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -55,14 +57,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	protected double timerDoneOut = 0;
 	Timer timer = new Timer();
 
-	public MainFrame()
+	public MainFrame(List<Edge> edges)
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
-		initialize();
+		initialize(edges);
 		addListeners();
 	}
 
-	private void initialize()
+	private void initialize(List<Edge> edges)
 	{
 		// frame properties
 		setTitle("Map of Denmark");
@@ -73,7 +75,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(visibleArea, streets);
+		drawMapComponent = new MapComponent(visibleArea, streets,edges);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
@@ -97,7 +99,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setVisible(true);
 
 	}
-
+	
 	private void addListeners()
 	{
 		this.drawMapComponent.addMouseListener(this);
@@ -110,11 +112,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	public Dimension getPreferredSize()
 	{
 		return new Dimension((int) (screenSize.width / 1.5), (int) (screenSize.height / 1.5));
-	}
-
-	public static void main(String[] args)
-	{
-		new MainFrame();
 	}
 
 	private Point getDeltaPoint(Point p1, Point p2)
