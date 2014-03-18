@@ -43,6 +43,8 @@ public class DatabaseHandler implements DatabaseInterface {
     NodeComparer nc = new NodeComparer();
     EdgeComparer ec = new EdgeComparer();
     StreetComparer sc = new StreetComparer();
+	
+	private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -57,8 +59,26 @@ public class DatabaseHandler implements DatabaseInterface {
         } catch (SQLException ex) {
             throw new RuntimeException("Something went wrong while initializing the DataSource", ex);
         }
-
+		nodesDownloadedPct = 0;
+		edgesDownloadedPct = 0;
+		streetsDownloadedPct = 0;
     }
+
+	public double getNodesDownloadedPct()
+	{
+		return nodesDownloadedPct;
+	}
+
+	public double getEdgesDownloadedPct()
+	{
+		return edgesDownloadedPct;
+	}
+
+	public double getStreetsDownloadedPct()
+	{
+		return streetsDownloadedPct;
+	}
+
 
     private void initiateDataSource() throws SQLException {
         // initiates the connection to the database, and sets the basic parameters for the connection pooling.
@@ -72,7 +92,7 @@ public class DatabaseHandler implements DatabaseInterface {
         cpds.setIdleConnectionTestPeriod(10);
         cpds.setTestConnectionOnCheckin(true);
         cpds.setMaxIdleTimeExcessConnections(5);
-        initDataStructure();
+        //initDataStructure();
 
     }
 
@@ -239,6 +259,7 @@ public class DatabaseHandler implements DatabaseInterface {
                 node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2)-440000, rs.getDouble(3)-6040000)); // these subtractions needs to be done in the database.
                 nodes.add(node);
                 i++;
+				nodesDownloadedPct += (double)1/675902;
             }
             System.out.println("Total nodes: " + i);
             Collections.sort(nodes, nc);
@@ -247,6 +268,7 @@ public class DatabaseHandler implements DatabaseInterface {
         } finally {
             closeConnection(cons, pstatements, resultsets);
         }
+		nodesDownloadedPct = 1;
         return nodes;
     }
 
@@ -268,6 +290,7 @@ public class DatabaseHandler implements DatabaseInterface {
                 edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5));
                 edges.add(edge);
                 i++;
+				edgesDownloadedPct += (double)1/812301;
             }
 
             System.out.println("Total edges: " + i);
@@ -277,6 +300,7 @@ public class DatabaseHandler implements DatabaseInterface {
             closeConnection(cons, pstatements, resultsets);
         }
         Collections.sort(edges);
+		edgesDownloadedPct = 1;
         return edges;
     }
 
@@ -306,6 +330,7 @@ public class DatabaseHandler implements DatabaseInterface {
                 street = new Street(rs.getInt(2), rs.getString(1));
                 streets.add(street);
                 i++;
+				streetsDownloadedPct += (double)1/115883;
             }
 
             System.out.println("Total streets: " + i);
@@ -315,6 +340,7 @@ public class DatabaseHandler implements DatabaseInterface {
             closeConnection(cons, pstatements, resultsets);
         }
         Collections.sort(streets);
+		streetsDownloadedPct = 1;
         return streets;
     }
 
@@ -438,6 +464,7 @@ public class DatabaseHandler implements DatabaseInterface {
     }
     @Override
         public ArrayList<Edge> getData(){
+		initDataStructure();
         return edges;
     }
 }
