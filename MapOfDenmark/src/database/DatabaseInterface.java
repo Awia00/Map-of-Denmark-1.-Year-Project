@@ -19,6 +19,13 @@ import java.util.ArrayList;
  * @author Aleksandar Jonovic
  */
 public interface DatabaseInterface {
-    public ArrayList<Edge> getData(); 
-    
+
+	public ArrayList<Edge> getData();
+
+	public double getNodesDownloadedPct();
+
+	public double getEdgesDownloadedPct();
+
+	public double getStreetsDownloadedPct();
+
 }
