@@ -90,9 +90,11 @@ public class LoadingFrame extends JFrame {
 		public void paint(Graphics g)
 		{
 			super.paint(g); //To change body of generated methods, choose Tools | Templates.
-			int position = 500%((int)(nodesLoaded*150+edgesLoaded*150+streetsLoaded*150)+1);
+			int position = 500%((int)((nodesLoaded+edgesLoaded+streetsLoaded)*150)+1);
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
+			
+			// white mover
 			Color color = new Color(255,255,255,100);
 			Color color2 = new Color(255,255,255,50);
 			g.setColor(color);
@@ -101,7 +103,26 @@ public class LoadingFrame extends JFrame {
 			g.fillRect(position-5, 0,5,50);
 			g.fillRect(position+15, 0,5,50);
 			
+			
 			g.setColor(Color.black);
+			
+			int i = (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500);
+			g.drawOval(i+1+3, 20, 10, 10); // hovede
+			g.drawOval(i+3+3, 22, 2, 2); // øje
+			g.drawLine(i+4,25,i+7,27); // mund
+			
+			g.drawLine(i+5+3, 32, i, 25); // arms
+			g.drawLine(i+5+3, 32, i, 30); // arms
+			
+			g.drawLine(i+5+3, 30,i+5+3, 38); // body
+			
+			g.drawLine(i+5+3, 38, i+2+3, 50); // legs
+			g.drawLine(i+5+3, 38, i+13+3, 50);
+			
+			g.drawOval(i+17, 48, 2, 2); // ruble
+			g.drawOval(i+19, 45, 3, 3); // ruble
+			g.drawOval(i+22, 47, 2, 2); // ruble
+			
 			g.drawRect(0, 0, 500, 50);
 			g.drawString("Loading process...", 200, 28);
 		}
