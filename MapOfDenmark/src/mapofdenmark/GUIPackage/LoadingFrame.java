@@ -83,7 +83,6 @@ public class LoadingFrame extends JFrame {
 			this.nodesLoaded = nodesLoaded;
 			this.edgesLoaded = edgesLoaded;
 			this.streetsLoaded = streetsLoaded;
-			repaint();
 		}
 
 		@Override
