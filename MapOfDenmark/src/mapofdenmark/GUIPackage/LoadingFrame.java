@@ -8,7 +8,8 @@ package mapofdenmark.GUIPackage;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
-import java.awt.HeadlessException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author Anders
  */
-public class LoadingFrame extends JFrame {
+public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 	private loadingComponent loadingBar;
 	private JTextField messageField;
@@ -27,6 +28,7 @@ public class LoadingFrame extends JFrame {
 
 	public LoadingFrame()
 	{
+		
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
@@ -45,6 +47,8 @@ public class LoadingFrame extends JFrame {
 		mainContainer.add(messageField, "cell 0 0");
 		mainContainer.add(loadingBar, "cell 0 1, width 501:501:501, height 51:51:51");
 
+		
+		loadingBar.addMouseMotionListener(this);
 		revalidate();
 		repaint();
 		pack();
@@ -67,17 +71,37 @@ public class LoadingFrame extends JFrame {
 		this.repaint();
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent e)
+	{
+		//
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		loadingBar.mouseHover(e);
+	}
+
 	private static class loadingComponent extends JComponent {
 
 		private double nodesLoaded, edgesLoaded, streetsLoaded;
+		private int mouseHoverX, mouseHoverY;
 
 		public loadingComponent()
 		{
 			nodesLoaded = 0;
 			edgesLoaded = 0;
 			streetsLoaded = 0;
+			mouseHoverX = 0;
+			mouseHoverY = 0;
 		}
 
+		public void mouseHover(MouseEvent e)
+		{
+			mouseHoverX = e.getX();
+			mouseHoverY = e.getY();
+		}
 		public void setValues(double nodesLoaded, double edgesLoaded, double streetsLoaded)
 		{
 			this.nodesLoaded = nodesLoaded;
@@ -88,12 +112,13 @@ public class LoadingFrame extends JFrame {
 		@Override
 		public void paint(Graphics g)
 		{
-			super.paint(g); //To change body of generated methods, choose Tools | Templates.
+			
+			Color loadingColor = new Color((int)(((double)mouseHoverY/50)*255),255,(int)(((double)mouseHoverX/500)*255));
 			int position = 500%((int)((nodesLoaded+edgesLoaded+streetsLoaded)*150)+1);
-			g.setColor(Color.BLUE);
+			g.setColor(loadingColor);
 			g.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
 			
-			// white mover
+			// white tranparent hover box
 			Color color = new Color(255,255,255,100);
 			Color color2 = new Color(255,255,255,50);
 			g.setColor(color);
@@ -105,6 +130,7 @@ public class LoadingFrame extends JFrame {
 			
 			g.setColor(Color.black);
 			
+			// draw a stickman
 			int i = (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500);
 			g.drawOval(i+1+3, 20, 10, 10); // hovede
 			g.drawOval(i+3+3, 22, 2, 2); // øje
