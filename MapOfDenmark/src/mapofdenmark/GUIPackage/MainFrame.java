@@ -69,6 +69,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		// frame properties
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setExtendedState(MAXIMIZED_BOTH);
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();

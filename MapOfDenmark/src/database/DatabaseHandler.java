@@ -464,7 +464,7 @@ public class DatabaseHandler implements DatabaseInterface {
     }
     @Override
         public ArrayList<Edge> getData(){
-		initDataStructure();
+		if (edges.isEmpty()){initDataStructure();}
         return edges;
     }
 }

@@ -31,6 +31,7 @@ public class LoadingFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		requestFocus();
+		setLocationRelativeTo(null);
 		MigLayout migMainLayout = new MigLayout("", "10[center]10[center]10", "10[center]10[center]10");
 
 		mainContainer = new JPanel(migMainLayout);
@@ -90,7 +91,7 @@ public class LoadingFrame extends JFrame {
 		{
 			super.paint(g); //To change body of generated methods, choose Tools | Templates.
 
-			g.setColor(Color.red);
+			g.setColor(Color.blue);
 			g.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
 			g.setColor(Color.black);
 			g.drawRect(0, 0, 500, 50);
