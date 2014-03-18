@@ -90,10 +90,17 @@ public class LoadingFrame extends JFrame {
 		public void paint(Graphics g)
 		{
 			super.paint(g); //To change body of generated methods, choose Tools | Templates.
-
-			Color color = new Color((int)(streetsLoaded*255),(int)(nodesLoaded*255),(int)(edgesLoaded*255));
-			g.setColor(color);
+			int position = 500%((int)(nodesLoaded*150+edgesLoaded*150+streetsLoaded*150)+1);
+			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
+			Color color = new Color(255,255,255,100);
+			Color color2 = new Color(255,255,255,50);
+			g.setColor(color);
+			g.fillRect(position, 0,15,50);
+			g.setColor(color2);
+			g.fillRect(position-5, 0,5,50);
+			g.fillRect(position+15, 0,5,50);
+			
 			g.setColor(Color.black);
 			g.drawRect(0, 0, 500, 50);
 			g.drawString("Loading process...", 200, 28);
