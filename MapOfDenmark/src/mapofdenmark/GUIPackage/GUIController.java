@@ -48,10 +48,10 @@ public class GUIController {
 
 		List<Edge> edges = db.getData();
 		
+		mainframe = new MainFrame(edges);
+		
 		lframe.setVisible(false);
 		lframe.dispose();
-		
-		mainframe = new MainFrame(edges);
 	}
 
 	public static void main(String[] args)
