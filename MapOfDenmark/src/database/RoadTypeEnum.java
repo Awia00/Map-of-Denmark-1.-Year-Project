@@ -14,8 +14,8 @@ package database;
 public enum RoadTypeEnum {
     
     
-    HIGHWAY(new int[] {1,2,3,21,22,23,31,32,33,41,42,43}),
-	SECONDARYROAD(new int[] {4,24,34,44}),
+    HIGHWAY(new int[] {1,2,21,22,31,32,41,42}),
+	SECONDARYROAD(new int[] {3,4,23,24,33,34,43,44}),
 	NORMALROAD(new int[] {5,25,35,45}),
 	SMALLROAD(new int[] {6,10,26,46,48}),
     PATHWAY(new int[] {8,11,28,48}),
