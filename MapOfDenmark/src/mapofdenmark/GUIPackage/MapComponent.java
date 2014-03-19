@@ -214,6 +214,7 @@ public class MapComponent extends JComponent {
 	public void paint(Graphics g)
 	{
 		// draw the map white and with a border
+		Graphics2D g2 = (Graphics2D) g;
 		g.setColor(Color.white);
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
@@ -224,7 +225,7 @@ public class MapComponent extends JComponent {
 		double xVArea = visibleArea.getxCoord();
 		double yVArea = visibleArea.getyCoord();
 
-		Graphics2D g2 = (Graphics2D) g;
+		
 		BasicStroke[] highwayStrokes =
 		{
 			new BasicStroke(2), new BasicStroke(3), new BasicStroke(4), new BasicStroke(5)
