@@ -46,7 +46,9 @@ public class MapComponent extends JComponent {
 	protected final double zoomOutConstant = 1.02;
 
 	protected double doneTimer = 0;
-
+       
+        protected ColorScheme colorScheme;
+        
 	public MapComponent(VisibleArea visibleArea, Street[] streets, List<Edge> edges)
 	{
 		this.visibleArea = new VisibleArea();
@@ -61,6 +63,9 @@ public class MapComponent extends JComponent {
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
 		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12); // HELE DANMARK
 		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
+                
+                // set the initial Color scheme to Standard Color scheme
+                this.setColorScheme("sdadadafafa");
 	}
 
 	/**
@@ -213,9 +218,10 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
+                
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
-		g.setColor(Color.white);
+		g.setColor(this.colorScheme.getBackgroundColor());
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
@@ -247,7 +253,7 @@ public class MapComponent extends JComponent {
 		{
 			if (quadTree.isDrawable())
 			{
-				g.setColor(Color.black);
+				g.setColor(this.colorScheme.getHighwayColor());
 				if (xlength <= 10000)
 				{
 					g2.setStroke(highwayStrokes[3]);
@@ -272,7 +278,7 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= 550000)
 				{
-					g.setColor(Color.orange);
+					g.setColor(this.colorScheme.getSecondaryRoadColor());
 					if (xlength <= 8000)
 					{
 						g2.setStroke(secondaryStrokes[2]);
@@ -294,7 +300,7 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= 100000)
 				{
-					g.setColor(Color.gray);
+					g.setColor(this.colorScheme.getNormalRoadColor());
 					if (xlength <= 8000)
 					{
 						g2.setStroke(normalStrokes[2]);
@@ -316,7 +322,7 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= 35000)
 				{
-					g.setColor(Color.gray);
+					g.setColor(this.colorScheme.getSmallRoadColor());
 					if (xlength <= 7000)
 					{
 						g2.setStroke(normalStrokes[2]);
@@ -338,7 +344,7 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= 20000)
 				{
-					g.setColor(Color.green);
+					g.setColor(this.colorScheme.getPathwayColor());
 					if (xlength <= 8000)
 					{
 						g2.setStroke(pathStrokes[1]);
@@ -359,14 +365,14 @@ public class MapComponent extends JComponent {
 				{
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
-						g.setColor(Color.black);
+						g.setColor(this.colorScheme.getPlaceNameColor());
 						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
 					}
 				}
 				for (Edge edge : quadTree.getFerryEdges())
 				{
 					g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-					g.setColor(Color.blue);
+					g.setColor(this.colorScheme.getFerrywayColor());
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
@@ -389,7 +395,25 @@ public class MapComponent extends JComponent {
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
 	}
-
+         
+        protected void setColorScheme(String colorScheme)
+        {
+           switch(colorScheme){
+                case "Standard":
+                    //set Standard ColorScheme
+                    this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, Color.orange, Color.gray, Color.gray, Color.green, Color.blue, Color.black);
+                    break;
+                case "Night":
+                    // set Night ColorScheme
+                    this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, Color.gray, Color.cyan, Color.cyan, Color.magenta, Color.blue, Color.red);
+                    break;
+                    // default to Standard ColorScheme
+                default:
+                    setColorScheme("Standard");
+                    break;
+            }
+        }
+        
 	@Override
 	public void reshape(int x, int y, int w, int h)
 	{

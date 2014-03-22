@@ -81,26 +81,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
                 
                 
-                //menubar
-                JMenuBar menubar = new JMenuBar();
-                this.setJMenuBar(menubar);
                 
-                // create the Color scheme menu
-                JMenu colorSchemeMenu = new JMenu("Color scheme");
-                menubar.add(colorSchemeMenu);
-                
-                JMenuItem standardItem = new JMenuItem("Standard");
-                standardItem.addActionListener(new ActionListener(){
-                                    public void actionPerformed(ActionEvent e){ setStandardColorScheme(); }
-                });
-                
-                JMenuItem nightItem = new JMenuItem("Night");
-                nightItem.addActionListener(new ActionListener(){
-                                    public void actionPerformed(ActionEvent e){ setNightColorScheme(); }
-                });
-                    
-                colorSchemeMenu.add(standardItem);
-                colorSchemeMenu.add(nightItem);
                 
                 
                 
@@ -120,7 +101,33 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
+                
 
+                //menubar
+                JMenuBar menubar = new JMenuBar();
+                this.setJMenuBar(menubar);
+                
+                // create the Color scheme menu
+                JMenu colorSchemeMenu = new JMenu("Color scheme");
+                menubar.add(colorSchemeMenu);
+                
+                // create the Stardard menu item
+                JMenuItem standardItem = new JMenuItem("Standard");
+                standardItem.addActionListener(new ActionListener(){
+                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Standard");
+                                            drawMapComponent.repaint();}
+                });
+                
+                // create the Night menu 
+                JMenuItem nightItem = new JMenuItem("Night");
+                nightItem.addActionListener(new ActionListener(){
+                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Night");
+                                            drawMapComponent.repaint();}
+                });
+                    
+                colorSchemeMenu.add(standardItem);
+                colorSchemeMenu.add(nightItem);
+                
 		// Action listeners
 		// rdy up
 		revalidate();
@@ -294,26 +301,15 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				*/
 
 	}
-
+        
 	protected void callRepaint()
 	{
 		drawMapComponent.repaint();
 		this.repaint();
 	}
         
-        protected void setStandardColorScheme()
-        {
-            //something
-            System.out.println("Standard Color");
-        }
         
-        protected void setNightColorScheme()
-        {
-            //something
-            System.out.println("Night Color");
-        }
         
-
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
