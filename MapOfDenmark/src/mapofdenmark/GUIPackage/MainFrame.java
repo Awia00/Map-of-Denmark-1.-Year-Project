@@ -11,6 +11,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -24,6 +26,9 @@ import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
@@ -47,7 +52,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private Dimension screenSize;
 	private VisibleArea visibleArea;
 	private Street[] streets;
-
+        
 	private Point oldPosition;
 	private Point newPosition;
 
@@ -74,7 +79,31 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
-
+                
+                
+                //menubar
+                JMenuBar menubar = new JMenuBar();
+                this.setJMenuBar(menubar);
+                
+                // create the Color scheme menu
+                JMenu colorSchemeMenu = new JMenu("Color scheme");
+                menubar.add(colorSchemeMenu);
+                
+                JMenuItem standardItem = new JMenuItem("Standard");
+                standardItem.addActionListener(new ActionListener(){
+                                    public void actionPerformed(ActionEvent e){ setStandardColorScheme(); }
+                });
+                
+                JMenuItem nightItem = new JMenuItem("Night");
+                nightItem.addActionListener(new ActionListener(){
+                                    public void actionPerformed(ActionEvent e){ setNightColorScheme(); }
+                });
+                    
+                colorSchemeMenu.add(standardItem);
+                colorSchemeMenu.add(nightItem);
+                
+                
+                
 		// components
 		drawMapComponent = new MapComponent(visibleArea, streets,edges);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
@@ -271,6 +300,19 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		drawMapComponent.repaint();
 		this.repaint();
 	}
+        
+        protected void setStandardColorScheme()
+        {
+            //something
+            System.out.println("Standard Color");
+        }
+        
+        protected void setNightColorScheme()
+        {
+            //something
+            System.out.println("Night Color");
+        }
+        
 
 	@Override
 	public void keyTyped(KeyEvent e)
