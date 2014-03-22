@@ -407,8 +407,14 @@ public class MapComponent extends JComponent {
                     // set Night ColorScheme
                     this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, Color.gray, Color.cyan, Color.cyan, Color.magenta, Color.blue, Color.red);
                     break;
-                    // default to Standard ColorScheme
+                    
+                case "Funky":
+                    // set Funky ColorScheme
+                    this.colorScheme = new ColorScheme("Funky", Color.red, Color.magenta, Color.green, Color.yellow, Color.yellow, Color.magenta, Color.blue, Color.white);
+                    break;
+                    
                 default:
+                    // default to Standard ColorScheme
                     setColorScheme("Standard");
                     break;
             }

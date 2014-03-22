@@ -124,9 +124,17 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                     public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Night");
                                             drawMapComponent.repaint();}
                 });
+                
+                // create the Night menu 
+                JMenuItem funkyItem = new JMenuItem("Funky");
+                funkyItem.addActionListener(new ActionListener(){
+                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Funky");
+                                            drawMapComponent.repaint();}
+                });
                     
                 colorSchemeMenu.add(standardItem);
                 colorSchemeMenu.add(nightItem);
+                colorSchemeMenu.add(funkyItem);
                 
 		// Action listeners
 		// rdy up
