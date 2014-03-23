@@ -43,8 +43,8 @@ public class DatabaseHandler implements DatabaseInterface {
     NodeComparer nc = new NodeComparer();
     EdgeComparer ec = new EdgeComparer();
     StreetComparer sc = new StreetComparer();
-	
-	private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
+
+    private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -59,26 +59,22 @@ public class DatabaseHandler implements DatabaseInterface {
         } catch (SQLException ex) {
             throw new RuntimeException("Something went wrong while initializing the DataSource", ex);
         }
-		nodesDownloadedPct = 0;
-		edgesDownloadedPct = 0;
-		streetsDownloadedPct = 0;
+        nodesDownloadedPct = 0;
+        edgesDownloadedPct = 0;
+        streetsDownloadedPct = 0;
     }
 
-	public double getNodesDownloadedPct()
-	{
-		return nodesDownloadedPct;
-	}
+    public double getNodesDownloadedPct() {
+        return nodesDownloadedPct;
+    }
 
-	public double getEdgesDownloadedPct()
-	{
-		return edgesDownloadedPct;
-	}
+    public double getEdgesDownloadedPct() {
+        return edgesDownloadedPct;
+    }
 
-	public double getStreetsDownloadedPct()
-	{
-		return streetsDownloadedPct;
-	}
-
+    public double getStreetsDownloadedPct() {
+        return streetsDownloadedPct;
+    }
 
     private void initiateDataSource() throws SQLException {
         // initiates the connection to the database, and sets the basic parameters for the connection pooling.
@@ -243,6 +239,8 @@ public class DatabaseHandler implements DatabaseInterface {
     private ArrayList<Node> getNodes() {
         Node node = null;
         try {
+
+            //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[nodes];";
             Connection con = cpds.getConnection();
@@ -254,12 +252,13 @@ public class DatabaseHandler implements DatabaseInterface {
             System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
 
             int i = 0;
-            Point2D x = new Point2D.Double();
+            
+            //Add nodes to node ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2)-440000, rs.getDouble(3)-6040000)); // these subtractions needs to be done in the database.
+                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2) - 440000, rs.getDouble(3) - 6040000)); // these subtractions needs to be done in the database.
                 nodes.add(node);
                 i++;
-				nodesDownloadedPct += (double)1/675902;
+                nodesDownloadedPct += (double) 1 / 675902;
             }
             System.out.println("Total nodes: " + i);
             Collections.sort(nodes, nc);
@@ -268,12 +267,13 @@ public class DatabaseHandler implements DatabaseInterface {
         } finally {
             closeConnection(cons, pstatements, resultsets);
         }
-		nodesDownloadedPct = 1;
+        nodesDownloadedPct = 1;
         return nodes;
     }
 
     private ArrayList<Edge> getEdges() {
         try {
+            //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             Edge edge = null;
             String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE FROM [jonovic_dk_db].[dbo].[edges];";
@@ -285,12 +285,13 @@ public class DatabaseHandler implements DatabaseInterface {
 
             System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
             int i = 0;
+            
+            //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-
                 edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5));
                 edges.add(edge);
                 i++;
-				edgesDownloadedPct += (double)1/812301;
+                edgesDownloadedPct += (double) 1 / 812301;
             }
 
             System.out.println("Total edges: " + i);
@@ -300,7 +301,7 @@ public class DatabaseHandler implements DatabaseInterface {
             closeConnection(cons, pstatements, resultsets);
         }
         Collections.sort(edges);
-		edgesDownloadedPct = 1;
+        edgesDownloadedPct = 1;
         return edges;
     }
 
@@ -330,7 +331,7 @@ public class DatabaseHandler implements DatabaseInterface {
                 street = new Street(rs.getInt(2), rs.getString(1));
                 streets.add(street);
                 i++;
-				streetsDownloadedPct += (double)1/115883;
+                streetsDownloadedPct += (double) 1 / 115883;
             }
 
             System.out.println("Total streets: " + i);
@@ -340,7 +341,7 @@ public class DatabaseHandler implements DatabaseInterface {
             closeConnection(cons, pstatements, resultsets);
         }
         Collections.sort(streets);
-		streetsDownloadedPct = 1;
+        streetsDownloadedPct = 1;
         return streets;
     }
 
@@ -389,33 +390,31 @@ public class DatabaseHandler implements DatabaseInterface {
         }
         return edgeResults;
     }
-    
-    private ArrayList<Street> getStreet(int id){
-    ArrayList<Street> streetResults = new ArrayList<>();
-    
-    Street s = new Street(id, "N/A");
-    int index = Collections.binarySearch(streets, s, sc);
-    int indexTemp = index;
-    int indexMax;
-    int indexMin;
-    while(streets.get(indexTemp).getID() == id && indexTemp != streets.size()-1)
-    {
-        indexTemp++;
-    }
-    indexMax = indexTemp;
-    
-    indexTemp = index;
-    while(streets.get(indexTemp).getID() == id && indexTemp > 0)
-    {
-        indexTemp--;
-    }
-    indexMin = indexTemp;
-    
-    for(int i = indexMin; i <= indexMax; i++){
-        streetResults.add(streets.get(i));
-    }
-    
-    return streetResults;
+
+    private ArrayList<Street> getStreet(int id) {
+        ArrayList<Street> streetResults = new ArrayList<>();
+
+        Street s = new Street(id, "N/A");
+        int index = Collections.binarySearch(streets, s, sc);
+        int indexTemp = index;
+        int indexMax;
+        int indexMin;
+        while (streets.get(indexTemp).getID() == id && indexTemp != streets.size() - 1) {
+            indexTemp++;
+        }
+        indexMax = indexTemp;
+
+        indexTemp = index;
+        while (streets.get(indexTemp).getID() == id && indexTemp > 0) {
+            indexTemp--;
+        }
+        indexMin = indexTemp;
+
+        for (int i = indexMin; i <= indexMax; i++) {
+            streetResults.add(streets.get(i));
+        }
+
+        return streetResults;
     }
 
     private void initDataStructure() {
@@ -431,40 +430,41 @@ public class DatabaseHandler implements DatabaseInterface {
         }
         System.out.println("Node-to-Edge joining complete.");
         /*for (Street street : streets) {
-            ArrayList<Edge> el = getEdge(street.getID(), street.getStreetName());
-            for (Edge e : el) {
-                street.addEdge(e);
-            }
-        }*/
+         ArrayList<Edge> el = getEdge(street.getID(), street.getStreetName());
+         for (Edge e : el) {
+         street.addEdge(e);
+         }
+         }*/
         /*
-        for(Edge edge : edges){
+         for(Edge edge : edges){
             
-            ArrayList<Street> s = getStreet(edge.getRoadcode());
-            for(Street street : s){
-            if(edge.getRoadName().equals(street.getStreetName()))
-            {
-            //System.out.println("Added edge!");
-            street.addEdge(edge);
-            }
-            }
-        }
+         ArrayList<Street> s = getStreet(edge.getRoadcode());
+         for(Street street : s){
+         if(edge.getRoadName().equals(street.getStreetName()))
+         {
+         //System.out.println("Added edge!");
+         street.addEdge(edge);
+         }
+         }
+         }
         
-        for (Street street : streets) {
-            ArrayList<Edge> e = street.getEdges();
+         for (Street street : streets) {
+         ArrayList<Edge> e = street.getEdges();
             
-            if ( e.size() != 0){
-            i += e.size();
-            }
-        }*/
+         if ( e.size() != 0){
+         i += e.size();
+         }
+         }*/
         //System.out.println(i);
-        
+
         //System.out.println("Edge-to-Street joining complete.");
-        
-        
     }
+
     @Override
-        public ArrayList<Edge> getData(){
-		if (edges.isEmpty()){initDataStructure();}
+    public ArrayList<Edge> getData() {
+        if (edges.isEmpty()) {
+            initDataStructure();
+        }
         return edges;
     }
 }
