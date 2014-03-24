@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class represents a scheme of colors to be assigned to the background 
+ * and the different road types. 
  */
 
 package mapofdenmark.GUIPackage;
@@ -34,9 +33,9 @@ public class ColorScheme {
     private final Color placeNameColor;
     
     //Constructor for the ColorScheme class. This constructor takes Color 
-    //objects as parameters and initializes the color for the background,
-    //placeName, highway, ferryway, secondaryRoad, pathway and road as well as
-    //setting the name of the ColorScheme. 
+    //objects as parameters and initializes the color for the background, 
+    //highway, secondary road, normal road, small road, pathway, ferryway 
+    //as well as setting the name of the ColorScheme. 
     public ColorScheme(String name, Color backgroundColor, Color highwayColor, Color secondaryRoadColor, Color normalRoadColor, Color smallRoadColor, Color pathwayColor, Color ferrywayColor, Color placeNameColor)
     {
     this.name = name;
@@ -49,39 +48,49 @@ public class ColorScheme {
     this.ferrywayColor = ferrywayColor;
     this.placeNameColor = placeNameColor;
     }
-
+    
+    //This method returns the name of the colorScheme.
+    //@return name
     public String getName() {
         return name;
     }
-
+    //This method returns the backgroundColor of the colorScheme.
+    //@return backgroundColor
     public Color getBackgroundColor() {
         return backgroundColor;
     }
-
+    //This method returns the highwayColor of the colorScheme.
+    //@return highwayColor
     public Color getHighwayColor() {
         return highwayColor;
     }
-
+    //This method returns the secondaryRoadColor of the colorScheme.
+    //@return secondaryRoadColor
     public Color getSecondaryRoadColor() {
         return secondaryRoadColor;
     }
-
+    //This method returns the normalRoadColor of the colorScheme.
+    //@return normalRoadColor
     public Color getNormalRoadColor() {
         return normalRoadColor;
     }
-
+    //This method returns the smallRoadColor of the colorScheme.
+    //@return smallRoadColor
     public Color getSmallRoadColor() {
         return smallRoadColor;
     }
-
+    //This method returns the pathwayColor of the colorScheme.
+    //@return pathwayColor
     public Color getPathwayColor() {
         return pathwayColor;
     }
-
+    //This method returns the ferrywayColor of the colorScheme.
+    //@return ferrywayColor
     public Color getFerrywayColor() {
         return ferrywayColor;
     }
-
+    //This method returns the placeNameColor of the colorScheme.
+    //@return placeNameColor
     public Color getPlaceNameColor() {
         return placeNameColor;
     }
