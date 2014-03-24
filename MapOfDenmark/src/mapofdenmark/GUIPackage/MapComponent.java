@@ -52,7 +52,7 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12);
 
 		// set the initial Color scheme to Standard Color scheme
-		this.setColorScheme("sdadadafafa");
+		this.setColorScheme("Standard");
 	}
 
 	/**
@@ -369,7 +369,9 @@ public class MapComponent extends JComponent {
 
 		if (drawRectangle)
 		{
-			g.setColor(Color.black);
+                //The color of the rectangle is set as the inverted color of the background color.
+
+                        g.setColor(new Color(255-(this.colorScheme.getBackgroundColor().getRed()),255-(this.colorScheme.getBackgroundColor().getGreen()),255-(this.colorScheme.getBackgroundColor().getBlue())));
 			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
 			g.drawRect(xStartCoord + 1, yStartCoord + 1, xEndCoord - 2 - xStartCoord, yEndCoord - 2 - yStartCoord);
 		}
