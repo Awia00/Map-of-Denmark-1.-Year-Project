@@ -222,19 +222,19 @@ public class MapComponent extends JComponent {
 
 		// create strokes
 		BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3, (zoomFactorStroke * 1.2) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke secondaryRoadStrokeBorder = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 0.9) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke secondaryRoadStroke = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke *0.9))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke secondaryRoadStroke = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke *0.9))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke normalRoadStrokeBorder = new BasicStroke((float) (Math.max(1.6, (zoomFactorStroke * 0.6) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke normalRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.6))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke normalRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.6))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke smallRoadStrokeBorder = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke*0.3) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke smallRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.3))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke smallRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.2, (zoomFactorStroke*0.1) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.1))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
@@ -371,9 +371,11 @@ public class MapComponent extends JComponent {
 		{
                 //The color of the rectangle is set as the inverted color of the background color.
 
-                        g.setColor(new Color(255-(this.colorScheme.getBackgroundColor().getRed()),255-(this.colorScheme.getBackgroundColor().getGreen()),255-(this.colorScheme.getBackgroundColor().getBlue())));
+            g.setColor(new Color(255-(this.colorScheme.getBackgroundColor().getRed()),255-(this.colorScheme.getBackgroundColor().getGreen()),255-(this.colorScheme.getBackgroundColor().getBlue())));
+			
+			g2.setStroke(new BasicStroke(2));
 			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
-			g.drawRect(xStartCoord + 1, yStartCoord + 1, xEndCoord - 2 - xStartCoord, yEndCoord - 2 - yStartCoord);
+			g2.setStroke(new BasicStroke());
 		}
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
