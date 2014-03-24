@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This enum represents the different road types.
  */
 
 package database;
@@ -15,14 +13,15 @@ public enum RoadTypeEnum {
     
     
     HIGHWAY(new int[] {1,2,21,22,31,32,41,42}),
-	SECONDARYROAD(new int[] {3,4,23,24,33,34,43,44}),
-	NORMALROAD(new int[] {5,25,35,45}),
-	SMALLROAD(new int[] {6,10,26,46,48}),
+    SECONDARYROAD(new int[] {3,4,23,24,33,34,43,44}),
+    NORMALROAD(new int[] {5,25,35,45}),
+    SMALLROAD(new int[] {6,10,26,46,48}),
     PATHWAY(new int[] {8,11,28,48}),
     FERRYWAY(new int[] {80}),
     PLACENAME(new int[] {99});
     
     private final int[] types;
+    
     
     RoadTypeEnum(int[] types){
         this.types = types;

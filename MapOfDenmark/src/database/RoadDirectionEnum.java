@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This enum represents the different road directions. The road direction is
+ * the direction in which you are allowed to drive.
  */
 
 package database;
