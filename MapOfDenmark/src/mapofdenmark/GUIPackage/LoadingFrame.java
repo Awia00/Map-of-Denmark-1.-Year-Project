@@ -7,6 +7,7 @@ package mapofdenmark.GUIPackage;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -43,6 +44,10 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 		messageField = new JTextField("Step 1/4 - Loading nodes from the database...");
 		messageField.setEditable(false);
+		messageField.setEnabled(false);
+		messageField.setBorder(null);
+		messageField.setFont(new Font("Verdana", Font.PLAIN, 12));
+	
 		loadingBar = new loadingComponent();
 
 		mainContainer.add(messageField, "cell 0 0");
