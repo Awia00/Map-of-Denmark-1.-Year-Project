@@ -152,11 +152,67 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		this.drawMapComponent.addMouseWheelListener(this);
 		this.drawMapComponent.addKeyListener(this);
 	}
-
-	@Override
-	public Dimension getPreferredSize()
+	
+		private void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
 	{
-		return new Dimension((int) (screenSize.width / 1.5), (int) (screenSize.height / 1.5));
+		final double coordX = mouseX;
+		final double coordY = mouseX;
+		if (wheelRotation < 0)
+		{
+			if(timerDoneOut != 0)
+			{
+				timerDoneOut = 0;
+				timer.cancel();
+				timer.purge();
+				timer = new Timer();
+			}
+			timerDoneIn= 0;
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run()
+				{
+					timerDoneIn+= 0.05;
+					drawMapComponent.zoomIn(coordX,coordY);
+					callRepaint();
+					if(timerDoneIn >= 1.2)
+					{
+						timer.cancel();
+						timerDoneIn = 0;
+						timer.purge();
+						timer = new Timer();
+					}
+				}
+			};
+			timer.scheduleAtFixedRate(task, 10, 10);
+		} else
+		{
+			if(timerDoneIn != 0)
+			{
+				timerDoneIn = 0;
+				timer.cancel();
+				timer.purge();
+				timer = new Timer();
+			}
+			timerDoneOut= 0;
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run()
+				{
+					timerDoneOut+= 0.05;
+					drawMapComponent.zoomOut(coordX,coordY);
+					callRepaint();
+					if(timerDoneOut >= 1.2)
+					{
+						timer.cancel();
+						timerDoneOut = 0;
+						timer.purge();
+						timer = new Timer();
+					}
+				}
+			};
+			timer.scheduleAtFixedRate(task, 10, 10);
+		}
+		repaint();
 	}
 
 	private Point getDeltaPoint(Point p1, Point p2)
@@ -167,6 +223,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		return new Point(deltaX, deltaY);
 
 	}
+	
+	@Override
+	public Dimension getPreferredSize()
+	{
+		return new Dimension((int) (screenSize.width / 1.5), (int) (screenSize.height / 1.5));
+	}
+
+	
 
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -232,73 +296,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	{
 
 	}
-
-	protected void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
-	{
-		final double coordX = mouseX;
-		final double coordY = mouseX;
-		if (wheelRotation < 0)
-		{
-			if(timerDoneOut != 0)
-			{
-				timerDoneOut = 0;
-				timer.cancel();
-				timer.purge();
-				timer = new Timer();
-			}
-			timerDoneIn= 0;
-			TimerTask task = new TimerTask() {
-				@Override
-				public void run()
-				{
-					timerDoneIn+= 0.05;
-					drawMapComponent.zoomIn(coordX,coordY);
-					callRepaint();
-					if(timerDoneIn >= 1.2)
-					{
-						timer.cancel();
-						timerDoneIn = 0;
-						timer.purge();
-						timer = new Timer();
-					}
-				}
-			};
-			timer.scheduleAtFixedRate(task, 10, 10);
-		} else
-		{
-			if(timerDoneIn != 0)
-			{
-				timerDoneIn = 0;
-				timer.cancel();
-				timer.purge();
-				timer = new Timer();
-			}
-			timerDoneOut= 0;
-			TimerTask task = new TimerTask() {
-				@Override
-				public void run()
-				{
-					timerDoneOut+= 0.05;
-					drawMapComponent.zoomOut(coordX,coordY);
-					callRepaint();
-					if(timerDoneOut >= 1.2)
-					{
-						timer.cancel();
-						timerDoneOut = 0;
-						timer.purge();
-						timer = new Timer();
-					}
-				}
-			};
-			timer.scheduleAtFixedRate(task, 10, 10);
-		}
-		repaint();
-	}
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		final MouseWheelEvent m = e;
 		callSmoothZoom(e.getX(), e.getY(), e.getWheelRotation());
 	}
         
