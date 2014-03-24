@@ -5,25 +5,15 @@
  */
 package mapofdenmark.GUIPackage;
 
-import database.Database;
-import database.DatabaseInterface;
 import database.Edge;
-import database.RoadTypeEnum;
 import database.Street;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JComponent;
 
 /**
@@ -47,7 +37,7 @@ public class MapComponent extends JComponent {
 
 	protected double doneTimer = 0;
        
-        protected ColorScheme colorScheme;
+    private ColorScheme colorScheme;
         
 	public MapComponent(VisibleArea visibleArea, Street[] streets, List<Edge> edges)
 	{
@@ -253,7 +243,7 @@ public class MapComponent extends JComponent {
 		{
 			if (quadTree.isDrawable())
 			{
-				g.setColor(this.colorScheme.getHighwayColor());
+				
 				if (xlength <= 10000)
 				{
 					g2.setStroke(highwayStrokes[3]);
@@ -267,15 +257,24 @@ public class MapComponent extends JComponent {
 				{
 					g2.setStroke(highwayStrokes[0]);
 				}
+				BasicStroke highWayStrokeBorder =	new BasicStroke((float)(Math.max(3,((1-(xlength/quadTreeToDraw.getQuadTreeLength()))+1)*2)+2),BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+				BasicStroke highWayStroke =			new BasicStroke((float)(Math.max(1,((1-(xlength/quadTreeToDraw.getQuadTreeLength()))+1)*2)),BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 				for (Edge edge : quadTree.getHighwayEdges())
 				{
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
-
+					
+					g.setColor(colorScheme.getHighwayColor());
+					g2.setStroke(highWayStrokeBorder);
+					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g2.setStroke(highWayStroke);
+					g.setColor(Color.pink);
 					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
 				}
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 				if (xlength <= 550000)
 				{
 					g.setColor(this.colorScheme.getSecondaryRoadColor());
@@ -419,15 +418,4 @@ public class MapComponent extends JComponent {
                     break;
             }
         }
-        
-	@Override
-	public void reshape(int x, int y, int w, int h)
-	{
-		//System.out.println("x: " + x + " y: " + y + " w: " + w + " h: " + h);
-
-		//double constant = getWidth()/w;
-		//visibleArea.setCoord(visibleArea.getxCoord(), visibleArea.getyCoord(), w*(visibleArea.getxLength()/getWidth())*constant, h*(visibleArea.getyLength()/getHeight())*constant);
-		super.reshape(x, y, w, h); //To change body of generated methods, choose Tools | Templates.
-	}
-
 }

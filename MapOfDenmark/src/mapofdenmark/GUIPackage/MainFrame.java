@@ -114,6 +114,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 // create the Stardard menu item
                 JMenuItem standardItem = new JMenuItem("Standard");
                 standardItem.addActionListener(new ActionListener(){
+									@Override
                                     public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Standard");
                                             drawMapComponent.repaint();}
                 });
@@ -121,6 +122,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 // create the Night menu 
                 JMenuItem nightItem = new JMenuItem("Night");
                 nightItem.addActionListener(new ActionListener(){
+									@Override
                                     public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Night");
                                             drawMapComponent.repaint();}
                 });
@@ -128,6 +130,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 // create the Night menu 
                 JMenuItem funkyItem = new JMenuItem("Funky");
                 funkyItem.addActionListener(new ActionListener(){
+									@Override
                                     public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Funky");
                                             drawMapComponent.repaint();}
                 });
