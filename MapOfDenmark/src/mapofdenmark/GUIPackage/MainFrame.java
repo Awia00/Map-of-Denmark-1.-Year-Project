@@ -233,11 +233,11 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	}
 
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e)
+	protected void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
 	{
-		final MouseWheelEvent m = e;
-		if (e.getWheelRotation() < 0)
+		final double coordX = mouseX;
+		final double coordY = mouseX;
+		if (wheelRotation < 0)
 		{
 			if(timerDoneOut != 0)
 			{
@@ -252,7 +252,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				public void run()
 				{
 					timerDoneIn+= 0.05;
-					drawMapComponent.zoomIn(m.getX(), m.getY());
+					drawMapComponent.zoomIn(coordX,coordY);
 					callRepaint();
 					if(timerDoneIn >= 1.2)
 					{
@@ -279,7 +279,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				public void run()
 				{
 					timerDoneOut+= 0.05;
-					drawMapComponent.zoomOut(m.getX(), m.getY());
+					drawMapComponent.zoomOut(coordX,coordY);
 					callRepaint();
 					if(timerDoneOut >= 1.2)
 					{
@@ -293,21 +293,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			timer.scheduleAtFixedRate(task, 10, 10);
 		}
 		repaint();
-		/*
-		Timer timerToStopTimer = new Timer();
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run()
-			{
-				timer.cancel();
-				timer.purge();
-				timer = new Timer();
-				//timerToStopTimer.cancel();
-			}
-		};
-		timerToStopTimer.schedule(task, 500);
-				*/
-
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e)
+	{
+		final MouseWheelEvent m = e;
+		callSmoothZoom(e.getX(), e.getY(), e.getWheelRotation());
 	}
         
 	protected void callRepaint()
