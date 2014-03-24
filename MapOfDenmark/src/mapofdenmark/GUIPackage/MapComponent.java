@@ -48,12 +48,8 @@ public class MapComponent extends JComponent {
 
 	private void initialize(Street[] streets, List<Edge> edges)
 	{
-		//List<Edge> edges = db.getEdges();
-
-		// DATABASEN SKAL FJERNES HERFRA STREET[] streets BRUGES I STEDET.
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12); // HELE DANMARK
-		//visibleArea.setCoord(120000, 80000, 50000, 25000); // ODENSE
+		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("sdadadafafa");
