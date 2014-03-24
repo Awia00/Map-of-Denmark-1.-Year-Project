@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
@@ -24,7 +25,7 @@ import net.miginfocom.swing.MigLayout;
 public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 	private loadingComponent loadingBar;
-	private JTextField messageField;
+	private JLabel messageField;
 	private Container mainContainer;
 
 	public LoadingFrame()
@@ -42,10 +43,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 		getContentPane().add(mainContainer);
 
-		messageField = new JTextField("Step 1/4 - Loading nodes from the database...");
-		messageField.setEditable(false);
-		messageField.setEnabled(false);
-		messageField.setBorder(null);
+		messageField = new JLabel("Step 1/4 - Loading nodes from the database...");
 		messageField.setFont(new Font("Verdana", Font.PLAIN, 12));
 	
 		loadingBar = new loadingComponent();
