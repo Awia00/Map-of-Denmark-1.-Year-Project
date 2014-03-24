@@ -159,7 +159,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		private void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
 	{
 		final double coordX = mouseX;
-		final double coordY = mouseX;
+		final double coordY = mouseY;
 		if (wheelRotation < 0)
 		{
 			if(timerDoneOut != 0)
