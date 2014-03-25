@@ -13,6 +13,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -202,6 +204,41 @@ public class MapComponent extends JComponent {
 		 */
 	}
 
+	public String findClosestRoad(int mouseCoordX, int mouseCoordY)
+	{
+		QuadTree quadTreeToSearch;
+		double xCoord = convertMouseXToMap(mouseCoordX);
+		double yCoord = convertMouseYToMap(mouseCoordY);
+		List<Edge> edges = new ArrayList<>();
+		for (QuadTree quadTree : QuadTree.getBottomTrees())
+		{
+			if ((quadTree.getQuadTreeX() + quadTree.getQuadTreeLength() >= xCoord && quadTree.getQuadTreeY() + quadTree.getQuadTreeLength() >= yCoord))
+			{
+				if ((quadTree.getQuadTreeX() <= xCoord && quadTree.getQuadTreeY() <= yCoord))
+				{
+					edges.addAll(quadTree.getEdges());
+				}
+			}
+		}
+		double distance = -1;
+		Edge closestEdge = null; 
+		for(Edge edge : edges)
+		{
+			double tempDistance = calculateDistanceEdgeToPoint(edge, xCoord,yCoord);
+			if (distance == -1 && !edge.getRoadName().trim().equals("")){distance = tempDistance; closestEdge = edge;}
+			if(tempDistance < distance && !edge.getRoadName().trim().equals("")){distance = tempDistance;closestEdge = edge;}			
+		}
+		if (distance != -1){return closestEdge.getRoadName();}
+		return "No nearby roads found";
+	}
+	
+	private double calculateDistanceEdgeToPoint(Edge edge, double xCoord, double yCoord)
+	{
+		Line2D line = new Line2D.Double(edge.getFromNodeTrue().getxCoord(),edge.getFromNodeTrue().getyCoord(),edge.getToNodeTrue().getxCoord(),edge.getToNodeTrue().getyCoord());
+		Point2D point = new Point2D.Double(xCoord,yCoord);
+		return line.ptSegDist(point);
+	}
+
 	@Override
 	public void paint(Graphics g)
 	{
@@ -218,32 +255,32 @@ public class MapComponent extends JComponent {
 		double xVArea = visibleArea.getxCoord();
 		double yVArea = visibleArea.getyCoord();
 
-		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength*3)));
+		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
 		// create strokes
 		BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3, (zoomFactorStroke * 1.2) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke secondaryRoadStrokeBorder = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 0.9) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke secondaryRoadStroke = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke *0.9))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+		BasicStroke secondaryRoadStroke = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke * 0.9))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		BasicStroke normalRoadStrokeBorder = new BasicStroke((float) (Math.max(1.6, (zoomFactorStroke * 0.6) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke normalRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.6))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke smallRoadStrokeBorder = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke*0.3) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke smallRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+		BasicStroke smallRoadStrokeBorder = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke * 0.3) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke smallRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.2, (zoomFactorStroke*0.1) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke*0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.2, (zoomFactorStroke * 0.1) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
-		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);	
-		
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+
 		for (QuadTree quadTree : bottomTrees)
 		{
 			if (quadTree.isDrawable())
-			{	
+			{
 				if (xlength <= 15000)
 				{
 					for (Edge edge : quadTree.getPathEdges())
@@ -369,10 +406,10 @@ public class MapComponent extends JComponent {
 
 		if (drawRectangle)
 		{
-                //The color of the rectangle is set as the inverted color of the background color.
+			//The color of the rectangle is set as the inverted color of the background color.
 
-            g.setColor(new Color(255-(this.colorScheme.getBackgroundColor().getRed()),255-(this.colorScheme.getBackgroundColor().getGreen()),255-(this.colorScheme.getBackgroundColor().getBlue())));
-			
+			g.setColor(new Color(255 - (this.colorScheme.getBackgroundColor().getRed()), 255 - (this.colorScheme.getBackgroundColor().getGreen()), 255 - (this.colorScheme.getBackgroundColor().getBlue())));
+
 			g2.setStroke(new BasicStroke(2));
 			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
 			g2.setStroke(new BasicStroke());
@@ -388,7 +425,7 @@ public class MapComponent extends JComponent {
 		{
 			case "Standard":
 				//set Standard ColorScheme
-				this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), Color.gray, new Color(90, 90, 90), Color.gray, new Color(90, 90, 90), new Color(0,230,30), new Color(0, 170, 10), Color.blue, Color.black);
+				this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), Color.gray, new Color(90, 90, 90), Color.gray, new Color(90, 90, 90), new Color(0, 230, 30), new Color(0, 170, 10), Color.blue, Color.black);
 				break;
 			case "Night":
 				// set Night ColorScheme
