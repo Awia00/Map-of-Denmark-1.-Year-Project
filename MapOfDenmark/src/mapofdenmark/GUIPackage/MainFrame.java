@@ -52,7 +52,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private Dimension screenSize;
 	private VisibleArea visibleArea;
 	private Street[] streets;
-        
+
 	private Point oldPosition;
 	private Point newPosition;
 
@@ -61,6 +61,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	protected double timerDoneIn = 0;
 	protected double timerDoneOut = 0;
 	Timer timer = new Timer();
+	Timer mouseStillTimer = new Timer();
 
 	public MainFrame(List<Edge> edges)
 	{
@@ -79,14 +80,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
-                
-                
-                
-                
-                
-                
+
 		// components
-		drawMapComponent = new MapComponent(visibleArea, streets,edges);
+		drawMapComponent = new MapComponent(visibleArea, streets, edges);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
@@ -101,44 +97,52 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
-                
 
-                //menubar
-                JMenuBar menubar = new JMenuBar();
-                this.setJMenuBar(menubar);
-                
-                // create the Color scheme menu
-                JMenu colorSchemeMenu = new JMenu("Color scheme");
-                menubar.add(colorSchemeMenu);
-                
-                // create the Stardard menu item
-                JMenuItem standardItem = new JMenuItem("Standard");
-                standardItem.addActionListener(new ActionListener(){
-									@Override
-                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Standard");
-                                            drawMapComponent.repaint();}
-                });
-                
-                // create the Night menu 
-                JMenuItem nightItem = new JMenuItem("Night");
-                nightItem.addActionListener(new ActionListener(){
-									@Override
-                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Night");
-                                            drawMapComponent.repaint();}
-                });
-                
-                // create the Night menu 
-                JMenuItem funkyItem = new JMenuItem("Funky");
-                funkyItem.addActionListener(new ActionListener(){
-									@Override
-                                    public void actionPerformed(ActionEvent e){ drawMapComponent.setColorScheme("Funky");
-                                            drawMapComponent.repaint();}
-                });
-                    
-                colorSchemeMenu.add(standardItem);
-                colorSchemeMenu.add(nightItem);
-                colorSchemeMenu.add(funkyItem);
-                
+		//menubar
+		JMenuBar menubar = new JMenuBar();
+		this.setJMenuBar(menubar);
+
+		// create the Color scheme menu
+		JMenu colorSchemeMenu = new JMenu("Color scheme");
+		menubar.add(colorSchemeMenu);
+
+		// create the Stardard menu item
+		JMenuItem standardItem = new JMenuItem("Standard");
+		standardItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Standard");
+				drawMapComponent.repaint();
+			}
+		});
+
+		// create the Night menu 
+		JMenuItem nightItem = new JMenuItem("Night");
+		nightItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Night");
+				drawMapComponent.repaint();
+			}
+		});
+
+		// create the Night menu 
+		JMenuItem funkyItem = new JMenuItem("Funky");
+		funkyItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Funky");
+				drawMapComponent.repaint();
+			}
+		});
+
+		colorSchemeMenu.add(standardItem);
+		colorSchemeMenu.add(nightItem);
+		colorSchemeMenu.add(funkyItem);
+
 		// Action listeners
 		// rdy up
 		revalidate();
@@ -147,7 +151,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setVisible(true);
 
 	}
-	
+
 	private void addListeners()
 	{
 		this.drawMapComponent.addMouseListener(this);
@@ -155,29 +159,29 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		this.drawMapComponent.addMouseWheelListener(this);
 		this.drawMapComponent.addKeyListener(this);
 	}
-	
-		private void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
+
+	private void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
 	{
 		final double coordX = mouseX;
 		final double coordY = mouseY;
 		if (wheelRotation < 0)
 		{
-			if(timerDoneOut != 0)
+			if (timerDoneOut != 0)
 			{
 				timerDoneOut = 0;
 				timer.cancel();
 				timer.purge();
 				timer = new Timer();
 			}
-			timerDoneIn= 0;
+			timerDoneIn = 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
-					timerDoneIn+= 0.05;
-					drawMapComponent.zoomIn(coordX,coordY);
+					timerDoneIn += 0.05;
+					drawMapComponent.zoomIn(coordX, coordY);
 					callRepaint();
-					if(timerDoneIn >= 1.2)
+					if (timerDoneIn >= 1.2)
 					{
 						timer.cancel();
 						timerDoneIn = 0;
@@ -189,22 +193,22 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			timer.scheduleAtFixedRate(task, 10, 10);
 		} else
 		{
-			if(timerDoneIn != 0)
+			if (timerDoneIn != 0)
 			{
 				timerDoneIn = 0;
 				timer.cancel();
 				timer.purge();
 				timer = new Timer();
 			}
-			timerDoneOut= 0;
+			timerDoneOut = 0;
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run()
 				{
-					timerDoneOut+= 0.05;
-					drawMapComponent.zoomOut(coordX,coordY);
+					timerDoneOut += 0.05;
+					drawMapComponent.zoomOut(coordX, coordY);
 					callRepaint();
-					if(timerDoneOut >= 1.2)
+					if (timerDoneOut >= 1.2)
 					{
 						timer.cancel();
 						timerDoneOut = 0;
@@ -226,14 +230,12 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		return new Point(deltaX, deltaY);
 
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize()
 	{
 		return new Dimension((int) (screenSize.width / 1.5), (int) (screenSize.height / 1.5));
 	}
-
-	
 
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -263,6 +265,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
+
 		//System.out.println("Mouse Entered");
 		this.drawMapComponent.requestFocusInWindow();
 	}
@@ -297,23 +300,35 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
+		final MouseEvent mouseEvent = e;
+		
+		TimerTask task = new TimerTask() {
 
+
+			@Override
+			public void run()
+			{
+				System.out.println(drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY()));
+			}
+		};
+		mouseStillTimer.cancel();
+		mouseStillTimer = null;
+		mouseStillTimer = new Timer();
+		mouseStillTimer.schedule(task, 700);
 	}
-	
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		callSmoothZoom(e.getX(), e.getY(), e.getWheelRotation());
 	}
-        
+
 	protected void callRepaint()
 	{
 		drawMapComponent.repaint();
 		this.repaint();
 	}
-        
-        
-        
+
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
