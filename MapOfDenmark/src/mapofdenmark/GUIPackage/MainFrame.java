@@ -45,8 +45,9 @@ import net.miginfocom.swing.MigLayout;
 public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
 	private MapComponent drawMapComponent;
-	private Container mainContainer;
+	private Container mainContainer, sideContainer;
 	private JLabel mapOfDenmarkLabel;
+	protected JLabel closestRoadLabel;
 	private JTextField enterAddressField;
 	private JButton searchButton;
 	private Dimension screenSize;
@@ -79,21 +80,25 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setExtendedState(MAXIMIZED_BOTH);
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
+		MigLayout migMainLayout = new MigLayout("", "[150!]10[center]", "[]10[top]");
 
 		// components
 		drawMapComponent = new MapComponent(visibleArea, streets, edges);
 		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
+		closestRoadLabel = new JLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 
 		// Structure
+		sideContainer = new JPanel(new MigLayout());
+		sideContainer.add(enterAddressField, "wrap");
+		sideContainer.add(closestRoadLabel, "wrap");
+
 		mainContainer = new JPanel(migMainLayout);
-		//drawMapComponent.setSize(new Dimension((int)(getSize().width/1.2), (int)(getSize().height/1.2)));
 
 		getContentPane().add(mainContainer);
 		mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
-		mainContainer.add(enterAddressField, "cell 0 1");
+		mainContainer.add(sideContainer, "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
@@ -301,14 +306,24 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	public void mouseMoved(MouseEvent e)
 	{
 		final MouseEvent mouseEvent = e;
-		
-		TimerTask task = new TimerTask() {
 
+		TimerTask task = new TimerTask() {
 
 			@Override
 			public void run()
 			{
-				System.out.println(drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY()));
+				String s = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
+				
+				// this method is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
+				StringBuilder sb = new StringBuilder(s);
+
+				int i = 0;
+				while ((i = sb.indexOf(" ", i + 10)) != -1)
+				{
+					sb.replace(i, i + 1, "<br>");
+				}
+
+				closestRoadLabel.setText("<html>"+sb.toString()+"</html>");
 			}
 		};
 		mouseStillTimer.cancel();
