@@ -80,25 +80,26 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setExtendedState(MAXIMIZED_BOTH);
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MigLayout migMainLayout = new MigLayout("", "[150!]10[center]", "[]10[top]");
+		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
 		drawMapComponent = new MapComponent(visibleArea, streets, edges);
-		mapOfDenmarkLabel = new JLabel("The Map of Denmark");
+		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new JLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 
 		// Structure
-		sideContainer = new JPanel(new MigLayout());
-		sideContainer.add(enterAddressField, "wrap");
-		sideContainer.add(closestRoadLabel, "wrap");
+//		sideContainer = new JPanel(new MigLayout());
+//		sideContainer.add(enterAddressField, "wrap");
+//		sideContainer.add(closestRoadLabel, "wrap");
+                
 
 		mainContainer = new JPanel(migMainLayout);
 
 		getContentPane().add(mainContainer);
-		mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
-		mainContainer.add(sideContainer, "cell 0 1");
+		//mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
+		mainContainer.add(new NavigatonBar(), "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");

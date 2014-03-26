@@ -1,4 +1,5 @@
 // From http://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder
+package mapofdenmark.GUIPackage;
 
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ static Font customFont;
     tf.setColumns(20);
     tf.setPlaceholder("All your base are belong to us!");
     final Font f = new Font("Roboto-Bold", Font.PLAIN, 13);
-    tf.setFont(customFont);
+    tf.setFont(FontLoader.getFontWithSize("Roboto-Light", 20f));
     JOptionPane.showMessageDialog(null, tf);
   }
 
@@ -31,19 +32,7 @@ static Font customFont;
     super(pText);
     
 
-   try {
-                        //create the font to use. Specify the size!
-                       customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Roboto-Bold.ttf")).deriveFont(12f);
-                        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-                        //register the font
-                        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Roboto-Bold.ttf")));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    catch(FontFormatException e)
-                    {
-                        e.printStackTrace();
-                    }
+
   }
 
   @Override

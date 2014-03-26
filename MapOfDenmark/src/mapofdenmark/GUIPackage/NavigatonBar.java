@@ -6,6 +6,7 @@
 
 package mapofdenmark.GUIPackage;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -20,17 +21,36 @@ import net.miginfocom.swing.MigLayout;
  */
 public class NavigatonBar extends JPanel {
     
-    private JTextField from;
-    private JTextField to;
+    private PlaceholderTextField from;
+    private PlaceholderTextField to;
+    private JLabel rutevejledning;
+    private Button visVej;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     public NavigatonBar() {
-        from = new JTextField("From", 100);
-        to = new JTextField("To", 100);
-        setLayout(new MigLayout("", "[center]","[][]400[]"));
+        rutevejledning = new JLabel("Rutevejledning");
+        rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
+        rutevejledning.setForeground(Color.decode("#9B9B9B"));
         
-        add(from, "cell 0 0");
-        add(to, "cell 0 1");
+        from = new PlaceholderTextField("");
+        from.setPlaceholder("Fra");
+        from.setColumns(20);
+        from.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
+        
+        to = new PlaceholderTextField("");
+        to.setPlaceholder("Til");
+        to.setColumns(20);
+        to.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
+        
+        visVej = new Button("button");
+        //visVej.setText("Vis");
+        
+        setLayout(new MigLayout("", "[center]","[][][][][]"));
+        
+        add(rutevejledning, "cell 0 0, align left");
+        add(from, "cell 0 1");
+        add(to, "cell 0 2");
+        add(visVej, "cell 0 3, align right");
 //        add(new Compass(), "cell 0 2");
     }
     
