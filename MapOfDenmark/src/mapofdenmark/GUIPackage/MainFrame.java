@@ -46,6 +46,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private MapComponent drawMapComponent;
 	private Container mainContainer, sideContainer;
+        private NavigatonBar navigationBar;
 	private JLabel mapOfDenmarkLabel;
 	protected JLabel closestRoadLabel;
 	private JTextField enterAddressField;
@@ -93,13 +94,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 //		sideContainer = new JPanel(new MigLayout());
 //		sideContainer.add(enterAddressField, "wrap");
 //		sideContainer.add(closestRoadLabel, "wrap");
-                
+                navigationBar = new NavigatonBar();
 
 		mainContainer = new JPanel(migMainLayout);
 
 		getContentPane().add(mainContainer);
 		//mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
-		mainContainer.add(new NavigatonBar(), "cell 0 1");
+		mainContainer.add(navigationBar, "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
@@ -324,13 +325,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 					sb.replace(i, i + 1, "<br>");
 				}
 
-				closestRoadLabel.setText("<html>"+sb.toString()+"</html>");
+				navigationBar.getClosestRoad().setText("<html>"+sb.toString()+" </html>");
+                                navigationBar.repaint();
 			}
 		};
 		mouseStillTimer.cancel();
 		mouseStillTimer = null;
 		mouseStillTimer = new Timer();
-		mouseStillTimer.schedule(task, 700);
+		mouseStillTimer.schedule(task, 400);
 	}
 
 	@Override

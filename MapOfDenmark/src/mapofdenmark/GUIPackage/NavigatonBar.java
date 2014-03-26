@@ -25,10 +25,11 @@ public class NavigatonBar extends JPanel {
     private PlaceholderTextField to;
     private JLabel rutevejledning;
     private Button visVej;
+    private JLabel closestRoad;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     public NavigatonBar() {
-        rutevejledning = new JLabel("Rutevejledning");
+        rutevejledning = new JLabel("Rutevejledning ");
         rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
         rutevejledning.setForeground(Color.decode("#9B9B9B"));
         
@@ -36,21 +37,28 @@ public class NavigatonBar extends JPanel {
         from.setPlaceholder("Fra");
         from.setColumns(20);
         from.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
+        from.setForeground(Color.decode("#4A4A4A"));
         
         to = new PlaceholderTextField("");
         to.setPlaceholder("Til");
         to.setColumns(20);
         to.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
+        to.setForeground(Color.decode("#4A4A4A"));
         
         visVej = new Button("button");
         //visVej.setText("Vis");
         
-        setLayout(new MigLayout("", "[center]","[][][][][]"));
+        closestRoad = new JLabel("");
+        closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
+        closestRoad.setForeground(Color.decode("#9B9B9B"));
+        
+        setLayout(new MigLayout("", "[center]","[][][][]50[]"));
         
         add(rutevejledning, "cell 0 0, align left");
         add(from, "cell 0 1");
         add(to, "cell 0 2");
         add(visVej, "cell 0 3, align right");
+        add(closestRoad, "cell 0 4, align left");
 //        add(new Compass(), "cell 0 2");
     }
     
@@ -66,4 +74,10 @@ public class NavigatonBar extends JPanel {
         frame.pack();
         frame.setVisible(true);
     }
+
+    public JLabel getClosestRoad() {
+        return closestRoad;
+    }
+    
+    
 }
