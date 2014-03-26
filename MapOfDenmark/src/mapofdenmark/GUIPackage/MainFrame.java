@@ -9,6 +9,7 @@ import database.Edge;
 import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -20,9 +21,16 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -74,6 +82,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private void initialize(List<Edge> edges)
 	{
+            try {
+                //Toolkit kit = Toolkit.getDefaultToolkit();
+                //Image img = kit.createImage(url);
+                setIconImage(ImageIO.read(new File("assets/Icon.png")));
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
 		// frame properties
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
