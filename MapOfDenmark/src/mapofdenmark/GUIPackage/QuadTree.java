@@ -147,7 +147,14 @@ public class QuadTree implements Iterable<QuadTree> {
 			{
 				if (roadType == edge.getRoadType())
 				{
-					placeNameEdges.add(edge);
+					boolean addThisEdge = true;
+					for(Edge edge2 : placeNameEdges)
+					{
+						if(edge.getRoadName().equals(edge2.getRoadName())){addThisEdge = false;}
+					}
+					if (addThisEdge){
+						placeNameEdges.add(edge);
+					}
 					break;
 				}
 			}

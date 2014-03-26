@@ -7,11 +7,13 @@ package mapofdenmark.GUIPackage;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
@@ -23,7 +25,7 @@ import net.miginfocom.swing.MigLayout;
 public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 	private loadingComponent loadingBar;
-	private JTextField messageField;
+	private JLabel messageField;
 	private Container mainContainer;
 
 	public LoadingFrame()
@@ -34,14 +36,16 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		setResizable(false);
 		requestFocus();
 		setLocationRelativeTo(null);
+		this.setUndecorated(true);
 		MigLayout migMainLayout = new MigLayout("", "10[center]10[center]10", "10[center]10[center]10");
 
 		mainContainer = new JPanel(migMainLayout);
 
 		getContentPane().add(mainContainer);
 
-		messageField = new JTextField("Step 1/4 - Loading nodes from the database...");
-		messageField.setEditable(false);
+		messageField = new JLabel("Step 1/4 - Loading nodes from the database...");
+		messageField.setFont(new Font("Verdana", Font.PLAIN, 12));
+	
 		loadingBar = new loadingComponent();
 
 		mainContainer.add(messageField, "cell 0 0");
