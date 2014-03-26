@@ -247,6 +247,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
+		if (e.getClickCount()>= 2)
+		{
+			callSmoothZoom(e.getX(), e.getY(), -1);
+		}
 	}
 
 	@Override
