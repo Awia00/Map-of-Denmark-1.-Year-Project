@@ -73,7 +73,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		setExtendedState(MAXIMIZED_BOTH);
 		requestFocus();
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MigLayout migMainLayout = new MigLayout("", "[125!]10[center]", "[]10[top]");
+		MigLayout migMainLayout = new MigLayout("", "[200!]10[center]", "[]10[top]");
 
 		// components
 		drawMapComponent = new MapComponent(visibleArea, streets,edges);
@@ -86,8 +86,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		//drawMapComponent.setSize(new Dimension((int)(getSize().width/1.2), (int)(getSize().height/1.2)));
 
 		getContentPane().add(mainContainer);
-		mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
-		mainContainer.add(enterAddressField, "cell 0 1");
+		//mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
+		mainContainer.add(new NavigatonBar(), "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
 				+ "height " + (int) (screenSize.height / 2.5) + ":" + (int) (screenSize.height - 25) + ":, left");
