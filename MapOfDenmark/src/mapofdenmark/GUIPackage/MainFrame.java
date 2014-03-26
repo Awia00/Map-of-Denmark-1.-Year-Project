@@ -108,13 +108,16 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		//menubar
 		JMenuBar menubar = new JMenuBar();
 		this.setJMenuBar(menubar);
-
+                
+                
 		// create the Color scheme menu
 		JMenu colorSchemeMenu = new JMenu("Color scheme");
 		menubar.add(colorSchemeMenu);
+                colorSchemeMenu.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 
 		// create the Stardard menu item
 		JMenuItem standardItem = new JMenuItem("Standard");
+                standardItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		standardItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -126,6 +129,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 		// create the Night menu 
 		JMenuItem nightItem = new JMenuItem("Night");
+                nightItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		nightItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -137,6 +141,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 		// create the Night menu 
 		JMenuItem funkyItem = new JMenuItem("Funky");
+                funkyItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		funkyItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)

@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
@@ -44,7 +46,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		getContentPane().add(mainContainer);
 
 		messageField = new JLabel("Step 1/4 - Loading nodes from the database...");
-		messageField.setFont(new Font("Verdana", Font.PLAIN, 12));
+		messageField.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
 	
 		loadingBar = new loadingComponent();
 
@@ -56,6 +58,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		revalidate();
 		repaint();
 		pack();
+                setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -116,44 +119,45 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		@Override
 		public void paint(Graphics g)
 		{
-			
+			                 Graphics2D g2 = (Graphics2D)g;
+                                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			Color loadingColor = new Color((int)(((double)mouseHoverY/50)*255),255,(int)(((double)mouseHoverX/500)*255));
 			int position = 500%((int)((nodesLoaded+edgesLoaded+streetsLoaded)*150)+1);
-			g.setColor(loadingColor);
-			g.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
+			g2.setColor(loadingColor);
+			g2.fillRect(0, 0, (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500), 50);
 			
 			// white tranparent hover box
 			Color color = new Color(255,255,255,100);
 			Color color2 = new Color(255,255,255,50);
-			g.setColor(color);
-			g.fillRect(position, 0,15,50);
-			g.setColor(color2);
-			g.fillRect(position-5, 0,5,50);
-			g.fillRect(position+15, 0,5,50);
+			g2.setColor(color);
+			g2.fillRect(position, 0,15,50);
+			g2.setColor(color2);
+			g2.fillRect(position-5, 0,5,50);
+			g2.fillRect(position+15, 0,5,50);
 			
-			
-			g.setColor(Color.black);
+			g2.setFont(FontLoader.getFontWithSize("Roboto-Light", 12f));
+			g2.setColor(Color.black);
 			
 			// draw a stickman
 			int i = (int) (((nodesLoaded + edgesLoaded + streetsLoaded) / 3) * 500);
-			g.drawOval(i+1+3, 20, 10, 10); // hovede
-			g.drawOval(i+3+3, 22, 2, 2); // øje
-			g.drawLine(i+4,25,i+7,27); // mund
+			g2.drawOval(i+1+3, 20, 10, 10); // hovede
+			g2.drawOval(i+3+3, 22, 2, 2); // øje
+			g2.drawLine(i+4,25,i+7,27); // mund
 			
-			g.drawLine(i+5+3, 32, i, 25); // arms
-			g.drawLine(i+5+3, 32, i, 30); // arms
+			g2.drawLine(i+5+3, 32, i, 25); // arms
+			g2.drawLine(i+5+3, 32, i, 30); // arms
 			
-			g.drawLine(i+5+3, 30,i+5+3, 38); // body
+			g2.drawLine(i+5+3, 30,i+5+3, 38); // body
 			
-			g.drawLine(i+5+3, 38, i+2+3, 50); // legs
-			g.drawLine(i+5+3, 38, i+13+3, 50);
+			g2.drawLine(i+5+3, 38, i+2+3, 50); // legs
+			g2.drawLine(i+5+3, 38, i+13+3, 50);
 			
-			g.drawOval(i+17, 48, 2, 2); // ruble
-			g.drawOval(i+19, 45, 3, 3); // ruble
-			g.drawOval(i+22, 47, 2, 2); // ruble
+			g2.drawOval(i+17, 48, 2, 2); // ruble
+			g2.drawOval(i+19, 45, 3, 3); // ruble
+			g2.drawOval(i+22, 47, 2, 2); // ruble
 			
-			g.drawRect(0, 0, 500, 50);
-			g.drawString("Loading process...", 200, 28);
+			g2.drawRect(0, 0, 500, 50);
+			g2.drawString("Loading process...", 200, 28);
 		}
 	}
 }
