@@ -84,7 +84,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	{
             try {
 
-                setIconImage(ImageIO.read(new File("assets/Icon.png")));
+                setIconImage(ImageIO.read(new File("assets/Icon48.png")));
                 
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
