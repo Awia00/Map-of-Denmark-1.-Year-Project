@@ -55,7 +55,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 		getContentPane().add(mainContainer);
 
-		messageField = new JLabel("Step 1/4 - Loading nodes from the database...");
+		messageField = new AAJLabel("Step 1/4 - Loading nodes from the database...");
 		messageField.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
 	
 		loadingBar = new loadingComponent();

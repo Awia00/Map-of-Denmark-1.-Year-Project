@@ -37,6 +37,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
+import java.awt.RenderingHints;
 
 /**
  * Class description:
@@ -59,6 +60,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private Dimension screenSize;
 	private VisibleArea visibleArea;
 	private Street[] streets;
+	
 
 	private Point oldPosition;
 	private Point newPosition;
@@ -98,7 +100,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		// components
 		drawMapComponent = new MapComponent(visibleArea, streets, edges);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
-		closestRoadLabel = new JLabel("Closest road");
+		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 

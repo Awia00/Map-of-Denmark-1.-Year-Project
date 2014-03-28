@@ -29,7 +29,7 @@ public class NavigatonBar extends JPanel {
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     public NavigatonBar() {
-        rutevejledning = new JLabel("Rutevejledning ");
+        rutevejledning = new AAJLabel("Rutevejledning ");
         rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
         rutevejledning.setForeground(Color.decode("#9B9B9B"));
         
@@ -48,7 +48,7 @@ public class NavigatonBar extends JPanel {
         visVej = new Button("button");
         //visVej.setText("Vis");
         
-        closestRoad = new JLabel("");
+        closestRoad = new AAJLabel("");
         closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
         closestRoad.setForeground(Color.decode("#9B9B9B"));
         
