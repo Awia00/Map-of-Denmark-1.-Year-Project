@@ -9,7 +9,6 @@ import database.Edge;
 import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -23,8 +22,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -269,7 +266,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	{
 		if (e.getClickCount()>= 2)
 		{
-			callSmoothZoom(e.getX(), e.getY(), -1);
+			if(e.getButton() == MouseEvent.BUTTON3)
+			{
+				callSmoothZoom(e.getX(), e.getY(), 1);
+			}
+			else if(e.getButton() == MouseEvent.BUTTON1)
+			{
+				callSmoothZoom(e.getX(), e.getY(), -1);
+			}
 		}
 	}
 
