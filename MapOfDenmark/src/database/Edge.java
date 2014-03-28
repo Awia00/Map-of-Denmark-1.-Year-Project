@@ -31,11 +31,11 @@ public class Edge implements Comparable<Edge>{
         this.roadcode = roadcode;
     }
 
-    public int getFromNode() {
+    protected int getFromNode() {
         return fromNode;
     }
 
-    public int getToNode() {
+    protected int getToNode() {
         return toNode;
     }
 
