@@ -51,7 +51,7 @@ public class MapComponent extends JComponent {
 	private void initialize(Street[] streets, List<Edge> edges)
 	{
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
-		visibleArea.setCoord(-90000, 1000, 50000 * 12, 25000 * 12);
+		visibleArea.setCoord(-90000, 1000, 42500 * 12, 25000 * 12);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
@@ -258,19 +258,19 @@ public class MapComponent extends JComponent {
 		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
 		// create strokes
-		BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3, (zoomFactorStroke * 1.2) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3.5, (zoomFactorStroke * 1.2) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke secondaryRoadStrokeBorder = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 0.9) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke secondaryRoadStrokeBorder = new BasicStroke((float) (Math.max(2.5, (zoomFactorStroke * 0.9) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke secondaryRoadStroke = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke * 0.9))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke normalRoadStrokeBorder = new BasicStroke((float) (Math.max(1.6, (zoomFactorStroke * 0.6) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke normalRoadStrokeBorder = new BasicStroke((float) (Math.max(2.1, (zoomFactorStroke * 0.6) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke normalRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.6))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke smallRoadStrokeBorder = new BasicStroke((float) (Math.max(1.3, (zoomFactorStroke * 0.3) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke smallRoadStrokeBorder = new BasicStroke((float) (Math.max(1.8, (zoomFactorStroke * 0.3) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke smallRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.2, (zoomFactorStroke * 0.1) + 1)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.7, (zoomFactorStroke * 0.1) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -429,7 +429,7 @@ public class MapComponent extends JComponent {
 				break;
 			case "Night":
 				// set Night ColorScheme
-				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, Color.gray, Color.cyan, Color.cyan, Color.magenta, Color.blue, Color.red);
+				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange,new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
 				break;
 
 			case "Funky":
