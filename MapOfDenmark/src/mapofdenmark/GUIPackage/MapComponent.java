@@ -197,11 +197,6 @@ public class MapComponent extends JComponent {
 		final double newStartY = visibleArea.getyCoord() + deltaYLength * yPct;
 
 		visibleArea.setCoord(newStartX, newStartY, xZoomLength, yZoomLength);
-		/*
-		 visibleArea.setCoordWithoutUpdate(newStartX*doneTimer+oldStartX*(1-doneTimer),
-		 newStartY*doneTimer + oldStartY*(1-doneTimer),
-		 xZoomLength*doneTimer+oldxLength*(1-doneTimer), yZoomLength*doneTimer+oldyLength*(1-doneTimer));
-		 */
 	}
 
 	public String findClosestRoad(int mouseCoordX, int mouseCoordY)
