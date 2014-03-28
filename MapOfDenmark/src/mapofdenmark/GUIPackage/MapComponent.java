@@ -216,21 +216,32 @@ public class MapComponent extends JComponent {
 			}
 		}
 		double distance = -1;
-		Edge closestEdge = null; 
-		for(Edge edge : edges)
+		Edge closestEdge = null;
+		for (Edge edge : edges)
 		{
-			double tempDistance = calculateDistanceEdgeToPoint(edge, xCoord,yCoord);
-			if (distance == -1 && !edge.getRoadName().trim().equals("")){distance = tempDistance; closestEdge = edge;}
-			if(tempDistance < distance && !edge.getRoadName().trim().equals("")){distance = tempDistance;closestEdge = edge;}			
+			double tempDistance = calculateDistanceEdgeToPoint(edge, xCoord, yCoord);
+			if (distance == -1 && !edge.getRoadName().trim().equals(""))
+			{
+				distance = tempDistance;
+				closestEdge = edge;
+			}
+			if (tempDistance < distance && !edge.getRoadName().trim().equals(""))
+			{
+				distance = tempDistance;
+				closestEdge = edge;
+			}
 		}
-		if (distance != -1){return closestEdge.getRoadName();}
+		if (distance != -1)
+		{
+			return closestEdge.getRoadName();
+		}
 		return "No nearby roads found";
 	}
-	
+
 	private double calculateDistanceEdgeToPoint(Edge edge, double xCoord, double yCoord)
 	{
-		Line2D line = new Line2D.Double(edge.getFromNodeTrue().getxCoord(),edge.getFromNodeTrue().getyCoord(),edge.getToNodeTrue().getxCoord(),edge.getToNodeTrue().getyCoord());
-		Point2D point = new Point2D.Double(xCoord,yCoord);
+		Line2D line = new Line2D.Double(edge.getFromNodeTrue().getxCoord(), edge.getFromNodeTrue().getyCoord(), edge.getToNodeTrue().getxCoord(), edge.getToNodeTrue().getyCoord());
+		Point2D point = new Point2D.Double(xCoord, yCoord);
 		return line.ptSegDist(point);
 	}
 
@@ -424,7 +435,7 @@ public class MapComponent extends JComponent {
 				break;
 			case "Night":
 				// set Night ColorScheme
-				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange,new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
+				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
 				break;
 
 			case "Funky":
