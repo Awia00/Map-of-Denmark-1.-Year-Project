@@ -37,7 +37,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
-import java.awt.RenderingHints;
 
 /**
  * Class description:
@@ -359,7 +358,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			{
 				String s = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
 				
-				// this method is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
+				// this implementation is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
 				StringBuilder sb = new StringBuilder(s);
 
 				int i = 0;
