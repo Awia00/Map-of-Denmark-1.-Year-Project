@@ -266,6 +266,19 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
+		if (pressedKeyCode == 17)
+		{
+			double xCoord = drawMapComponent.convertMouseXToMap(e.getX());
+			double yCoord = drawMapComponent.convertMouseXToMap(e.getY());
+			if (e.getButton() == MouseEvent.BUTTON1)
+			{
+				DrawingCoastLine.giveData(xCoord, yCoord, true);
+			}
+			else
+			{
+				DrawingCoastLine.giveData(xCoord, yCoord, false);
+			}	
+		}
 		if (e.getClickCount()>= 2)
 		{
 			if(e.getButton() == MouseEvent.BUTTON3)
