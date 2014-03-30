@@ -140,12 +140,12 @@ public class MapComponent extends JComponent {
 		}
 	}
 
-	private double convertMouseXToMap(double xCoord)
+	public double convertMouseXToMap(double xCoord)
 	{
 		return visibleArea.getxCoord() + xCoord / getWidth() * visibleArea.getxLength();
 	}
 
-	private double convertMouseYToMap(double yCoord)
+	public double convertMouseYToMap(double yCoord)
 	{
 		return visibleArea.getyCoord() + (getHeight() - yCoord) / getHeight() * visibleArea.getyLength();
 	}
