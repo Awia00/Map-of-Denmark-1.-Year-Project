@@ -350,12 +350,12 @@ public class MapComponent extends JComponent {
 						// drawing the border
 						g.setColor(colorScheme.getNormalRoadBorderColor());
 						g2.setStroke(normalRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getHeight() - ((y2 - yVArea) / ylength) * getHeight()));
 
 						// drawing the road
 						g.setColor(colorScheme.getNormalRoadColor());
 						g2.setStroke(normalRoadStroke);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getHeight() - ((y2 - yVArea) / ylength) * getHeight()));
 					}
 				}
 				if (xlength <= 550000)
