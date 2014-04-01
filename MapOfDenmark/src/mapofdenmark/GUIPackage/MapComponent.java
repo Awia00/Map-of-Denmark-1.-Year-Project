@@ -436,11 +436,10 @@ public class MapComponent extends JComponent {
 			case "Night":
 				// set Night ColorScheme
 				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
-				break;
-
-			case "Funky":
-				// set Funky ColorScheme
-				this.colorScheme = new ColorScheme("Funky", Color.red, Color.magenta, Color.green, Color.yellow, Color.yellow, Color.magenta, Color.blue, Color.white);
+				break;                            
+                        case "Colorblind":
+				// set Colorblind ColorScheme
+				this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), new Color(82, 82, 82), new Color(50, 50, 50), new Color(82, 82, 82), new Color(50, 50, 50), new Color(190, 190, 190), new Color(150, 150, 150), Color.blue, Color.black);
 				break;
 
 			default:
@@ -448,5 +447,6 @@ public class MapComponent extends JComponent {
 				setColorScheme("Standard");
 				break;
 		}
+                repaint();
 	}
 }
