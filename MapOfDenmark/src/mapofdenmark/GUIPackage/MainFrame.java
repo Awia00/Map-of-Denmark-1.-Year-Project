@@ -136,11 +136,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			public void actionPerformed(ActionEvent e)
 			{
 				drawMapComponent.setColorScheme("Standard");
-				drawMapComponent.repaint();
 			}
 		});
 
-		// create the Night menu 
+		// create the Night menu item
 		JMenuItem nightItem = new JMenuItem("Night");
                 nightItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		nightItem.addActionListener(new ActionListener() {
@@ -148,25 +147,24 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			public void actionPerformed(ActionEvent e)
 			{
 				drawMapComponent.setColorScheme("Night");
-				drawMapComponent.repaint();
 			}
 		});
 
-		// create the Night menu 
-		JMenuItem funkyItem = new JMenuItem("Funky");
-                funkyItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
-		funkyItem.addActionListener(new ActionListener() {
+		// create the Coloblind menu item 
+		JMenuItem colorblindItem = new JMenuItem("Colorblind");
+                colorblindItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
+		colorblindItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				drawMapComponent.setColorScheme("Funky");
-				drawMapComponent.repaint();
+				drawMapComponent.setColorScheme("Colorblind");
 			}
 		});
-
+                // add the menu items to the Color scheme menu
 		colorSchemeMenu.add(standardItem);
 		colorSchemeMenu.add(nightItem);
-		colorSchemeMenu.add(funkyItem);
+		colorSchemeMenu.add(colorblindItem);
+                
 
 		// Action listeners
 		// rdy up
