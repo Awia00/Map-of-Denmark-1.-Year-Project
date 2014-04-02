@@ -57,7 +57,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private JTextField enterAddressField;
 	private JButton searchButton;
 	private Dimension screenSize;
-	private VisibleArea visibleArea;
 	private Street[] streets;
 	
 
@@ -97,7 +96,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(visibleArea, streets, edges);
+		drawMapComponent = new MapComponent(streets, edges);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");

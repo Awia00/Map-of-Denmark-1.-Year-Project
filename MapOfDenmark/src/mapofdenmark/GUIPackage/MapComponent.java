@@ -30,26 +30,39 @@ import javax.swing.JComponent;
  */
 public class MapComponent extends JComponent {
 
+	// the toplevel quadtree
 	private QuadTree quadTreeToDraw;
 	protected VisibleArea visibleArea;
+
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
 
+	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
 
-	protected double doneTimer = 0;
+	private ColorScheme activeColorScheme;
 
-	private ColorScheme colorScheme;
-
-	public MapComponent(VisibleArea visibleArea, Street[] streets, List<Edge> edges)
+	/**
+	 * The constructor of the mapComponent.
+	 *
+	 * @param streets is not used at the moment
+	 * @param edges an array with all the edges in the database.
+	 */
+	public MapComponent(Street[] streets, List<Edge> edges)
 	{
-		this.visibleArea = new VisibleArea();
 		initialize(streets, edges);
 	}
 
+	/**
+	 * initializes the quadtree and sets values for visible area.
+	 *
+	 * @param streets not used at the moment.
+	 * @param edges an array with all the edges in the database.
+	 */
 	private void initialize(Street[] streets, List<Edge> edges)
 	{
+		visibleArea = new VisibleArea();
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
 		visibleArea.setCoord(-90000, 1000, 42500 * 12, 25000 * 12);
 
@@ -58,9 +71,11 @@ public class MapComponent extends JComponent {
 	}
 
 	/**
+	 * Change the position of the visible area, such that the user can see this
+	 * at the next repaint.
 	 *
-	 * @param xCoord is negative if move map to the right
-	 * @param yCoord is negative if move map to the down
+	 * @param xCoord if this is negative - move map to the right
+	 * @param yCoord if this is negative - move map to the down
 	 */
 	public void moveVisibleArea(double xCoord, double yCoord)
 	{
@@ -69,6 +84,19 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(visibleArea.getxCoord() + xMapCoord, visibleArea.getyCoord() + yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 	}
 
+	/**
+	 * The dragNDropZoom method takes in 4 coordinates which describes a
+	 * rectangle. This is the area which the user wants to zoom in on. To begin
+	 * with it checks the values so it does not matter from which corner the
+	 * user has dragged and dropped. Afterwards it finds the largest length in
+	 * the drawn rectangle and then uses this to indicate how much is zoomed in.
+	 * Lastly it uses the values to update the visibleArea object.
+	 *
+	 * @param xStartCoord
+	 * @param yStartCoord
+	 * @param xEndCoord
+	 * @param yEndCoord
+	 */
 	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
 	{
 		double mapXStartCoord;
@@ -117,6 +145,18 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
 	}
 
+	/**
+	 * This method is used to set the values so the repaint will either draw or
+	 * not draw a rectangle showing the user how his drag and drop zoom looks.
+	 * It checks the values so that it does not matter which corner the user has
+	 * dragged from.
+	 *
+	 * @param xStartCoord
+	 * @param yStartCoord
+	 * @param xEndCoord
+	 * @param yEndCoord
+	 * @param drawRectangle tells if the rectangle should be drawn or not.
+	 */
 	public void drawRectangle(int xStartCoord, int yStartCoord, int xEndCoord, int yEndCoord, boolean drawRectangle)
 	{
 		this.drawRectangle = drawRectangle;
@@ -140,16 +180,42 @@ public class MapComponent extends JComponent {
 		}
 	}
 
+	/**
+	 * Converts the mouse x coordinate to map coordinates so it can be used to
+	 * set values in the visible area object.
+	 *
+	 * @param xCoord the coordinate to convert
+	 * @return the converted coordinate
+	 */
 	public double convertMouseXToMap(double xCoord)
 	{
 		return visibleArea.getxCoord() + xCoord / getWidth() * visibleArea.getxLength();
 	}
 
+	/**
+	 * Converts the mouse y coordinate to map coordinates so it can be used to
+	 * set values in the visible area object. The y coordinate needs to be
+	 * handled a bit differently since a swing component has its y values
+	 * starting with 0 in the top and getWidth() in the bottom, but the map data
+	 * has the low values in the bottom and goes higher when you go up.
+	 *
+	 * @param yCoord the coordinate to convert
+	 * @return the converted coordinate
+	 */
 	public double convertMouseYToMap(double yCoord)
 	{
 		return visibleArea.getyCoord() + (getHeight() - yCoord) / getHeight() * visibleArea.getyLength();
 	}
 
+	/**
+	 * The zoomOut method takes the mouse coordinates and uses them to find out
+	 * percentage wise how much the visibleArea's start coordinate- and how much
+	 * the length needs to change. It does this for each axis. It uses the
+	 * zoomOutConstant to find out how much overall the area needs to grow.
+	 *
+	 * @param mouseXCoord
+	 * @param mouseYCoord
+	 */
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 	{
 		if (visibleArea.getyLength() + 10000 >= quadTreeToDraw.getQuadTreeLength())
@@ -173,6 +239,15 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(visibleArea.getxCoord() + deltaXLength * xPct, visibleArea.getyCoord() + deltaYLength * yPct, xZoomLength, yZoomLength);
 	}
 
+	/**
+	 * The zoomIn method takes the mouse coordinates and uses them to find out
+	 * percentage wise how much the visibleArea's start coordinate- and how much
+	 * the length needs to change. It does this for each axis. It uses the
+	 * zoomInConstant to find out how much overall the area needs to shrink.
+	 *
+	 * @param mouseXCoord
+	 * @param mouseYCoord
+	 */
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
 		if (visibleArea.getyLength() <= 100)
@@ -199,6 +274,16 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(newStartX, newStartY, xZoomLength, yZoomLength);
 	}
 
+	/**
+	 * The findClosestRoad method checks which quadtree the user has its cursor
+	 * in and then goes through all the edges in that quadtree to find out which
+	 * edge is the closest.
+	 *
+	 * @param mouseCoordX
+	 * @param mouseCoordY
+	 * @return a string with that edge's roadName. Could be changed to return
+	 * that edge or the street it is in.
+	 */
 	public String findClosestRoad(int mouseCoordX, int mouseCoordY)
 	{
 		QuadTree quadTreeToSearch;
@@ -238,6 +323,14 @@ public class MapComponent extends JComponent {
 		return "No nearby roads found";
 	}
 
+	/**
+	 * Calculates the distance from the Edge edge to the point (xCoord, yCoord).
+	 *
+	 * @param edge the edge to find the distance to.
+	 * @param xCoord the first coordinate of the point
+	 * @param yCoord the second coordinate of the point.
+	 * @return a double describing the distance.s
+	 */
 	private double calculateDistanceEdgeToPoint(Edge edge, double xCoord, double yCoord)
 	{
 		Line2D line = new Line2D.Double(edge.getFromNodeTrue().getxCoord(), edge.getFromNodeTrue().getyCoord(), edge.getToNodeTrue().getxCoord(), edge.getToNodeTrue().getyCoord());
@@ -251,7 +344,7 @@ public class MapComponent extends JComponent {
 
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
-		g.setColor(this.colorScheme.getBackgroundColor());
+		g.setColor(this.activeColorScheme.getBackgroundColor());
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
@@ -261,9 +354,12 @@ public class MapComponent extends JComponent {
 		double xVArea = visibleArea.getxCoord();
 		double yVArea = visibleArea.getyCoord();
 
+		double componentHeight = getHeight();
+		double componentWidth = getWidth();
+
 		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
-		// create strokes
+		// create strokes using the zoomFacotrStroke.
 		BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3.5, (zoomFactorStroke * 1.2) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
@@ -279,12 +375,14 @@ public class MapComponent extends JComponent {
 		BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.7, (zoomFactorStroke * 0.1) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
+		// sets the rendering hints so that it uses ANTI-ALIASING to render the edges.
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
 		for (QuadTree quadTree : bottomTrees)
 		{
+			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
 				if (xlength <= 15000)
@@ -296,14 +394,14 @@ public class MapComponent extends JComponent {
 						double x2 = edge.getToNodeTrue().getxCoord();
 						double y2 = edge.getToNodeTrue().getyCoord();
 						// drawing the border
-						g.setColor(colorScheme.getPathwayBorderColor());
+						g.setColor(activeColorScheme.getPathwayBorderColor());
 						g2.setStroke(pathRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-						g.setColor(colorScheme.getPathwayColor());
+						g.setColor(activeColorScheme.getPathwayColor());
 						g2.setStroke(pathRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
 				for (Edge edge : quadTree.getFerryEdges())
@@ -312,12 +410,12 @@ public class MapComponent extends JComponent {
 					{
 						9
 					}, 0));
-					g.setColor(this.colorScheme.getFerrywayColor());
+					g.setColor(this.activeColorScheme.getFerrywayColor());
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
 					double y2 = edge.getToNodeTrue().getyCoord();
-					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
 				if (xlength <= 30000)
 				{
@@ -328,14 +426,14 @@ public class MapComponent extends JComponent {
 						double x2 = edge.getToNodeTrue().getxCoord();
 						double y2 = edge.getToNodeTrue().getyCoord();
 						// drawing the border
-						g.setColor(colorScheme.getSmallRoadBorderColor());
+						g.setColor(activeColorScheme.getSmallRoadBorderColor());
 						g2.setStroke(smallRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-						g.setColor(colorScheme.getSmallRoadColor());
+						g.setColor(activeColorScheme.getSmallRoadColor());
 						g2.setStroke(smallRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
 				if (xlength <= 100000)
@@ -348,14 +446,14 @@ public class MapComponent extends JComponent {
 						double y2 = edge.getToNodeTrue().getyCoord();
 
 						// drawing the border
-						g.setColor(colorScheme.getNormalRoadBorderColor());
+						g.setColor(activeColorScheme.getNormalRoadBorderColor());
 						g2.setStroke(normalRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getHeight() - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-						g.setColor(colorScheme.getNormalRoadColor());
+						g.setColor(activeColorScheme.getNormalRoadColor());
 						g2.setStroke(normalRoadStroke);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getHeight() - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
 				if (xlength <= 550000)
@@ -367,14 +465,14 @@ public class MapComponent extends JComponent {
 						double x2 = edge.getToNodeTrue().getxCoord();
 						double y2 = edge.getToNodeTrue().getyCoord();
 						// drawing the border
-						g.setColor(colorScheme.getSecondaryRoadBorderColor());
+						g.setColor(activeColorScheme.getSecondaryRoadBorderColor());
 						g2.setStroke(secondaryRoadStrokeBorder);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-						g.setColor(colorScheme.getSecondaryRoadColor());
+						g.setColor(activeColorScheme.getSecondaryRoadColor());
 						g2.setStroke(secondaryRoadStroke);
-						g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
 				for (Edge edge : quadTree.getHighwayEdges())
@@ -385,22 +483,22 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 
 					// drawing the border
-					g.setColor(colorScheme.getHighwayBorderColor());
+					g.setColor(activeColorScheme.getHighwayBorderColor());
 					g2.setStroke(highWayStrokeBorder);
-					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 					// drawing the road
-					g.setColor(colorScheme.getHighwayColor());
+					g.setColor(activeColorScheme.getHighwayColor());
 					g2.setStroke(highWayStroke);
-					g.drawLine((int) (((x1 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y1 - yVArea) / ylength) * getHeight()), (int) (((x2 - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((y2 - yVArea) / ylength) * getHeight()));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
 				if (xlength <= 10000)
 				{
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
-						g.setColor(this.colorScheme.getPlaceNameColor());
+						g.setColor(this.activeColorScheme.getPlaceNameColor());
 						g.setFont(new Font("Verdana", Font.BOLD, 12));
-						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * getWidth()), (int) (getSize().height - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * getHeight()));
+						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * componentHeight));
 					}
 				}
 			}
@@ -410,11 +508,12 @@ public class MapComponent extends JComponent {
 		g.setColor(Color.black);
 		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 
+		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
 		{
 			//The color of the rectangle is set as the inverted color of the background color.
 
-			g.setColor(new Color(255 - (this.colorScheme.getBackgroundColor().getRed()), 255 - (this.colorScheme.getBackgroundColor().getGreen()), 255 - (this.colorScheme.getBackgroundColor().getBlue())));
+			g.setColor(new Color(255 - (this.activeColorScheme.getBackgroundColor().getRed()), 255 - (this.activeColorScheme.getBackgroundColor().getGreen()), 255 - (this.activeColorScheme.getBackgroundColor().getBlue())));
 
 			g2.setStroke(new BasicStroke(2));
 			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
@@ -425,21 +524,25 @@ public class MapComponent extends JComponent {
 		// then divide by the length. that way you get values from 0-1.
 	}
 
+	/**
+	 * Set the activeColorScheme to one of the three modes.
+	 * @param colorScheme a name of a color scheme that should be set.
+	 */
 	protected void setColorScheme(String colorScheme)
 	{
 		switch (colorScheme)
 		{
 			case "Standard":
 				//set Standard ColorScheme
-				this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), Color.gray, new Color(90, 90, 90), Color.gray, new Color(90, 90, 90), new Color(0, 230, 30), new Color(0, 170, 10), Color.blue, Color.black);
+				this.activeColorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), Color.gray, new Color(90, 90, 90), Color.gray, new Color(90, 90, 90), new Color(0, 230, 30), new Color(0, 170, 10), Color.blue, Color.black);
 				break;
 			case "Night":
 				// set Night ColorScheme
-				this.colorScheme = new ColorScheme("Night", Color.black, Color.orange, new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
-				break;                            
-                        case "Colorblind":
+				this.activeColorScheme = new ColorScheme("Night", Color.black, Color.orange, new Color(155, 100, 0), Color.gray, new Color(200, 200, 200), Color.cyan, new Color(30, 100, 75), Color.cyan, new Color(30, 100, 75), Color.magenta, new Color(100, 25, 65), Color.blue, Color.white);
+				break;
+			case "Colorblind":
 				// set Colorblind ColorScheme
-				this.colorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), new Color(82, 82, 82), new Color(50, 50, 50), new Color(82, 82, 82), new Color(50, 50, 50), new Color(190, 190, 190), new Color(150, 150, 150), Color.blue, Color.black);
+				this.activeColorScheme = new ColorScheme("Standard", Color.white, Color.black, new Color(100, 100, 100), Color.orange, new Color(230, 140, 0), new Color(82, 82, 82), new Color(50, 50, 50), new Color(82, 82, 82), new Color(50, 50, 50), new Color(190, 190, 190), new Color(150, 150, 150), Color.blue, Color.black);
 				break;
 
 			default:
@@ -447,6 +550,6 @@ public class MapComponent extends JComponent {
 				setColorScheme("Standard");
 				break;
 		}
-                repaint();
+		repaint();
 	}
 }
