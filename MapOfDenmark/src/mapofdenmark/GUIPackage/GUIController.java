@@ -24,6 +24,11 @@ public class GUIController {
 	private MainFrame mainframe;
 	private Timer timer;
 
+	/**
+	 * The GUI controller starts loading the data, and meanwhile creates the
+	 * loading screen which shows the loading process. When the data is loaded
+	 * it creates the MainFrame and shows it.
+	 */
 	public GUIController()
 	{
 		lframe = new LoadingFrame();
@@ -35,7 +40,7 @@ public class GUIController {
 			public void run()
 			{
 				lframe.updateLoadingBar(db.getNodesDownloadedPct(), db.getEdgesDownloadedPct(), db.getStreetsDownloadedPct());
-				if(db.getStreetsDownloadedPct() == 1)
+				if (db.getStreetsDownloadedPct() == 1)
 				{
 					timer.cancel();
 					timer.purge();
@@ -48,11 +53,10 @@ public class GUIController {
 		db = Database.db();
 
 		List<Edge> edges = db.getData();
-		
+
 		mainframe = new MainFrame(edges); // brug disse 
-		
+
 		//mainframe = new MainFrame(new ArrayList<Edge>()); // brug denne hvis du ikke vil loade
-		
 		lframe.setVisible(false);
 		lframe.dispose();
 	}
