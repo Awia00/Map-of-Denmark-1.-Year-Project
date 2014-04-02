@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mapofdenmark.GUIPackage;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  * Class description:
  *
  * @version 0.1 - changed 10-03-2014
- * @authorNewVersion  Anders Wind - awis@itu.dk
+ * @authorNewVersion Anders Wind - awis@itu.dk
  *
  * @buildDate 10-03-2014
  * @author Anders Wind - awis@itu.dk
@@ -20,21 +19,29 @@ import java.util.ArrayList;
 public class VisibleArea {
 
 	private double xCoord, yCoord, xLength, yLength;
-	
+
 	public VisibleArea()
 	{
 		initialize();
 	}
-	
-	
+
 	private void initialize()
-	{	
+	{
 		xCoord = 0;
 		yCoord = 0;
 		xLength = 0;
 		yLength = 0;
 	}
-	
+
+	/**
+	 * Set the coordinates and length of the visibleArea and go through the
+	 * trees and set which trees should be visible.
+	 *
+	 * @param xCoord
+	 * @param yCoord
+	 * @param xLength
+	 * @param yLength
+	 */
 	public void setCoord(double xCoord, double yCoord, double xLength, double yLength)
 	{
 		this.xCoord = xCoord;
@@ -44,7 +51,15 @@ public class VisibleArea {
 		//update
 		setQuadTreesVisible();
 	}
-	
+
+	/**
+	 * Set the coordinates and length of the visibleArea
+	 *
+	 * @param xCoord
+	 * @param yCoord
+	 * @param xLength
+	 * @param yLength
+	 */
 	public void setCoordWithoutUpdate(double xCoord, double yCoord, double xLength, double yLength)
 	{
 		this.xCoord = xCoord;
@@ -52,37 +67,33 @@ public class VisibleArea {
 		this.xLength = xLength;
 		this.yLength = yLength;
 	}
-	
-	public void setVisibleEdgeTypes(int acceptedType)
-	{
-		// do something.
-	}
-	
-	
+
+	/**
+	 * Go through the quadtrees and check if they have some coordinates inside
+	 * the visible area and if they have then set their drawThis boolean to
+	 * true.
+	 */
 	private void setQuadTreesVisible()
 	{
-		// iterate over the quadtree untill you get to the lowest level
+		// Iterate over the quadtree untill you get to the lowest level
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
-		for(QuadTree quadTree : bottomTrees)
+		for (QuadTree quadTree : bottomTrees)
 		{
-			if((quadTree.getQuadTreeX()+quadTree.getQuadTreeLength() >= xCoord &&  quadTree.getQuadTreeY()+quadTree.getQuadTreeLength()>=yCoord))
+			if ((quadTree.getQuadTreeX() + quadTree.getQuadTreeLength() >= xCoord && quadTree.getQuadTreeY() + quadTree.getQuadTreeLength() >= yCoord))
 			{
-				if((quadTree.getQuadTreeX()<= xCoord+xLength && quadTree.getQuadTreeY()<=yCoord+yLength))
+				if ((quadTree.getQuadTreeX() <= xCoord + xLength && quadTree.getQuadTreeY() <= yCoord + yLength))
 				{
 					quadTree.setDrawable(true);
-				}
-				else
+				} else
 				{
 					quadTree.setDrawable(false);
 				}
-			}
-			else
+			} else
 			{
 				quadTree.setDrawable(false);
-			}		
+			}
 		}
-		
-		
+
 		//IMPLEMENTATION
 		// take our quadTree
 		// go through the quadtree until you find the bottom ones.
