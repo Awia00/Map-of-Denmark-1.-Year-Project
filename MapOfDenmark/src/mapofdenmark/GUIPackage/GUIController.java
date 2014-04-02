@@ -8,7 +8,6 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
