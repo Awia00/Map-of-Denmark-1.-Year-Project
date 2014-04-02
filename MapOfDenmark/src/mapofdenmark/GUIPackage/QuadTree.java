@@ -20,7 +20,8 @@ public class QuadTree implements Iterable<QuadTree> {
 
 	private QuadTree NW, NE, SW, SE;
 	private List<Edge> allEdges;
-	// road type edges
+
+	// Individual lists of certain edge types
 	private List<Edge> highwayEdges;
 	private List<Edge> secondaryEdges;
 	private List<Edge> normalEdges;
@@ -28,12 +29,16 @@ public class QuadTree implements Iterable<QuadTree> {
 	private List<Edge> pathEdges;
 	private List<Edge> ferryEdges;
 	private List<Edge> placeNameEdges;
-	//
-
+	
+  // Origin and dimension of quadtree
 	private final double x, y, length;
+
 	private boolean isDrawable = true;
 	static Set<QuadTree> quadTrees = new LinkedHashSet<>();
+
 	static Random random = new Random(); // For testing purposes...
+
+  // Static list of innermost trees containing all edges
 	private static ArrayList<QuadTree> bottomTrees = new ArrayList<>();
 
 	public QuadTree(List<Edge> edges, double x, double y, double length)
@@ -43,7 +48,8 @@ public class QuadTree implements Iterable<QuadTree> {
 		this.length = length;
 		this.allEdges = edges;
 		double h = length / 2;
-
+    
+    // Divide when number of edges is above 500
 		if (edges.size() > 500)
 		{
 			List<Edge> NWEdges = new ArrayList<>(),
@@ -54,6 +60,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			{
 				double px = edge.getMidNodeTrue().getxCoord();
 				double py = edge.getMidNodeTrue().getyCoord();
+        // Assign edges to corresponding quad leaves
 				if (px >= x && px < x + h && py > y + h && py <= y + length)
 				{
 					NWEdges.add(edge);
@@ -71,6 +78,7 @@ public class QuadTree implements Iterable<QuadTree> {
 					SEEdges.add(edge);
 				}
 			}
+      // Instantiate quad leaves recursively
 			this.NW = new QuadTree(NWEdges, x, y + h, h);
 			this.NE = new QuadTree(NEEdges, x + h, y + h, h);
 			this.SW = new QuadTree(SWEdges, x, y, h);
@@ -78,6 +86,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			this.allEdges = Collections.emptyList();
 		} else
 		{
+      // Assign edges to distinct list if end of recursion is reached
 			highwayEdges = new ArrayList<>();
 			secondaryEdges = new ArrayList<>();
 			normalEdges = new ArrayList<>();
@@ -90,7 +99,8 @@ public class QuadTree implements Iterable<QuadTree> {
 			// this.points = pointData;
 		}
 	}
-
+  
+  // Sort all edges into their respective lists
 	private void splitEdgesIntoTypes()
 	{
 		for (Edge edge : allEdges)
@@ -160,37 +170,44 @@ public class QuadTree implements Iterable<QuadTree> {
 			}
 		}
 	}
-
+  
+  // Check if quadtree is drawable
 	public boolean isDrawable()
 	{
 		return this.isDrawable;
 	}
 
+  // Set quadtree drawable
 	public void setDrawable(boolean isDrawable)
 	{
 		this.isDrawable = isDrawable;
 	}
 
+  // Get origin of quadtree, x-coordinate
 	public double getQuadTreeX()
 	{
 		return this.x;
 	}
 
-	public static ArrayList<QuadTree> getBottomTrees()
-	{
-		return bottomTrees;
-	}
-
+  // Get origin of quadtree, y-coordinate
 	public double getQuadTreeY()
 	{
 		return this.y;
 	}
 
+  // Get the length of the quadtree
 	public double getQuadTreeLength()
 	{
 		return this.length;
 	}
+  
+  // Get all trees at the bottom
+	public static ArrayList<QuadTree> getBottomTrees()
+	{
+		return bottomTrees;
+	}
 
+  // Get immediate childs of quadtree
 	public QuadTree[] getQuadTrees()
 	{
 		if (NW == null && NE == null && SW == null && SE == null)
@@ -205,6 +222,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		}
 	}
 
+  // Get all edges in quadtree
 	public List<Edge> getEdges()
 	{
 		if (this.allEdges.isEmpty())
@@ -216,6 +234,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		}
 	}
 
+  // Get edges of certain type
 	public List<Edge> getHighwayEdges()
 	{
 		return highwayEdges;
@@ -318,6 +337,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		return shifted; // == (rand.nextDouble() * (max-min)) + min;
 	}
 
+  // Get 
 	public QuadTree getNW()
 	{
 		return NW;
