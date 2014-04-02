@@ -51,14 +51,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private MapComponent drawMapComponent;
 	private Container mainContainer, sideContainer;
-        private NavigatonBar navigationBar;
+	private NavigatonBar navigationBar;
 	private JLabel mapOfDenmarkLabel;
 	protected JLabel closestRoadLabel;
 	private JTextField enterAddressField;
 	private JButton searchButton;
 	private Dimension screenSize;
 	private Street[] streets;
-	
 
 	private Point oldPosition;
 	private Point newPosition;
@@ -79,13 +78,15 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private void initialize(List<Edge> edges)
 	{
-            try {
+		try
+		{
 
-                setIconImage(ImageIO.read(new File("assets/Icon48.png")));
-                
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+			setIconImage(ImageIO.read(new File("assets/Icon48.png")));
+
+		} catch (IOException ex)
+		{
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		// frame properties
 		setTitle("Map of Denmark");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -106,7 +107,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 //		sideContainer = new JPanel(new MigLayout());
 //		sideContainer.add(enterAddressField, "wrap");
 //		sideContainer.add(closestRoadLabel, "wrap");
-                navigationBar = new NavigatonBar();
+		navigationBar = new NavigatonBar();
 
 		mainContainer = new JPanel(migMainLayout);
 
@@ -120,16 +121,15 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		//menubar
 		JMenuBar menubar = new JMenuBar();
 		this.setJMenuBar(menubar);
-                
-                
+
 		// create the Color scheme menu
 		JMenu colorSchemeMenu = new JMenu("Color scheme");
 		menubar.add(colorSchemeMenu);
-                colorSchemeMenu.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
+		colorSchemeMenu.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 
 		// create the Stardard menu item
 		JMenuItem standardItem = new JMenuItem("Standard");
-                standardItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
+		standardItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		standardItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -140,7 +140,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 		// create the Night menu item
 		JMenuItem nightItem = new JMenuItem("Night");
-                nightItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
+		nightItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		nightItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -151,7 +151,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 		// create the Coloblind menu item 
 		JMenuItem colorblindItem = new JMenuItem("Colorblind");
-                colorblindItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
+		colorblindItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 		colorblindItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -159,11 +159,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				drawMapComponent.setColorScheme("Colorblind");
 			}
 		});
-                // add the menu items to the Color scheme menu
+		// add the menu items to the Color scheme menu
 		colorSchemeMenu.add(standardItem);
 		colorSchemeMenu.add(nightItem);
 		colorSchemeMenu.add(colorblindItem);
-                
 
 		// Action listeners
 		// rdy up
@@ -182,6 +181,17 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		this.drawMapComponent.addKeyListener(this);
 	}
 
+	/**
+	 * Call the smooth zoom method in mapComponent according to which values
+	 * wheelRotation has. The method is called about 10 times over the course of
+	 * approximately 10 times. If there is a zoom in method already being
+	 * called, cancel that.
+	 *
+	 * @param mouseX
+	 * @param mouseY
+	 * @param wheelRotation if it is positive then zoom in, if negative zoom
+	 * out.
+	 */
 	private void callSmoothZoom(double mouseX, double mouseY, int wheelRotation)
 	{
 		final double coordX = mouseX;
@@ -244,6 +254,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		repaint();
 	}
 
+	/**
+	 * Get the delta distance from one point to another. This is used in the
+	 * paning function.
+	 *
+	 * @param p1
+	 * @param p2
+	 * @return the delta distance from p1 to p2.
+	 */
 	private Point getDeltaPoint(Point p1, Point p2)
 	{
 		int deltaX = (int) (p1.getX() - p2.getX());
@@ -259,6 +277,15 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		return new Dimension((int) (screenSize.width / 1.5), (int) (screenSize.height / 1.5));
 	}
 
+	/**
+	 * If the alt key is pressed then the method is used for developing, and is
+	 * not something the user will notice. If the alt key is not pressed and the
+	 * user double clicks, then either zoom in or zoom out will be called
+	 * depending on which mouse-key was double pressed.
+	 *
+	 *
+	 * @param e
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
@@ -269,19 +296,17 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			if (e.getButton() == MouseEvent.BUTTON1)
 			{
 				DrawingCoastLine.giveData(xCoord, yCoord, true);
-			}
-			else
+			} else
 			{
 				DrawingCoastLine.giveData(xCoord, yCoord, false);
-			}	
+			}
 		}
-		if (e.getClickCount()>= 2)
+		if (e.getClickCount() >= 2)
 		{
-			if(e.getButton() == MouseEvent.BUTTON3)
+			if (e.getButton() == MouseEvent.BUTTON3)
 			{
 				callSmoothZoom(e.getX(), e.getY(), 1);
-			}
-			else if(e.getButton() == MouseEvent.BUTTON1)
+			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
 				callSmoothZoom(e.getX(), e.getY(), -1);
 			}
@@ -294,6 +319,12 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		oldPosition = e.getPoint();
 	}
 
+	/**
+	 * If the ctrl key is pressed then the drag and drop rectangle is removed
+	 * and then the map is zoomed in.
+	 *
+	 * @param e
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
@@ -311,8 +342,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-
-		//System.out.println("Mouse Entered");
 		this.drawMapComponent.requestFocusInWindow();
 	}
 
@@ -322,6 +351,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	}
 
+	/**
+	 * The mouseDragged method either calls the moveVisibleArea method in
+	 * mapComponent(pan the map), or if the ctrl key is pressed, draws a
+	 * rectangle that will be used for the drag N drop zoom.
+	 *
+	 * @param e
+	 */
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
@@ -343,6 +379,12 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		repaint();
 	}
 
+	/**
+	 * When the mouse is moved, create a timer that will when ran, call the
+	 * findClosest road method in mapComponent.
+	 *
+	 * @param e
+	 */
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
@@ -354,7 +396,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			public void run()
 			{
 				String s = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
-				
+
 				// this implementation is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
 				StringBuilder sb = new StringBuilder(s);
 
@@ -364,16 +406,20 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 					sb.replace(i, i + 1, "<br>");
 				}
 
-				navigationBar.getClosestRoad().setText("<html>"+sb.toString()+" </html>");
-                                navigationBar.repaint();
+				navigationBar.getClosestRoad().setText("<html>" + sb.toString() + " </html>");
+				navigationBar.repaint();
 			}
 		};
 		mouseStillTimer.cancel();
 		mouseStillTimer = null;
 		mouseStillTimer = new Timer();
-		mouseStillTimer.schedule(task, 400);
+		mouseStillTimer.schedule(task, 350);
 	}
 
+	/**
+	 * Call the callSmoothZoom which either zooms in or out depending on the value of the WheelRotation.
+	 * @param e
+	 */
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
@@ -392,6 +438,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	}
 
+	// if a key is pressed then set the field pressedKeyCode to that value.
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
