@@ -413,7 +413,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		mouseStillTimer.cancel();
 		mouseStillTimer = null;
 		mouseStillTimer = new Timer();
-		mouseStillTimer.schedule(task, 350);
+		mouseStillTimer.schedule(task, 150);
 	}
 
 	/**
