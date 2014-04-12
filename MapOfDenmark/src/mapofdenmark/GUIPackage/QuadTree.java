@@ -29,6 +29,7 @@ public class QuadTree implements Iterable<QuadTree> {
 	private List<Edge> pathEdges;
 	private List<Edge> ferryEdges;
 	private List<Edge> placeNameEdges;
+	private List<Edge> coastLineEdges;
 	
   // Origin and dimension of quadtree
 	private final double x, y, length;
@@ -94,6 +95,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			pathEdges = new ArrayList<>();
 			ferryEdges = new ArrayList<>();
 			placeNameEdges = new ArrayList<>();
+			coastLineEdges = new ArrayList<>();
 			splitEdgesIntoTypes();
 			bottomTrees.add(this);
 			// this.points = pointData;
@@ -150,6 +152,14 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					ferryEdges.add(edge);
+					break;
+				}
+			}
+			for (int roadType : RoadTypeEnum.COASTLINE.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					coastLineEdges.add(edge);
 					break;
 				}
 			}
@@ -263,6 +273,11 @@ public class QuadTree implements Iterable<QuadTree> {
 	public List<Edge> getFerryEdges()
 	{
 		return ferryEdges;
+	}
+
+	public List<Edge> getCoastLineEdges()
+	{
+		return coastLineEdges;
 	}
 
 	public List<Edge> getPlaceNameEdges()

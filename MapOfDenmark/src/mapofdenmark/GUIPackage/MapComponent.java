@@ -475,6 +475,19 @@ public class MapComponent extends JComponent {
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
+				for (Edge edge : quadTree.getCoastLineEdges())
+				{
+					double x1 = edge.getFromNodeTrue().getxCoord();
+					double y1 = edge.getFromNodeTrue().getyCoord();
+					double x2 = edge.getToNodeTrue().getxCoord();
+					double y2 = edge.getToNodeTrue().getyCoord();
+
+					// drawing the border
+					g.setColor(Color.BLACK);
+					g2.setStroke(new BasicStroke(2f));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
+
+				}
 				for (Edge edge : quadTree.getHighwayEdges())
 				{
 					double x1 = edge.getFromNodeTrue().getxCoord();
