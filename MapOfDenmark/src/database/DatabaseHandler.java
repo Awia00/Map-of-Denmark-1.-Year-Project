@@ -424,11 +424,14 @@ public class DatabaseHandler implements DatabaseInterface {
         getNodes();
         getEdges();
         getStreets();
+        getCoast();
         int i = 0;
         for (Edge edge : edges) {
+            if (edge.getRoadType() != 74){
             edge.setFromNodeTrue(getNode(edge.getFromNode()));
             edge.setToNodeTrue(getNode(edge.getToNode()));
             edge.setMidNodeTrue();
+            }
             //System.out.println(i++);
         }
         System.out.println("Node-to-Edge joining complete.");
@@ -462,7 +465,48 @@ public class DatabaseHandler implements DatabaseInterface {
 
         //System.out.println("Edge-to-Street joining complete.");
     }
+    private ArrayList<Edge> getCoast() {
+        try {
+            //Get time, Connection and ResultSet
+            Long time = System.currentTimeMillis();
+            Edge edge = null;
+            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[correctedCoastLine];";
+            Connection con = cpds.getConnection();
 
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+            time -= System.currentTimeMillis();
+
+            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
+            int i = 0;
+            
+            //Add edges to edge ArrayList, and count percentage for loading screen.
+            while (rs.next()) {
+                Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
+                Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
+                edge = new Edge(0, 0, 74, "", 0);
+                Node fromNode = new Node(startNode);
+                Node toNode = new Node(endNode);
+                edge.setFromNodeTrue(fromNode);
+                edge.setToNodeTrue(toNode);
+                edge.setMidNodeTrue();
+                //nodes.add(toNode);
+                //nodes.add(fromNode);
+                edges.add(edge);
+                i++;
+                //edgesDownloadedPct += (double) 1 / 812301;
+            }
+
+            System.out.println("Total edges: " + i);
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        Collections.sort(edges);
+        edgesDownloadedPct = 1;
+        return edges;
+    }
     @Override
     public ArrayList<Edge> getData() {
         if (edges.isEmpty()) {
