@@ -8,6 +8,8 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
+import database.GraphCreator;
+import database.Node;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,6 +55,9 @@ public class GUIController {
 
 		List<Edge> edges = db.getData();
 
+		GraphCreator graph;
+		graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
+		
 		mainframe = new MainFrame(edges); // brug disse 
 
 		//mainframe = new MainFrame(new ArrayList<Edge>()); // brug denne hvis du ikke vil loade
