@@ -21,6 +21,8 @@ import java.util.ArrayList;
 public interface DatabaseInterface {
 
 	public ArrayList<Edge> getData();
+	
+	public ArrayList<Node> getListOfNodes();
 
 	public double getNodesDownloadedPct();
 

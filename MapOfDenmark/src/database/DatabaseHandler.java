@@ -467,4 +467,10 @@ public class DatabaseHandler implements DatabaseInterface {
         }
         return edges;
     }
+
+	@Override
+	public ArrayList<Node> getListOfNodes()
+	{
+		return nodes;
+	}
 }
