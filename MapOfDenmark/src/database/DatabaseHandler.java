@@ -64,14 +64,17 @@ public class DatabaseHandler implements DatabaseInterface {
         streetsDownloadedPct = 0;
     }
 
+    @Override
     public double getNodesDownloadedPct() {
         return nodesDownloadedPct;
     }
 
+    @Override
     public double getEdgesDownloadedPct() {
         return edgesDownloadedPct;
     }
 
+    @Override
     public double getStreetsDownloadedPct() {
         return streetsDownloadedPct;
     }
