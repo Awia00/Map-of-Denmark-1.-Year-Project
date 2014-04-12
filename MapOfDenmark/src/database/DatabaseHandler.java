@@ -482,8 +482,8 @@ public class DatabaseHandler implements DatabaseInterface {
             
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
-                Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
+                Point2D startNode = new Point2D.Double(rs.getDouble(1) - 440000 , rs.getDouble(2) - 6040000);
+                Point2D endNode = new Point2D.Double(rs.getDouble(3) - 440000, rs.getDouble(4) - 6040000);
                 edge = new Edge(0, 0, 74, "", 0);
                 Node fromNode = new Node(startNode);
                 Node toNode = new Node(endNode);
