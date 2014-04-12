@@ -483,8 +483,8 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 
 					// drawing the border
-					g.setColor(Color.BLACK);
-					g2.setStroke(new BasicStroke(2f));
+					g.setColor(new Color(255-50,239-50,213-50));
+					g2.setStroke(new BasicStroke(1.4f));
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 				}
