@@ -34,7 +34,7 @@ public class GUIController {
 	 * loading screen which shows the loading process. When the data is loaded
 	 * it creates the MainFrame and shows it.
 	 */
-	public GUIController()
+	private GUIController()
 	{
 		frameChooser = new FrameChooser();
 	}
