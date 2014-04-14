@@ -70,7 +70,10 @@ public class DatabaseHandler implements DatabaseInterface {
     
     @Override
     public QuadTree getQuadTree(){
-        return QT;
+        if (QT.equals(null)) {
+            initDataStructure();
+        }
+		return QT;
     }
 
     @Override
@@ -267,7 +270,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add nodes to node ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2) - 440000, rs.getDouble(3) - 6040000)); // these subtractions needs to be done in the database.
+                node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2), rs.getDouble(3))); // these subtractions needs to be done in the database.
                 nodes.add(node);
                 i++;
                 nodesDownloadedPct += (double) 1 / 675902;
@@ -442,7 +445,6 @@ public class DatabaseHandler implements DatabaseInterface {
         getEdges();
         getStreets();
         getCoast();
-        createQuadTree();
         int i = 0;
         for (Edge edge : edges) {
             if (edge.getRoadType() != 74) {
@@ -452,36 +454,9 @@ public class DatabaseHandler implements DatabaseInterface {
             }
             //System.out.println(i++);
         }
+		createQuadTree();
         System.out.println("Node-to-Edge joining complete.");
-        /*for (Street street : streets) {
-         ArrayList<Edge> el = getEdge(street.getID(), street.getStreetName());
-         for (Edge e : el) {
-         street.addEdge(e);
-         }
-         }*/
-        /*
-         for(Edge edge : edges){
-            
-         ArrayList<Street> s = getStreet(edge.getRoadcode());
-         for(Street street : s){
-         if(edge.getRoadName().equals(street.getStreetName()))
-         {
-         //System.out.println("Added edge!");
-         street.addEdge(edge);
-         }
-         }
-         }
-        
-         for (Street street : streets) {
-         ArrayList<Edge> e = street.getEdges();
-            
-         if ( e.size() != 0){
-         i += e.size();
-         }
-         }*/
-        //System.out.println(i);
-
-        //System.out.println("Edge-to-Street joining complete.");
+     
         return QT;
     }
 
@@ -502,8 +477,8 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                Point2D startNode = new Point2D.Double(rs.getDouble(1) - 440000, rs.getDouble(2) - 6040000);
-                Point2D endNode = new Point2D.Double(rs.getDouble(3) - 440000, rs.getDouble(4) - 6040000);
+                Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
+                Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
                 edge = new Edge(0, 0, 74, "", 0);
                 Node fromNode = new Node(startNode);
                 Node toNode = new Node(endNode);

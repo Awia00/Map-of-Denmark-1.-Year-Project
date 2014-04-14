@@ -51,14 +51,16 @@ public class GUIController {
 
 		timer.scheduleAtFixedRate(task, 2000, 100);
 
-		db = Database.db();
+		db = Database.db(true); // true for krak
 
 		List<Edge> edges = db.getData();
+		QuadTree quadTree = db.getQuadTree();
+		
 
 		GraphCreator graph;
 		graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
 		
-		mainframe = new MainFrame(edges); // brug disse 
+		mainframe = new MainFrame(quadTree); // brug disse 
 
 		//mainframe = new MainFrame(new ArrayList<Edge>()); // brug denne hvis du ikke vil loade
 		lframe.setVisible(false);
