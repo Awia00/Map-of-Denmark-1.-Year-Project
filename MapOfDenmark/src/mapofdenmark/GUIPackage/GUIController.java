@@ -10,6 +10,7 @@ import database.DatabaseInterface;
 import database.Edge;
 import database.GraphCreator;
 import database.Node;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,10 +36,13 @@ public class GUIController {
 	{
 		frameChooser = new FrameChooser();
 	}
-	
+
 	public static void LoadData(boolean isKrak)
 	{
-                db = Database.db(isKrak); // true for krak
+		frameChooser.setVisible(false);
+		frameChooser.dispose();
+		
+		db = Database.db(isKrak); // true for krak
 		lframe = new LoadingFrame();
 
 		timer = new Timer();
@@ -58,19 +62,22 @@ public class GUIController {
 		timer.scheduleAtFixedRate(task, 4000, 100);
 
 		
-
 		List<Edge> edges = db.getData();
 		QuadTree quadTree = db.getQuadTree();
-		
 
 		GraphCreator graph;
 		graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
-		
-		mainframe = new MainFrame(quadTree); // brug disse 
 
-		//mainframe = new MainFrame(new ArrayList<Edge>()); // brug denne hvis du ikke vil loade
+		mainframe = new MainFrame(quadTree); // brug disse 
+		
+				
+		
+		//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
+		
+				
 		lframe.setVisible(false);
 		lframe.dispose();
+				
 	}
 
 	public static void main(String[] args)

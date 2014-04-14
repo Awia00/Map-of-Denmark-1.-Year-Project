@@ -73,8 +73,7 @@ public class FrameChooser extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-				dispose();
+                
 				GUIController.LoadData(true);
             }
         });
@@ -83,8 +82,6 @@ public class FrameChooser extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-				dispose();
 				GUIController.LoadData(false);
             }
         });
