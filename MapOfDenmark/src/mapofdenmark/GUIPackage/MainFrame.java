@@ -57,7 +57,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private JTextField enterAddressField;
 	private JButton searchButton;
 	private Dimension screenSize;
-	private Street[] streets;
 
 	private Point oldPosition;
 	private Point newPosition;
@@ -69,14 +68,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	Timer timer = new Timer();
 	Timer mouseStillTimer = new Timer();
 
-	public MainFrame(List<Edge> edges)
+	public MainFrame(QuadTree quadTree)
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
-		initialize(edges);
+		initialize(quadTree);
 		addListeners();
 	}
 
-	private void initialize(List<Edge> edges)
+	private void initialize(QuadTree quadTree)
 	{
 		try
 		{
@@ -97,7 +96,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(streets, edges);
+		drawMapComponent = new MapComponent(quadTree);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");

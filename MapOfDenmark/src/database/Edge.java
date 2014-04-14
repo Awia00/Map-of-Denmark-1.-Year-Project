@@ -30,6 +30,19 @@ public class Edge implements Comparable<Edge>{
         this.roadName = roadName;
         this.roadcode = roadcode;
     }
+	
+	
+	public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode) {
+        this.fromNodeTrue = fromNode;
+        this.toNodeTrue = toNode;
+        this.roadType = roadType;
+        this.roadName = roadName;
+        this.roadcode = roadcode;
+		this.fromNode = 0;
+		this.toNode = 0;
+		calcMidNode();
+		
+    }
 
     protected int getFromNode() {
         return fromNode;
@@ -88,10 +101,15 @@ public class Edge implements Comparable<Edge>{
     public int getRoadcode() {
         return roadcode;
     }
-
+/*
     @Override
     public int compareTo(Edge o) {
         return this.getRoadcode() - o.getRoadcode();
+    }
+    * */
+    @Override
+    public int compareTo(Edge o) {
+        return this.getRoadName().compareTo(o.getRoadName());
     }
     @Override
     public String toString(){
