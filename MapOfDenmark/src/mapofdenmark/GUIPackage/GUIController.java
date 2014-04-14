@@ -21,23 +21,30 @@ import java.util.TimerTask;
  */
 public class GUIController {
 
-	protected static DatabaseInterface db;
-	protected static LoadingFrame lframe;
-	private static FrameChooser frameChooser;
-	private static MainFrame mainframe;
-	private static Timer timer;
+	protected DatabaseInterface db;
+	protected LoadingFrame lframe;
+	private  FrameChooser frameChooser;
+	private  MainFrame mainframe;
+	private Timer timer;
+	
+	private static GUIController guiController;
 
 	/**
 	 * The GUI controller starts loading the data, and meanwhile creates the
 	 * loading screen which shows the loading process. When the data is loaded
 	 * it creates the MainFrame and shows it.
 	 */
-	public static void Initiate()
+	public GUIController()
 	{
 		frameChooser = new FrameChooser();
 	}
+	
+	public static void startLoading(boolean isKrak)
+	{
+		guiController.loadData(isKrak);
+	}
 
-	public static void LoadData(boolean isKrak)
+	public void loadData(boolean isKrak)
 	{
 		frameChooser.setVisible(false);
 		frameChooser.dispose();
@@ -82,7 +89,7 @@ public class GUIController {
 
 	public static void main(String[] args)
 	{
-		GUIController.Initiate();
+		guiController = new GUIController();
 	}
 
 }

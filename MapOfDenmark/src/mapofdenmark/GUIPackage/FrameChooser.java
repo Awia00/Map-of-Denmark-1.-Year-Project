@@ -74,7 +74,7 @@ public class FrameChooser extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-				GUIController.LoadData(true);
+				GUIController.startLoading(true);
             }
         });
         openButton = new JButton("Open-street-map data");
@@ -82,7 +82,7 @@ public class FrameChooser extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-				GUIController.LoadData(false);
+				GUIController.startLoading(false);
             }
         });
         botContainer.add(krakButton);

@@ -8,8 +8,8 @@ package database;
 public class Database 
 {
     // The database interface
-    private static DatabaseInterface db = new DatabaseHandler();
-	private static DatabaseInterface osmParser = new OSMParser();
+    private final static DatabaseInterface db = new DatabaseHandler();
+	private final static DatabaseInterface osmParser = new OSMParser();
     
     /**
      * This method gets the database interface for use.
