@@ -6,8 +6,7 @@
 
 package mapofdenmark;
 
-import database.Database;
-import database.DatabaseInterface;
+import mapofdenmark.GUIPackage.GUIController;
 
 /**
  *
@@ -20,8 +19,7 @@ public class MapOfDenmark {
      */
     public static void main(String[] args)
     {
-        DatabaseInterface db = Database.db();
-
+        new GUIController();
     }
     
 }
