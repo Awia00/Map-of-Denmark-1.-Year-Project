@@ -18,7 +18,7 @@ import mapofdenmark.GUIPackage.QuadTree;
  * @buildDate 14-04-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class osmParser implements DatabaseInterface {
+public class OSMParser implements DatabaseInterface {
 
 	@Override
 	public ArrayList<Edge> getData()

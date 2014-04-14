@@ -9,7 +9,7 @@ public class Database
 {
     // The database interface
     private static DatabaseInterface db = new DatabaseHandler();
-	private static DatabaseInterface osmParser = new osmParser();
+	private static DatabaseInterface osmParser = new OSMParser();
     
     /**
      * This method gets the database interface for use.
