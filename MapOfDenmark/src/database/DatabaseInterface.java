@@ -6,6 +6,7 @@
 package database;
 
 import java.util.ArrayList;
+import mapofdenmark.GUIPackage.QuadTree;
 
 /**
  * This interface states all public methods available for interaction with the
@@ -30,4 +31,5 @@ public interface DatabaseInterface {
 
 	public double getStreetsDownloadedPct();
 
+        public QuadTree getQuadTree();
 }

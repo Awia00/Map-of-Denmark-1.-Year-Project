@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
 import java.util.Collections;
+import mapofdenmark.GUIPackage.QuadTree;
 
 /**
  * If you are looking for more details on the methods of this class, please
@@ -42,9 +43,12 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<Node> nodes = new ArrayList<>();
     NodeComparer nc = new NodeComparer();
     EdgeComparer ec = new EdgeComparer();
+    EdgeComparerName ecName = new EdgeComparerName();
     StreetComparer sc = new StreetComparer();
-
     private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
+    
+    //QuadTree field.
+    QuadTree QT = null;
 
     /**
      * Constructor for this object. For more detail about the API methods of
@@ -62,6 +66,11 @@ public class DatabaseHandler implements DatabaseInterface {
         nodesDownloadedPct = 0;
         edgesDownloadedPct = 0;
         streetsDownloadedPct = 0;
+    }
+    
+    @Override
+    public QuadTree getQuadTree(){
+        return QT;
     }
 
     @Override
@@ -255,7 +264,7 @@ public class DatabaseHandler implements DatabaseInterface {
             System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
 
             int i = 0;
-            
+
             //Add nodes to node ArrayList, and count percentage for loading screen.
             while (rs.next()) {
                 node = new Node(rs.getInt(1), new Point2D.Double(rs.getDouble(2) - 440000, rs.getDouble(3) - 6040000)); // these subtractions needs to be done in the database.
@@ -288,7 +297,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
             int i = 0;
-            
+
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
                 edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5));
@@ -394,6 +403,14 @@ public class DatabaseHandler implements DatabaseInterface {
         return edgeResults;
     }
 
+    private void getEdgeName(String streetName) {
+        Edge e = new Edge(1, 1, 1, streetName, 1);
+        Collections.sort(edges);
+        int index = Collections.binarySearch(edges, e, ecName);
+
+        System.out.println(index);
+    }
+
     private ArrayList<Street> getStreet(int id) {
         ArrayList<Street> streetResults = new ArrayList<>();
 
@@ -420,17 +437,18 @@ public class DatabaseHandler implements DatabaseInterface {
         return streetResults;
     }
 
-    private void initDataStructure() {
+    private QuadTree initDataStructure() {
         getNodes();
         getEdges();
         getStreets();
         getCoast();
+        createQuadTree();
         int i = 0;
         for (Edge edge : edges) {
-            if (edge.getRoadType() != 74){
-            edge.setFromNodeTrue(getNode(edge.getFromNode()));
-            edge.setToNodeTrue(getNode(edge.getToNode()));
-            edge.setMidNodeTrue();
+            if (edge.getRoadType() != 74) {
+                edge.setFromNodeTrue(getNode(edge.getFromNode()));
+                edge.setToNodeTrue(getNode(edge.getToNode()));
+                edge.setMidNodeTrue();
             }
             //System.out.println(i++);
         }
@@ -464,7 +482,9 @@ public class DatabaseHandler implements DatabaseInterface {
         //System.out.println(i);
 
         //System.out.println("Edge-to-Street joining complete.");
+        return QT;
     }
+
     private ArrayList<Edge> getCoast() {
         try {
             //Get time, Connection and ResultSet
@@ -479,10 +499,10 @@ public class DatabaseHandler implements DatabaseInterface {
 
             System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
             int i = 0;
-            
+
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                Point2D startNode = new Point2D.Double(rs.getDouble(1) - 440000 , rs.getDouble(2) - 6040000);
+                Point2D startNode = new Point2D.Double(rs.getDouble(1) - 440000, rs.getDouble(2) - 6040000);
                 Point2D endNode = new Point2D.Double(rs.getDouble(3) - 440000, rs.getDouble(4) - 6040000);
                 edge = new Edge(0, 0, 74, "", 0);
                 Node fromNode = new Node(startNode);
@@ -507,6 +527,7 @@ public class DatabaseHandler implements DatabaseInterface {
         edgesDownloadedPct = 1;
         return edges;
     }
+
     @Override
     public ArrayList<Edge> getData() {
         if (edges.isEmpty()) {
@@ -515,9 +536,93 @@ public class DatabaseHandler implements DatabaseInterface {
         return edges;
     }
 
-	@Override
-	public ArrayList<Node> getListOfNodes()
-	{
-		return nodes;
-	}
+    @Override
+    public ArrayList<Node> getListOfNodes() {
+        return nodes;
+    }
+
+    private double[] getMinMax() {
+        double[] minmax = new double[4];
+        double minX;
+        double maxX;
+        double minY;
+        double maxY;
+        try {
+            String sql = "SELECT  (\n"
+                    + "        SELECT MIN([start-x-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c1,\n"
+                    + "		(\n"
+                    + "        SELECT MIN([end-x-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c2,\n"
+                    + "		(\n"
+                    + "        SELECT MAX([start-x-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c3,\n"
+                    + "        (\n"
+                    + "        SELECT MAX([end-x-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c4,\n"
+                    + "		(\n"
+                    + "        SELECT MIN([start-y-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c5,\n"
+                    + "		(\n"
+                    + "        SELECT MIN([end-y-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c6,\n"
+                    + "		(\n"
+                    + "		SELECT MAX([start-y-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c7,\n"
+                    + "		(\n"
+                    + "        SELECT MAX([end-y-coord])\n"
+                    + "        FROM   correctedCoastLine\n"
+                    + "        ) AS c8\n"
+                    + "		\n"
+                    + "";
+            Connection con = cpds.getConnection();
+
+            PreparedStatement pstatement = con.prepareStatement(sql);
+            ResultSet rs = executeQuery(pstatement);
+
+            while (rs.next()) {
+                minX = Math.min(rs.getDouble(1), rs.getDouble(2));
+                maxX = Math.max(rs.getDouble(3), rs.getDouble(4));
+                minY = Math.min(rs.getDouble(5), rs.getDouble(6));
+                maxY = Math.max(rs.getDouble(7), rs.getDouble(8));
+                
+                //To clarify what is what;
+                minmax[0] = minX;
+                minmax[1] = maxX;
+                minmax[2] = minY;
+                minmax[3] = maxY;
+            }
+            
+        } catch (SQLException ex) {
+            printSQLException(ex);
+        } finally {
+            closeConnection(cons, pstatements, resultsets);
+        }
+        return minmax;
+
+    }
+    
+   private QuadTree createQuadTree() {
+        double[] values = getMinMax();
+        double minX = values[0];
+        double minY = values[2];
+        double maxX = values[1];
+        double maxY = values[3];
+        
+        double length = Math.max((maxX - minX), (maxY - minY));
+        
+        
+       
+        QT = new QuadTree(edges, minX, minY, length);
+       
+        return QT;
+
+    }
 }

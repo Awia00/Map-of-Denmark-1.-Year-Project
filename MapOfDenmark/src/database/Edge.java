@@ -88,10 +88,15 @@ public class Edge implements Comparable<Edge>{
     public int getRoadcode() {
         return roadcode;
     }
-
+/*
     @Override
     public int compareTo(Edge o) {
         return this.getRoadcode() - o.getRoadcode();
+    }
+    * */
+    @Override
+    public int compareTo(Edge o) {
+        return this.getRoadName().compareTo(o.getRoadName());
     }
     @Override
     public String toString(){
