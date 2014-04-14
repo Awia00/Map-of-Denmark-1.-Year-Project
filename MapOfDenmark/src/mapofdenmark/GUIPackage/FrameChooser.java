@@ -9,22 +9,15 @@ package mapofdenmark.GUIPackage;
 //import javax.swing.JFrame;
 //import java.awt.Container;
 
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -61,7 +54,7 @@ public class FrameChooser extends JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         JLabel logoLabel = new JLabel(new ImageIcon(myPicture));
         
@@ -80,7 +73,9 @@ public class FrameChooser extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("hej1");
+                setVisible(false);
+				dispose();
+				GUIController.LoadData(true);
             }
         });
         openButton = new JButton("Open-street-map data");
@@ -88,7 +83,9 @@ public class FrameChooser extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("hej2");
+                setVisible(false);
+				dispose();
+				GUIController.LoadData(false);
             }
         });
         botContainer.add(krakButton);

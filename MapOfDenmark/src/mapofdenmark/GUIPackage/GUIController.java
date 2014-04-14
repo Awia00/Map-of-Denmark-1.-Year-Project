@@ -20,17 +20,23 @@ import java.util.TimerTask;
  */
 public class GUIController {
 
-	protected DatabaseInterface db;
-	protected LoadingFrame lframe;
-	private MainFrame mainframe;
-	private Timer timer;
+	protected static DatabaseInterface db;
+	protected static LoadingFrame lframe;
+	private static FrameChooser frameChooser;
+	private static MainFrame mainframe;
+	private static Timer timer;
 
 	/**
 	 * The GUI controller starts loading the data, and meanwhile creates the
 	 * loading screen which shows the loading process. When the data is loaded
 	 * it creates the MainFrame and shows it.
 	 */
-	public GUIController()
+	public static void Initiate()
+	{
+		frameChooser = new FrameChooser();
+	}
+	
+	public static void LoadData(boolean isKrak)
 	{
 		lframe = new LoadingFrame();
 
@@ -48,10 +54,9 @@ public class GUIController {
 				}
 			}
 		};
-
 		timer.scheduleAtFixedRate(task, 2000, 100);
 
-		db = Database.db(true); // true for krak
+		db = Database.db(isKrak); // true for krak
 
 		List<Edge> edges = db.getData();
 		QuadTree quadTree = db.getQuadTree();
@@ -69,7 +74,7 @@ public class GUIController {
 
 	public static void main(String[] args)
 	{
-		new GUIController();
+		GUIController.Initiate();
 	}
 
 }
