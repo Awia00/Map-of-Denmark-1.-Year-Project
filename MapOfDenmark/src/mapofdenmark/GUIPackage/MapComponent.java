@@ -64,7 +64,9 @@ public class MapComponent extends JComponent {
 	{
 		visibleArea = new VisibleArea();
 		quadTreeToDraw = new QuadTree(edges, 0, 0, 590000);
+		
 		visibleArea.setCoord(-90000, 1000, 42500 * 12, 25000 * 12);
+		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX()-quadTreeToDraw.getQuadTreeLength()/8, quadTreeToDraw.getQuadTreeY()-quadTreeToDraw.getQuadTreeLength()/50, quadTreeToDraw.getQuadTreeLength()/15*16, quadTreeToDraw.getQuadTreeLength()/15*10);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
