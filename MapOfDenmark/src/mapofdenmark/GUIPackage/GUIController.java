@@ -38,6 +38,7 @@ public class GUIController {
 	
 	public static void LoadData(boolean isKrak)
 	{
+                db = Database.db(isKrak); // true for krak
 		lframe = new LoadingFrame();
 
 		timer = new Timer();
@@ -54,9 +55,9 @@ public class GUIController {
 				}
 			}
 		};
-		timer.scheduleAtFixedRate(task, 2000, 100);
+		timer.scheduleAtFixedRate(task, 4000, 100);
 
-		db = Database.db(isKrak); // true for krak
+		
 
 		List<Edge> edges = db.getData();
 		QuadTree quadTree = db.getQuadTree();

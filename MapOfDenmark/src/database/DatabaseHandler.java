@@ -70,7 +70,7 @@ public class DatabaseHandler implements DatabaseInterface {
     
     @Override
     public QuadTree getQuadTree(){
-        if (QT.equals(null)) {
+        if (QT == null) {
             initDataStructure();
         }
 		return QT;
