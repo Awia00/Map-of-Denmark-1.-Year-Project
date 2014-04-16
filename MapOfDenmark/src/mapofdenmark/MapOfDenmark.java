@@ -19,7 +19,7 @@ public class MapOfDenmark {
      */
     public static void main(String[] args)
     {
-        new GUIController();
+        //new GUIController();
     }
     
 }
