@@ -46,7 +46,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		setResizable(false);
 		requestFocus();
 		setLocationRelativeTo(null);
-		this.setUndecorated(true);
+		setUndecorated(true);
 		MigLayout migMainLayout = new MigLayout("", "10[center]10[center]10", "10[center]10[center]10");
 
 		mainContainer = new JPanel(migMainLayout);
@@ -66,7 +66,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 		revalidate();
 		repaint();
 		pack();
-                setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

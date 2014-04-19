@@ -23,10 +23,10 @@ public class GUIController {
 
 	protected DatabaseInterface db;
 	protected LoadingFrame lframe;
-	private  FrameChooser frameChooser;
-	private  MainFrame mainframe;
+	private FrameChooser frameChooser;
+	private MainFrame mainframe;
 	private Timer timer;
-	
+
 	private static GUIController guiController;
 
 	/**
@@ -38,7 +38,7 @@ public class GUIController {
 	{
 		frameChooser = new FrameChooser();
 	}
-	
+
 	public static void startLoading(boolean isKrak)
 	{
 		guiController.loadData(isKrak);
@@ -46,45 +46,49 @@ public class GUIController {
 
 	public void loadData(boolean isKrak)
 	{
-		frameChooser.setVisible(false);
-		frameChooser.dispose();
-		
-		db = Database.db(isKrak); // true for krak
-		lframe = new LoadingFrame();
-
-		timer = new Timer();
-		TimerTask task = new TimerTask() {
-
+		final boolean isKrakB = isKrak;
+		// Solution with thread taken from StackOverflow: http://stackoverflow.com/questions/9419252/why-does-this-simple-java-swing-program-freeze
+		Thread thread = new Thread() {
 			@Override
 			public void run()
 			{
-				lframe.updateLoadingBar(db.getNodesDownloadedPct(), db.getEdgesDownloadedPct(), db.getStreetsDownloadedPct());
-				if (db.getStreetsDownloadedPct() == 1)
-				{
-					timer.cancel();
-					timer.purge();
-				}
+				frameChooser.setVisible(false);
+				frameChooser.dispose();
+
+				db = Database.db(isKrakB); // true for krak
+				lframe = new LoadingFrame();
+
+				timer = new Timer();
+				TimerTask task = new TimerTask() {
+
+					@Override
+					public void run()
+					{
+						lframe.updateLoadingBar(db.getNodesDownloadedPct(), db.getEdgesDownloadedPct(), db.getStreetsDownloadedPct());
+						if (db.getStreetsDownloadedPct() == 1)
+						{
+							timer.cancel();
+							timer.purge();
+						}
+					}
+				};
+				timer.scheduleAtFixedRate(task, 1000, 100);
+
+				List<Edge> edges = db.getData();
+				QuadTree quadTree = db.getQuadTree();
+
+				GraphCreator graph;
+				graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
+
+				mainframe = new MainFrame(quadTree); // brug disse 
+
+				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
+				lframe.setVisible(false);
+				lframe.dispose();
 			}
 		};
-		timer.scheduleAtFixedRate(task, 4000, 100);
+		thread.start();
 
-		
-		List<Edge> edges = db.getData();
-		QuadTree quadTree = db.getQuadTree();
-
-		GraphCreator graph;
-		graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
-
-		mainframe = new MainFrame(quadTree); // brug disse 
-		
-				
-		
-		//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
-		
-				
-		lframe.setVisible(false);
-		lframe.dispose();
-				
 	}
 
 	public static void main(String[] args)
