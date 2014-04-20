@@ -8,6 +8,9 @@ package database;
 
 import java.util.ArrayList;
 import mapofdenmark.GUIPackage.QuadTree;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
+
 
 /**
  * Class description:
@@ -18,10 +21,44 @@ import mapofdenmark.GUIPackage.QuadTree;
  * @buildDate 14-04-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class OSMParser implements DatabaseInterface {
+public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
+	public OSMParser()
+	{
+		
+	}
+	
+	/**
+	 * Gets called when it hits a 
+	 * @param uri
+	 * @param localName
+	 * @param qName
+	 * @param attributes
+	 * @throws SAXException 
+	 */
 	@Override
-	public ArrayList<Edge> getData()
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
+	{
+		super.startElement(uri, localName, qName, attributes); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	/**
+	 * 
+	 * @param uri
+	 * @param localName
+	 * @param qName
+	 * @throws SAXException 
+	 */
+	@Override
+	public void endElement(String uri, String localName, String qName) throws SAXException
+	{
+		super.endElement(uri, localName, qName); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	
+	
+	@Override
+	public ArrayList<Edge> getEdgeList()
 	{
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}

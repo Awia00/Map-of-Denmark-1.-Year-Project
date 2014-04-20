@@ -73,7 +73,7 @@ public class GUIController {
 				};
 				timer.scheduleAtFixedRate(task, 1000, 100);
 
-				List<Edge> edges = db.getData();
+				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
 				GraphCreator graph;

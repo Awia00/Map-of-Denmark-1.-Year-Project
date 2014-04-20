@@ -21,7 +21,7 @@ import mapofdenmark.GUIPackage.QuadTree;
  */
 public interface DatabaseInterface {
 
-	public ArrayList<Edge> getData();
+	public ArrayList<Edge> getEdgeList();
 	
 	public ArrayList<Node> getListOfNodes();
 
