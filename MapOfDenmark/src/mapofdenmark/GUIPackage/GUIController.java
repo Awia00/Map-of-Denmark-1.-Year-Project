@@ -10,7 +10,6 @@ import database.DatabaseInterface;
 import database.Edge;
 import database.GraphCreator;
 import database.Node;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
