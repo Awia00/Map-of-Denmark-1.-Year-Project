@@ -6,9 +6,15 @@
 
 package database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+
 import mapofdenmark.GUIPackage.QuadTree;
 import org.xml.sax.*;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.helpers.*;
 
 
@@ -23,23 +29,60 @@ import org.xml.sax.helpers.*;
  */
 public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
+	private double nodesDownloadedPct = 0, edgesDownloadedPct = 0, streetsDownloadedPct = 0;
+	private double minX, maxX;
+	private double minY, maxY;
+	private ArrayList<Node> nodes;
+	private ArrayList<Edge> edges;
+	private QuadTree quadTree;
+	private SAXParser saxParser;
+	
 	public OSMParser()
 	{
+		nodesDownloadedPct = 0;
+		edgesDownloadedPct = 0;
+		streetsDownloadedPct = 0;
+		nodes = new ArrayList<>();
+		edges = new ArrayList<>();
+		
+		// http://tutorials.jenkov.com/java-xml/sax.html
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		File file = new File("src\\highways.osm");
+		try{
+			InputStream openStreetMapData = new FileInputStream(file);
+			SAXParser saxParser = factory.newSAXParser();
+			saxParser.parse(openStreetMapData, this);
+		}
+		catch(Throwable err)
+		{
+			err.printStackTrace();
+		}
 		
 	}
 	
-	/**
-	 * Gets called when it hits a 
-	 * @param uri
-	 * @param localName
-	 * @param qName
-	 * @param attributes
-	 * @throws SAXException 
-	 */
+
+	@Override
+	public void startDocument() throws SAXException
+	{
+		System.out.println("start document   : ");
+	}
+
+	@Override
+	public void endDocument() throws SAXException
+	{
+		System.out.println("end document     : ");
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length) throws SAXException
+	{
+		System.out.println("start characters : " + new String(ch, start, length));
+	}
+	
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
-		super.startElement(uri, localName, qName, attributes); //To change body of generated methods, choose Tools | Templates.
+		System.out.println("start element    : " + qName);
 	}
 
 	/**
@@ -52,6 +95,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
+		System.out.println("end element      : " + qName);
 		super.endElement(uri, localName, qName); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -60,37 +104,37 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public ArrayList<Edge> getEdgeList()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return edges;
 	}
 
 	@Override
 	public ArrayList<Node> getListOfNodes()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return nodes;
 	}
 
 	@Override
 	public double getNodesDownloadedPct()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return nodesDownloadedPct;
 	}
 
 	@Override
 	public double getEdgesDownloadedPct()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return edgesDownloadedPct;
 	}
 
 	@Override
 	public double getStreetsDownloadedPct()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return streetsDownloadedPct;
 	}
 
 	@Override
 	public QuadTree getQuadTree()
 	{
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return quadTree;
 	}
 
 }
