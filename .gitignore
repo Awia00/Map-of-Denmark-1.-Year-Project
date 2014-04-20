@@ -22,3 +22,4 @@ nbproject/*
 *.lock
 /MapOfDenmark/nbproject/private/
 
+*.osm
