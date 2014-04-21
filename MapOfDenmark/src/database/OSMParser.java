@@ -61,9 +61,26 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
 	private int convertRoadTypeToInt(String roadType)
 	{
-		if (roadType != null && roadType.equals("path"))
+		if(roadType == null){ return -1;}
+		else if (roadType.equalsIgnoreCase("motorway"))
 		{
 			return 1;
+		}
+		else if (roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("primary"))
+		{
+			return 3;
+		}
+		else if (roadType.equalsIgnoreCase("tertiary"))
+		{
+			return 5;
+		}
+		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		{
+			return 6;
+		}
+		else if (roadType.equalsIgnoreCase("path"))
+		{
+			return 8;
 		}
 		return -1;
 	}
@@ -94,7 +111,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	{
 		if (qName.equals("node"))
 		{
-			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")), Double.parseDouble(attributes.getValue("lat"))));
+			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*13000));
 			//System.out.println(node);
 			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
 			nodes.add(node);
@@ -125,10 +142,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			}
 		} else if (qName.equals("bounds"))
 		{
-			minX = Double.parseDouble(attributes.getValue("minlon"));
-			minY = Double.parseDouble(attributes.getValue("minlat"));
-			maxX = Double.parseDouble(attributes.getValue("maxlon"));
-			maxY = Double.parseDouble(attributes.getValue("maxlat"));
+			minX = Double.parseDouble(attributes.getValue("minlon"))*10000;
+			minY = Double.parseDouble(attributes.getValue("minlat"))*13000;
+			maxX = Double.parseDouble(attributes.getValue("maxlon"))*10000;
+			maxY = Double.parseDouble(attributes.getValue("maxlat"))*13000;
 			System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
 			return;
 		}
