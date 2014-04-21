@@ -115,7 +115,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	{
 		if (qName.equals("node"))
 		{
-			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*13000));
+			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
 			//System.out.println(node);
 			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
 			nodes.add(node);
@@ -147,9 +147,9 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		} else if (qName.equals("bounds"))
 		{
 			minX = Double.parseDouble(attributes.getValue("minlon"))*10000;
-			minY = Double.parseDouble(attributes.getValue("minlat"))*13000;
+			minY = Double.parseDouble(attributes.getValue("minlat"))*15000;
 			maxX = Double.parseDouble(attributes.getValue("maxlon"))*10000;
-			maxY = Double.parseDouble(attributes.getValue("maxlat"))*13000;
+			maxY = Double.parseDouble(attributes.getValue("maxlat"))*15000;
 			System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
 			return;
 		}
