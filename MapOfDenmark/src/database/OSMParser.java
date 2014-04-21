@@ -38,6 +38,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	private ArrayList<Edge> edges;
 	private QuadTree quadTree;
 	private SAXParser saxParser;
+	private boolean isParsed;
 
 	private boolean createWay = false;
 	private List<Node> nodesOnWay = new ArrayList<>();
@@ -46,6 +47,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
 	public OSMParser()
 	{
+		isParsed = false;
 		nodesDownloadedPct = 0;
 		edgesDownloadedPct = 0;
 		streetsDownloadedPct = 0;
@@ -59,7 +61,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
 	private int convertRoadTypeToInt(String roadType)
 	{
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -71,6 +73,9 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endDocument() throws SAXException
 	{
+		nodesDownloadedPct = 1;
+		edgesDownloadedPct = 1;
+		streetsDownloadedPct = 1;
 		System.out.println("end document     : ");
 	}
 
@@ -86,9 +91,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		if (qName.equals("node"))
 		{
 			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")), Double.parseDouble(attributes.getValue("lat"))));
-			System.out.println(node);
+			//System.out.println(node);
 			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
 			nodes.add(node);
+			nodesDownloadedPct += (double)1/3500000;
 			return;
 		} else if (qName.equals("way"))
 		{
@@ -137,6 +143,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 				if(fromNode != null)
 				{
 					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0));
+					nodesDownloadedPct += (double)1/6500000;
 					fromNode = node;
 				}
 				else
@@ -164,16 +171,18 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			InputStream openStreetMapData = new FileInputStream(file);
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
+			isParsed = true;
 		} catch (Throwable err)
 		{
 			err.printStackTrace();
 		}
+		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX, maxY));
 	}
 	
 	@Override
 	public ArrayList<Edge> getEdgeList()
 	{
-		if (!edges.isEmpty())
+		if (isParsed)
 		{
 			return edges;
 		}
@@ -187,7 +196,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public ArrayList<Node> getListOfNodes()
 	{
-		if(!nodes.isEmpty())
+		if(isParsed)
 		{
 			return nodes;
 		}
@@ -219,14 +228,14 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public QuadTree getQuadTree()
 	{
-		if(quadTree != null)
+		if(isParsed)
 		{
 			return quadTree;
 		}
 		else
 		{
 			initiateParsing();
-			return new QuadTree(edges, minX, minY, Math.max(maxX, maxY));
+			return quadTree;
 		}
 	}
 
