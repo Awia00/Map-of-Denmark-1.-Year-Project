@@ -61,7 +61,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
 	private int convertRoadTypeToInt(String roadType)
 	{
-		if (roadType != null && roadType.equals("secondary"))
+		if (roadType != null && roadType.equals("path"))
 		{
 			return 1;
 		}
@@ -114,8 +114,14 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			if (createWay)
 			{
-				roadName = attributes.getValue("name");
-				roadType = attributes.getValue("highway");
+				if(attributes.getValue("k").equalsIgnoreCase("highway"))
+				{
+					roadType = attributes.getValue("v");
+				}
+				if(attributes.getValue("k").equalsIgnoreCase("name"))
+				{
+					roadName = attributes.getValue("v");
+				}
 			}
 		} else if (qName.equals("bounds"))
 		{
