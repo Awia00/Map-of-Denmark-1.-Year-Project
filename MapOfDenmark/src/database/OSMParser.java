@@ -176,7 +176,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			err.printStackTrace();
 		}
-		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX, maxY));
+		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
 	}
 	
 	@Override
