@@ -61,7 +61,11 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 
 	private int convertRoadTypeToInt(String roadType)
 	{
-		return 1;
+		if (roadType != null && roadType.equals("secondary"))
+		{
+			return 1;
+		}
+		return -1;
 	}
 
 	@Override
