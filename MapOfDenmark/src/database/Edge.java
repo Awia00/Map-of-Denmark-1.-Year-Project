@@ -40,7 +40,7 @@ public class Edge implements Comparable<Edge>{
         this.roadcode = roadcode;
 		this.fromNode = 0;
 		this.toNode = 0;
-		calcMidNode();
+		midNodeTrue = calcMidNode();
 		
     }
 
