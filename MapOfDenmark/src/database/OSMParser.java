@@ -48,7 +48,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		
 		// http://tutorials.jenkov.com/java-xml/sax.html
 		SAXParserFactory factory = SAXParserFactory.newInstance();
-		File file = new File("src\\highways.osm");
+		File file = new File("assets\\OSM_MapOfDenmark.osm");
 		try{
 			InputStream openStreetMapData = new FileInputStream(file);
 			SAXParser saxParser = factory.newSAXParser();
