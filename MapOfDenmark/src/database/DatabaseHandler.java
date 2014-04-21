@@ -107,12 +107,6 @@ public class DatabaseHandler implements DatabaseInterface {
 
     }
 
-    private Connection getConnection() throws SQLException {
-
-        return cpds.getConnection();
-
-    }
-
     /**
      * This method is borrowed from:<br>
      *
@@ -182,17 +176,6 @@ public class DatabaseHandler implements DatabaseInterface {
                     }
                 }
             }
-        }
-    }
-
-    private void executeUpdate(PreparedStatement pstatement) {
-        //SET method, for putting data into the database.
-        try {
-            //Execute the prepared statement.
-            pstatement.executeUpdate();
-
-        } catch (SQLException ex) {
-            printSQLException(ex);
         }
     }
 
@@ -358,86 +341,6 @@ public class DatabaseHandler implements DatabaseInterface {
         Collections.sort(streets);
         streetsDownloadedPct = 1;
         return streets;
-    }
-
-    private ArrayList<Edge> getEdge(int id, String streetName) {
-        ArrayList<Edge> edgeResults = new ArrayList<>();
-        Edge e = new Edge(1, 1, 1, "1", id);
-        int index = Collections.binarySearch(edges, e, ec);
-        int indexVar = index;
-        int topIndex = 0;
-        int botIndex = 0;
-        // go right
-        do {
-
-            //edgeResults.add(edges.get(indexVar-indexDif));
-            //edges.remove(indexVar-indexDif);
-            indexVar -= 10;
-            if (indexVar < 0) {
-                indexVar = 0;
-            }
-            if (edges.get(indexVar).getRoadcode() != id) {
-                while (edges.get(++indexVar).getRoadcode() != id) {
-                }
-                botIndex = indexVar;
-                break;
-            }
-        } while (true);
-
-        indexVar = index;
-        do {
-            indexVar += 10;
-            if (indexVar >= edges.size()) {
-                indexVar = edges.size() - 1;
-            }
-            if (edges.get(indexVar).getRoadcode() != id) {
-                while (edges.get(--indexVar).getRoadcode() != id) {
-                }
-                topIndex = indexVar;
-                break;
-            }
-        } while (true);
-
-        for (int i = botIndex; i <= topIndex; i++) {
-            if (edges.get(i).getRoadName().equals(streetName)) {
-                edgeResults.add(edges.get(i));
-            }
-        }
-        return edgeResults;
-    }
-
-    private void getEdgeName(String streetName) {
-        Edge e = new Edge(1, 1, 1, streetName, 1);
-        Collections.sort(edges);
-        int index = Collections.binarySearch(edges, e, ecName);
-
-        System.out.println(index);
-    }
-
-    private ArrayList<Street> getStreet(int id) {
-        ArrayList<Street> streetResults = new ArrayList<>();
-
-        Street s = new Street(id, "N/A");
-        int index = Collections.binarySearch(streets, s, sc);
-        int indexTemp = index;
-        int indexMax;
-        int indexMin;
-        while (streets.get(indexTemp).getID() == id && indexTemp != streets.size() - 1) {
-            indexTemp++;
-        }
-        indexMax = indexTemp;
-
-        indexTemp = index;
-        while (streets.get(indexTemp).getID() == id && indexTemp > 0) {
-            indexTemp--;
-        }
-        indexMin = indexTemp;
-
-        for (int i = indexMin; i <= indexMax; i++) {
-            streetResults.add(streets.get(i));
-        }
-
-        return streetResults;
     }
 
     private QuadTree initDataStructure() {
