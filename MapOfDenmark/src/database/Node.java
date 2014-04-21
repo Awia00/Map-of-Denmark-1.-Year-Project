@@ -22,6 +22,12 @@ public class Node implements Comparable<Node>{
         this.ID = ID;
     }
     
+	public Node(long id, Point2D coords) {
+        this.xCoord = coords.getX();
+        this.yCoord = coords.getY();
+        this.ID = (int) id;
+    }
+	
     public Node( Point2D coords) {
         this.xCoord = coords.getX();
         this.yCoord = coords.getY();
@@ -45,5 +51,12 @@ public class Node implements Comparable<Node>{
         
         return this.getID() - o.getID();
     }
+
+	@Override
+	public String toString()
+	{
+		return "ID: " + " x: " + xCoord + " y: " + yCoord;
+	}
     
+	
 }

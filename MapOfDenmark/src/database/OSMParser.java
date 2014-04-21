@@ -6,6 +6,7 @@
 
 package database;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -76,13 +77,36 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException
 	{
-		System.out.println("start characters : " + new String(ch, start, length));
+		//System.out.println("start characters : " + new String(ch, start, length));
 	}
 	
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
-		System.out.println("start element    : " + qName);
+		if(qName.equals("node"))
+		{
+			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")),Double.parseDouble(attributes.getValue("lat"))));
+			System.out.println(node);
+			nodes.add(node);
+			return;
+		}
+		else if (qName.equals("way"))
+		{
+			Edge edge = null;
+			System.out.println(edge);
+			edges.add(edge);
+			return;
+		}
+		else if (qName.equals("bounds"))
+		{
+			minX = Double.parseDouble(attributes.getValue("minlon"));
+			minY = Double.parseDouble(attributes.getValue("minlat"));
+			maxX = Double.parseDouble(attributes.getValue("maxlon"));
+			maxY = Double.parseDouble(attributes.getValue("maxlat"));
+			System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
+			return;
+		}
+		//System.out.println("start element    : " + qName);
 	}
 
 	/**
@@ -95,8 +119,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
-		System.out.println("end element      : " + qName);
-		super.endElement(uri, localName, qName); //To change body of generated methods, choose Tools | Templates.
+		//System.out.println("end element      : " + qName);
 	}
 
 	
