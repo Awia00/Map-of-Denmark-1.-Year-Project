@@ -386,6 +386,19 @@ public class MapComponent extends JComponent {
 			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
+				for (Edge edge : quadTree.getCoastLineEdges())
+				{
+					double x1 = edge.getFromNodeTrue().getxCoord();
+					double y1 = edge.getFromNodeTrue().getyCoord();
+					double x2 = edge.getToNodeTrue().getxCoord();
+					double y2 = edge.getToNodeTrue().getyCoord();
+
+					// drawing the border
+					g.setColor(new Color(255-50,239-50,213-50));
+					g2.setStroke(new BasicStroke(1.4f));
+					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
+
+				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/40))
 				{
 					for (Edge edge : quadTree.getPathEdges())
@@ -475,19 +488,6 @@ public class MapComponent extends JComponent {
 						g2.setStroke(secondaryRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
-				}
-				for (Edge edge : quadTree.getCoastLineEdges())
-				{
-					double x1 = edge.getFromNodeTrue().getxCoord();
-					double y1 = edge.getFromNodeTrue().getyCoord();
-					double x2 = edge.getToNodeTrue().getxCoord();
-					double y2 = edge.getToNodeTrue().getyCoord();
-
-					// drawing the border
-					g.setColor(new Color(255-50,239-50,213-50));
-					g2.setStroke(new BasicStroke(1.4f));
-					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
-
 				}
 				for (Edge edge : quadTree.getHighwayEdges())
 				{

@@ -82,6 +82,11 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 8;
 		}
+		else if (roadType.equalsIgnoreCase("coastline"))
+		{
+			System.out.println("hej");
+			return 75;
+		}
 		return -1;
 	}
 
@@ -131,7 +136,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			if (createWay)
 			{
-				if(attributes.getValue("k").equalsIgnoreCase("highway"))
+				if(attributes.getValue("k").equalsIgnoreCase("highway") || attributes.getValue("k").equalsIgnoreCase("natural"))
 				{
 					roadType = attributes.getValue("v");
 				}
@@ -193,6 +198,17 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		// http://tutorials.jenkov.com/java-xml/sax.html
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		File file = new File("assets/OSM_MapOfDenmark.osm");
+		try
+		{
+			InputStream openStreetMapData = new FileInputStream(file);
+			SAXParser saxParser = factory.newSAXParser();
+			saxParser.parse(openStreetMapData, this);
+			isParsed = true;
+		} catch (Throwable err)
+		{
+			err.printStackTrace();
+		}
+		file = new File("assets/OSM_Natural.osm");
 		try
 		{
 			InputStream openStreetMapData = new FileInputStream(file);
