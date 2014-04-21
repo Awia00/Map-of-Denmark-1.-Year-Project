@@ -84,7 +84,6 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		}
 		else if (roadType.equalsIgnoreCase("coastline"))
 		{
-			System.out.println("hej");
 			return 75;
 		}
 		return -1;
