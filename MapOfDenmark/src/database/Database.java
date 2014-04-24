@@ -8,8 +8,8 @@ package database;
 public class Database 
 {
     // The database interface
-    private final static DatabaseInterface db = new DatabaseHandler();
-	private final static DatabaseInterface osmParser = new OSMParser();
+    private static DatabaseInterface db = null;
+	private static DatabaseInterface osmParser = null;
     
     /**
      * This method gets the database interface for use.
@@ -19,10 +19,12 @@ public class Database
     {
 		if(isKrak)
 		{
+			if(db == null){db = new DatabaseHandler();}
 			return db;
 		}
 		else
 		{
+			if(osmParser == null){osmParser = new OSMParser();}
 			return osmParser;
 		}
     }
