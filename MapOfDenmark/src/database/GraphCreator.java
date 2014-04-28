@@ -5,8 +5,11 @@
  */
 package database;
 
+import java.util.AbstractQueue;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -29,6 +32,8 @@ public class GraphCreator {
 		{
 			graph.put(edge.getFromNodeTrue(), new LinkedList<Edge>());
 			graph.get(edge.getFromNodeTrue()).add(edge);
+			graph.put(edge.getToNodeTrue(), new LinkedList<Edge>());
+			graph.get(edge.getToNodeTrue()).add(edge);
 		}
 	}
 
@@ -49,9 +54,39 @@ public class GraphCreator {
 	 * @param node1
 	 * @param node2
 	 */
-	private void runBFS(Node node1, Node node2)
+	public double runBFS(Node start, Node end)
 	{
+		// Not correct implementation yet.
+		HashMap<Node,Integer> distTo = new HashMap<>();
+ 		ArrayDeque<Node> queue = new ArrayDeque<>();
 
+ 		queue.add(start); 
+ 		distTo.put(start, 0);
+
+ 		while (!queue.isEmpty()) {
+ 			Node parent = (Node)queue.removeFirst();
+
+ 			if (parent.equals(end)) { return distTo.get(parent); }
+ 			
+ 			for (Object edgeObject : graph.get(parent)) {
+ 				Edge edge = (Edge) edgeObject;
+
+ 				if (!distTo.containsKey(edge.getFromNodeTrue()) || !distTo.containsKey(edge.getToNodeTrue()) ) {
+					if(parent != edge.getFromNodeTrue())
+					{
+						queue.add(edge.getFromNodeTrue());
+						distTo.put(edge.getFromNodeTrue(), distTo.get(parent) + 1);
+					}
+					else
+					{
+						queue.add(edge.getToNodeTrue());
+						distTo.put(edge.getToNodeTrue(), distTo.get(parent) + 1);
+					}
+ 				}
+ 			}
+ 		}
+
+ 		return -1;
 	}
 
 	/**
