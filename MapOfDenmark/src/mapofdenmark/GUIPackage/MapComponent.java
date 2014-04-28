@@ -12,12 +12,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
  * Class description:
@@ -33,10 +36,13 @@ public class MapComponent extends JComponent {
 	// the toplevel quadtree
 	private QuadTree quadTreeToDraw;
 	protected VisibleArea visibleArea;
+	private List<PolygonShape> polygons;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-
+        
+        private int xFrom, yFrom, xTo, yTo;
+        
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
@@ -49,9 +55,9 @@ public class MapComponent extends JComponent {
 	 * @param streets is not used at the moment
 	 * @param edges an array with all the edges in the database.
 	 */
-	public MapComponent(QuadTree quadTree)
+	public MapComponent(QuadTree quadTree, List<PolygonShape> polygons)
 	{
-		initialize(quadTree);
+		initialize(quadTree, polygons);
 	}
 
 	/**
@@ -60,17 +66,28 @@ public class MapComponent extends JComponent {
 	 * @param streets not used at the moment.
 	 * @param edges an array with all the edges in the database.
 	 */
-	private void initialize(QuadTree quadTree)
+	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
 	{
 		quadTreeToDraw = quadTree;
 		visibleArea = new VisibleArea();
+		this.polygons = polygons;
 		
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX()-quadTreeToDraw.getQuadTreeLength()/8, quadTreeToDraw.getQuadTreeY()-quadTreeToDraw.getQuadTreeLength()/50, quadTreeToDraw.getQuadTreeLength()/15*16, quadTreeToDraw.getQuadTreeLength()/15*10);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
-
+        
+        public void setFrom(int x, int y) {
+            this.xFrom = x;
+            this.yFrom = y;
+        }
+        
+        public void setTo(int x, int y) {
+            this.xTo = x;
+            this.yTo = y;
+        }
+        
 	/**
 	 * Change the position of the visible area, such that the user can see this
 	 * at the next repaint.
@@ -285,9 +302,9 @@ public class MapComponent extends JComponent {
 	 * @return a string with that edge's roadName. Could be changed to return
 	 * that edge or the street it is in.
 	 */
-	public String findClosestRoad(int mouseCoordX, int mouseCoordY)
+	public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 	{
-		QuadTree quadTreeToSearch;
+		//QuadTree quadTreeToSearch;
 		double xCoord = convertMouseXToMap(mouseCoordX);
 		double yCoord = convertMouseYToMap(mouseCoordY);
 		List<Edge> edges = new ArrayList<>();
@@ -319,9 +336,9 @@ public class MapComponent extends JComponent {
 		}
 		if (distance != -1)
 		{
-			return closestEdge.getRoadName();
+			return closestEdge;
 		}
-		return "No nearby roads found";
+		return null;
 	}
 
 	/**
@@ -342,12 +359,12 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
-
+		
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
 		g.setColor(this.activeColorScheme.getBackgroundColor());
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
-
+		
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		double xlength = visibleArea.getxLength();
 		double ylength = visibleArea.getyLength();
@@ -380,7 +397,12 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-
+		
+		g.setColor(Color.red);
+		int[ ] factorial1 = { 10, 20, 50, 200, 300};
+		int[ ] factorial2 = { 10, 20, 30, 100, 50};	
+		g2.fillPolygon(factorial1, factorial2, factorial1.length);
+		
 		for (QuadTree quadTree : bottomTrees)
 		{
 			// checks that they should be drawn, this is set when the visibleArea is updated.
@@ -399,7 +421,7 @@ public class MapComponent extends JComponent {
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/40))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/60))
 				{
 					for (Edge edge : quadTree.getPathEdges())
 					{
@@ -431,7 +453,7 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/15))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/20))
 				{
 					for (Edge edge : quadTree.getSmallEdges())
 					{
@@ -536,6 +558,8 @@ public class MapComponent extends JComponent {
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
+                
+                g.drawRect(xFrom, yFrom, 10, 10);
 	}
 
 	/**
