@@ -1,9 +1,12 @@
 package database;
 
+import java.awt.Color;
+import java.awt.Polygon;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +15,7 @@ import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileExcep
 import org.nocrala.tools.gis.data.esri.shapefile.header.ShapeFileHeader;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.MultiPointZShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PointShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
@@ -27,7 +31,7 @@ import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
  */
 public class ShapeFileParser {
 
-	ArrayList<PolygonShape> polygons;
+	List<PolygonShape> polygons;
 
 	public ShapeFileParser()
 	{
@@ -35,16 +39,17 @@ public class ShapeFileParser {
 		startParsing();
 	}
 
-	public ArrayList<PolygonShape> getPolygons()
+	public List<PolygonShape> getPolygons()
 	{
 		return polygons;
 	}
 
-	private void startParsing() 
+	private void startParsing()
 	{
-		try{
+		try
+		{
 			parseLanduse();
-		}catch(	InvalidShapeFileException | IOException ex)
+		} catch (InvalidShapeFileException | IOException ex)
 		{
 			Logger.getLogger(ShapeFileParser.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -77,19 +82,20 @@ public class ShapeFileParser {
 						break;
 					case POLYGON:
 						PolygonShape aPolygon = (PolygonShape) s;
+						Polygon truePolygon = new Polygon();
 						polygons.add(aPolygon);
-						
+
 						/* debug code
-						System.out.println("I read a Polygon with "
-								+ aPolygon.getNumberOfParts() + " parts and "
-								+ aPolygon.getNumberOfPoints() + " points");
-						for (int i = 0; i < aPolygon.getNumberOfParts(); i++)
-						{
-							PointData[] points = aPolygon.getPointsOfPart(i);
-							System.out.println("- part " + i + " has " + points.length
-									+ " points.");
-						}
-						*/
+						 System.out.println("I read a Polygon with "
+						 + aPolygon.getNumberOfParts() + " parts and "
+						 + aPolygon.getNumberOfPoints() + " points");
+						 for (int i = 0; i < aPolygon.getNumberOfParts(); i++)
+						 {
+						 PointData[] points = aPolygon.getPointsOfPart(i);
+						 System.out.println("- part " + i + " has " + points.length
+						 + " points.");
+						 }
+						 */
 						break;
 					default:
 						System.out.println("Read other type of shape.");
@@ -99,6 +105,25 @@ public class ShapeFileParser {
 
 			System.out.println("Total shapes read: " + total);
 		}
+		for (PolygonShape polyShape : polygons)
+		{
+			int size = polyShape.getNumberOfPoints();
+			int[] xPoints = new int[size];
+			int[] yPoints = new int[size];
+
+			PointData[] pointData = polyShape.getPoints();
+			for (int i = 0; i < size; i++)
+			{
+				xPoints[i] = (int) pointData[i].getX();
+				yPoints[i] = (int) pointData[i].getY();
+			}
+			//g.fillPolygon(new Polygon(xPoints, yPoints, Math.max(xPoints.length, yPoints.length)));
+		}
+	}
+
+	private int[][] splitData(PointData[] points)
+	{
+		return new int[2][points.length];
 	}
 
 	public static void main(String[] args)
