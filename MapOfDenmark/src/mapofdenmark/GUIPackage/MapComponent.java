@@ -399,7 +399,7 @@ public class MapComponent extends JComponent {
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/40))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/60))
 				{
 					for (Edge edge : quadTree.getPathEdges())
 					{
@@ -431,7 +431,7 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/15))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/20))
 				{
 					for (Edge edge : quadTree.getSmallEdges())
 					{

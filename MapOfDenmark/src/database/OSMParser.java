@@ -62,11 +62,11 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 1;
 		}
-		else if (roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("primary"))
+		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
 		{
 			return 3;
 		}
-		else if (roadType.equalsIgnoreCase("tertiary"))
+		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary"))
 		{
 			return 5;
 		}
@@ -74,7 +74,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 6;
 		}
-		else if (roadType.equalsIgnoreCase("path"))
+		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
 			return 8;
 		}
