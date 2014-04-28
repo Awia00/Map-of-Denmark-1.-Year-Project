@@ -77,8 +77,9 @@ public class GUIController {
 				QuadTree quadTree = db.getQuadTree();
 
 				GraphCreator graph;
-				graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
-
+				//graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
+                                graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
+                                
 				mainframe = new MainFrame(quadTree); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
@@ -93,6 +94,7 @@ public class GUIController {
 	public static void main(String[] args)
 	{
 		guiController = new GUIController();
+                
 	}
 
 }

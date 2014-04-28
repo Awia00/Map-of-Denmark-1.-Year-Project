@@ -379,7 +379,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		List<Edge> edges = new ArrayList<>();
 		for (int i = 0; i < 35; i++)
 		{
-			Edge edge = new Edge(0, 0, 0, null, 0);
+			Edge edge = new Edge(0, 0, 0, null, 0,0);
 			edge.setFromNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199))));
 			edge.setToNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199))));
 			edge.setMidNodeTrue();

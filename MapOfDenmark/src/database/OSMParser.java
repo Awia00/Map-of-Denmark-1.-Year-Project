@@ -171,7 +171,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			{
 				if(fromNode != null)
 				{
-					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0));
+					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, -1));
 					nodesDownloadedPct += (double)1/6500000;
 					fromNode = node;
 				}
@@ -223,9 +223,6 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			err.printStackTrace();
 		}
 		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
-        //Attempted memory release.
-        edges.clear();
-        nodes.clear();
 	}
 	
 	@Override
