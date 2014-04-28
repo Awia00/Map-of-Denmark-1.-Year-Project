@@ -6,6 +6,7 @@
 package mapofdenmark.GUIPackage;
 
 import database.Edge;
+import database.Node;
 import database.Street;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -61,6 +62,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private Point oldPosition;
 	private Point newPosition;
+        
+        private Node fromNode = null;
+        private Node toNode = null;
 
 	private boolean mapInFocus;
 	private int pressedKeyCode;
@@ -291,26 +295,52 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	{
 		if (pressedKeyCode == 17)
 		{
-			double xCoord = drawMapComponent.convertMouseXToMap(e.getX());
-			double yCoord = drawMapComponent.convertMouseXToMap(e.getY());
-			if (e.getButton() == MouseEvent.BUTTON1)
-			{
-				DrawingCoastLine.giveData(xCoord, yCoord, true);
-			} else
-			{
-				DrawingCoastLine.giveData(xCoord, yCoord, false);
-			}
+//			double xCoord = drawMapComponent.convertMouseXToMap(e.getX());
+//			double yCoord = drawMapComponent.convertMouseXToMap(e.getY());
+//			if (e.getButton() == MouseEvent.BUTTON1)
+//			{
+//				DrawingCoastLine.giveData(xCoord, yCoord, true);
+//			} else
+//			{
+//				DrawingCoastLine.giveData(xCoord, yCoord, false);
+//			}
+                    
 		}
 		if (e.getClickCount() >= 2)
 		{
 			if (e.getButton() == MouseEvent.BUTTON3)
 			{
 				callSmoothZoom(e.getX(), e.getY(), 1);
+                                
+                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+                                toNode = edge.getFromNodeTrue();
+                                System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
 				callSmoothZoom(e.getX(), e.getY(), -1);
+                                
+                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+                                fromNode = edge.getFromNodeTrue();
+                                navigationBar.getFrom().setText(edge.getRoadName());
+                                System.out.println(fromNode);
 			}
 		}
+                if (e.getButton() == MouseEvent.BUTTON3)
+			{
+                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+                                toNode = edge.getFromNodeTrue();
+                                navigationBar.getTo().setText(edge.getRoadName());
+                                System.out.println(toNode);
+			} else if (e.getButton() == MouseEvent.BUTTON1)
+			{
+
+                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+                                fromNode = edge.getFromNodeTrue();
+                                navigationBar.getFrom().setText(edge.getRoadName());
+                                drawMapComponent.setFrom(e.getX(), e.getY());
+                                repaint();
+			}
+                
 	}
 
 	@Override
@@ -395,10 +425,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			@Override
 			public void run()
 			{
-				String s = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
-
+				Edge e = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
+                                String closestRoadString = e.getRoadName();
 				// this implementation is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
-				StringBuilder sb = new StringBuilder(s);
+				StringBuilder sb = new StringBuilder(closestRoadString);
 
 				int i = 0;
 				while ((i = sb.indexOf(" ", i + 10)) != -1)

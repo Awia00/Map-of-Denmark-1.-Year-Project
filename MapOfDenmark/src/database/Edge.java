@@ -23,17 +23,19 @@ public class Edge implements Comparable<Edge> {
     private double midY = 0;
     private final int roadType;
     private final String roadName;
+    private double weight = 0;
 
     // Mangler TYPE
-    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode) {
+    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weight) {
         this.fromNode = fromNode;
         this.toNode = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
         this.roadcode = roadcode;
+        this.weight = weight;
     }
 
-    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode) {
+    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode, double weight) {
         this.fromNodeTrue = fromNode;
         this.toNodeTrue = toNode;
         this.roadType = roadType;
@@ -41,6 +43,7 @@ public class Edge implements Comparable<Edge> {
         this.roadcode = roadcode;
         this.fromNode = 0;
         this.toNode = 0;
+        this.weight = weight;
         setMidNodeTrue();
 
     }
@@ -93,6 +96,10 @@ public class Edge implements Comparable<Edge> {
 
     public double getMidY() {
         return midY;
+    }
+    
+    public double getWeight(){
+        return weight;
     }
     /*
      @Override

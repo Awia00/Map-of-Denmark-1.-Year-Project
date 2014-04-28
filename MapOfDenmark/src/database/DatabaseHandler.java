@@ -274,7 +274,7 @@ public class DatabaseHandler implements DatabaseInterface {
             //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             Edge edge = null;
-            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE FROM [jonovic_dk_db].[dbo].[edges];";
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, DRIVETIME FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
 
             PreparedStatement pstatement = con.prepareStatement(sql);
@@ -286,7 +286,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5));
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6));
                 edges.add(edge);
                 i++;
                 edgesDownloadedPct += (double) 1 / 812301;
@@ -359,9 +359,6 @@ public class DatabaseHandler implements DatabaseInterface {
         }
 		createQuadTree();
         System.out.println("Node-to-Edge joining complete.");
-        //Attempted memory release.
-        edges.clear();
-        nodes.clear();
         return QT;
     }
 
@@ -384,7 +381,7 @@ public class DatabaseHandler implements DatabaseInterface {
             while (rs.next()) {
                 Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
                 Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
-                edge = new Edge(0, 0, 74, "", 0);
+                edge = new Edge(0, 0, 74, "", 0, 0);
                 Node fromNode = new Node(startNode);
                 Node toNode = new Node(endNode);
                 edge.setFromNodeTrue(fromNode);

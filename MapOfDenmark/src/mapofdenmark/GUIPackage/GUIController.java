@@ -81,7 +81,7 @@ public class GUIController {
 
 				
 				GraphCreator graph;
-				graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
+				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
 
 				List<PolygonShape> polygons = new ArrayList<>();
 				if(!isKrakB){polygons=new ShapeFileParser().getPolygons();}
@@ -99,6 +99,7 @@ public class GUIController {
 	public static void main(String[] args)
 	{
 		guiController = new GUIController();
+                
 	}
 
 }
