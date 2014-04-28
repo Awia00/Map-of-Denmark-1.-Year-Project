@@ -82,10 +82,9 @@ public class ShapeFileParser {
 						break;
 					case POLYGON:
 						PolygonShape aPolygon = (PolygonShape) s;
-						Polygon truePolygon = new Polygon();
 						polygons.add(aPolygon);
 
-						/* debug code
+						/*
 						 System.out.println("I read a Polygon with "
 						 + aPolygon.getNumberOfParts() + " parts and "
 						 + aPolygon.getNumberOfPoints() + " points");
@@ -94,6 +93,10 @@ public class ShapeFileParser {
 						 PointData[] points = aPolygon.getPointsOfPart(i);
 						 System.out.println("- part " + i + " has " + points.length
 						 + " points.");
+						 }
+						 for(PointData points : aPolygon.getPoints())
+						 {
+						 System.out.println("point x: " + points.getX() + " y: " + points.getY());
 						 }
 						 */
 						break;
@@ -104,20 +107,20 @@ public class ShapeFileParser {
 			}
 
 			System.out.println("Total shapes read: " + total);
-		}
-		for (PolygonShape polyShape : polygons)
+		}catch(FileNotFoundException ex)
 		{
-			int size = polyShape.getNumberOfPoints();
-			int[] xPoints = new int[size];
-			int[] yPoints = new int[size];
+			
+		}
+		try (FileInputStream is = new FileInputStream(
+				"assets/shape/landuse.chp"))
+		{
+			ShapeFileReader r = new ShapeFileReader(is);
 
-			PointData[] pointData = polyShape.getPoints();
-			for (int i = 0; i < size; i++)
-			{
-				xPoints[i] = (int) pointData[i].getX();
-				yPoints[i] = (int) pointData[i].getY();
-			}
-			//g.fillPolygon(new Polygon(xPoints, yPoints, Math.max(xPoints.length, yPoints.length)));
+			ShapeFileHeader h = r.getHeader();
+			System.out.println("The shape type of this files is " + h.getShapeType());
+		}catch(FileNotFoundException ex)
+		{
+			
 		}
 	}
 
