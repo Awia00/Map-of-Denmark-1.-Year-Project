@@ -38,6 +38,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
  * Class description:
@@ -72,14 +73,14 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	Timer timer = new Timer();
 	Timer mouseStillTimer = new Timer();
 
-	public MainFrame(QuadTree quadTree)
+	public MainFrame(QuadTree quadTree, List<PolygonShape> polygons)
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
-		initialize(quadTree);
+		initialize(quadTree, polygons);
 		addListeners();
 	}
 
-	private void initialize(QuadTree quadTree)
+	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
 	{
 		try
 		{
@@ -100,7 +101,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(quadTree);
+		drawMapComponent = new MapComponent(quadTree,polygons);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");

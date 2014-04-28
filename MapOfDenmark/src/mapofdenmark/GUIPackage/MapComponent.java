@@ -12,12 +12,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
  * Class description:
@@ -33,6 +36,7 @@ public class MapComponent extends JComponent {
 	// the toplevel quadtree
 	private QuadTree quadTreeToDraw;
 	protected VisibleArea visibleArea;
+	private List<PolygonShape> polygons;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
@@ -51,9 +55,9 @@ public class MapComponent extends JComponent {
 	 * @param streets is not used at the moment
 	 * @param edges an array with all the edges in the database.
 	 */
-	public MapComponent(QuadTree quadTree)
+	public MapComponent(QuadTree quadTree, List<PolygonShape> polygons)
 	{
-		initialize(quadTree);
+		initialize(quadTree, polygons);
 	}
 
 	/**
@@ -62,10 +66,11 @@ public class MapComponent extends JComponent {
 	 * @param streets not used at the moment.
 	 * @param edges an array with all the edges in the database.
 	 */
-	private void initialize(QuadTree quadTree)
+	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
 	{
 		quadTreeToDraw = quadTree;
 		visibleArea = new VisibleArea();
+		this.polygons = polygons;
 		
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX()-quadTreeToDraw.getQuadTreeLength()/8, quadTreeToDraw.getQuadTreeY()-quadTreeToDraw.getQuadTreeLength()/50, quadTreeToDraw.getQuadTreeLength()/15*16, quadTreeToDraw.getQuadTreeLength()/15*10);
 
@@ -354,12 +359,12 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
-
+		
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
 		g.setColor(this.activeColorScheme.getBackgroundColor());
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
-
+		
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		double xlength = visibleArea.getxLength();
 		double ylength = visibleArea.getyLength();
@@ -392,7 +397,12 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-
+		
+		g.setColor(Color.red);
+		int[ ] factorial1 = { 10, 20, 50, 200, 300};
+		int[ ] factorial2 = { 10, 20, 30, 100, 50};	
+		g2.fillPolygon(factorial1, factorial2, factorial1.length);
+		
 		for (QuadTree quadTree : bottomTrees)
 		{
 			// checks that they should be drawn, this is set when the visibleArea is updated.
@@ -411,7 +421,7 @@ public class MapComponent extends JComponent {
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/40))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/60))
 				{
 					for (Edge edge : quadTree.getPathEdges())
 					{
@@ -443,7 +453,7 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/15))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/20))
 				{
 					for (Edge edge : quadTree.getSmallEdges())
 					{
@@ -524,7 +534,7 @@ public class MapComponent extends JComponent {
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
 						g.setFont(new Font("Verdana", Font.BOLD, 12));
-						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * componentHeight));
+						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 					}
 				}
 			}

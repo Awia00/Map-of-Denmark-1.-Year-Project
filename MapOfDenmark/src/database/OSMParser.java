@@ -53,10 +53,6 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		streetsDownloadedPct = 0;
 		nodes = new ArrayList<>();
 		edges = new ArrayList<>();
-		mapOfNodes = new HashMap<>();
-
-		
-
 	}
 
 	private int convertRoadTypeToInt(String roadType)
@@ -66,11 +62,11 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 1;
 		}
-		else if (roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("primary"))
+		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
 		{
 			return 3;
 		}
-		else if (roadType.equalsIgnoreCase("tertiary"))
+		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary"))
 		{
 			return 5;
 		}
@@ -78,7 +74,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 6;
 		}
-		else if (roadType.equalsIgnoreCase("path"))
+		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
 			return 8;
 		}
@@ -92,12 +88,14 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void startDocument() throws SAXException
 	{
+		mapOfNodes = new HashMap<>();
 		System.out.println("start document   : ");
 	}
 
 	@Override
 	public void endDocument() throws SAXException
 	{
+		mapOfNodes = null;
 		nodesDownloadedPct = 1;
 		edgesDownloadedPct = 1;
 		streetsDownloadedPct = 1;
@@ -203,10 +201,13 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
 			isParsed = true;
-		} catch (Throwable err)
+                        //Release Memory
+                        openStreetMapData.close();
+                        saxParser.reset();
+                } catch (Throwable err)
 		{
 			err.printStackTrace();
-		}
+		} 
 		file = new File("assets/OSM_Natural.osm");
 		try
 		{
@@ -214,11 +215,17 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
 			isParsed = true;
+                        //Release Memory
+                        openStreetMapData.close();
+                        saxParser.reset();
 		} catch (Throwable err)
 		{
 			err.printStackTrace();
 		}
 		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
+        //Attempted memory release.
+        edges.clear();
+        nodes.clear();
 	}
 	
 	@Override

@@ -23,3 +23,9 @@ nbproject/*
 /MapOfDenmark/nbproject/private/
 
 *.osm
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
+MapOfDenmark/assets/shape/README

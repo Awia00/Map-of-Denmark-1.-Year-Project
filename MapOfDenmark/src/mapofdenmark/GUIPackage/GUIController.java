@@ -10,6 +10,7 @@ import database.DatabaseInterface;
 import database.Edge;
 import database.GraphCreator;
 import database.Node;
+import database.ShapeFileParser;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -76,10 +77,11 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
+				
 				GraphCreator graph;
 				graph = new GraphCreator(edges.toArray(new Edge[edges.size()]), db.getListOfNodes().toArray(new Node[db.getListOfNodes().size()]));
 
-				mainframe = new MainFrame(quadTree); // brug disse 
+				mainframe = new MainFrame(quadTree, new ShapeFileParser().getPolygons()); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
 				lframe.setVisible(false);
