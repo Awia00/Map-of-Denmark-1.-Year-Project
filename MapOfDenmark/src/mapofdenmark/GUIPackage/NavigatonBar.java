@@ -6,9 +6,14 @@
 
 package mapofdenmark.GUIPackage;
 
+import database.Edge;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +30,7 @@ public class NavigatonBar extends JPanel {
     private PlaceholderTextField to;
     private JLabel rutevejledning;
     private Button visVej;
+    private JButton findRoute;
     private JLabel closestRoad;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
@@ -45,8 +51,17 @@ public class NavigatonBar extends JPanel {
         to.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
         to.setForeground(Color.decode("#4A4A4A"));
         
-        visVej = new Button("button");
+//        visVej = new Button("button");
         //visVej.setText("Vis");
+        
+        findRoute = new JButton("Find Route");
+        findRoute.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("hello");
+            }
+        });
         
         closestRoad = new AAJLabel("");
         closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
@@ -57,9 +72,9 @@ public class NavigatonBar extends JPanel {
         add(rutevejledning, "cell 0 0, align left");
         add(from, "cell 0 1");
         add(to, "cell 0 2");
-        add(visVej, "cell 0 3, align right");
+//        add(visVej, "cell 0 3, align right");
         add(closestRoad, "cell 0 4, align left");
-//        add(new Compass(), "cell 0 2");
+        add(findRoute, "cell 0 3");
     }
     
     
@@ -79,5 +94,13 @@ public class NavigatonBar extends JPanel {
         return closestRoad;
     }
     
+    public PlaceholderTextField getFrom() {
+        return from;
+    }
+    
+    public PlaceholderTextField getTo() {
+        return to;
+    }
+   
     
 }

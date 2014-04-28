@@ -36,7 +36,9 @@ public class MapComponent extends JComponent {
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-
+        
+        private int xFrom, yFrom, xTo, yTo;
+        
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
@@ -70,7 +72,17 @@ public class MapComponent extends JComponent {
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
-
+        
+        public void setFrom(int x, int y) {
+            this.xFrom = x;
+            this.yFrom = y;
+        }
+        
+        public void setTo(int x, int y) {
+            this.xTo = x;
+            this.yTo = y;
+        }
+        
 	/**
 	 * Change the position of the visible area, such that the user can see this
 	 * at the next repaint.
@@ -285,9 +297,9 @@ public class MapComponent extends JComponent {
 	 * @return a string with that edge's roadName. Could be changed to return
 	 * that edge or the street it is in.
 	 */
-	public String findClosestRoad(int mouseCoordX, int mouseCoordY)
+	public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 	{
-		QuadTree quadTreeToSearch;
+		//QuadTree quadTreeToSearch;
 		double xCoord = convertMouseXToMap(mouseCoordX);
 		double yCoord = convertMouseYToMap(mouseCoordY);
 		List<Edge> edges = new ArrayList<>();
@@ -319,9 +331,9 @@ public class MapComponent extends JComponent {
 		}
 		if (distance != -1)
 		{
-			return closestEdge.getRoadName();
+			return closestEdge;
 		}
-		return "No nearby roads found";
+		return null;
 	}
 
 	/**
@@ -536,6 +548,8 @@ public class MapComponent extends JComponent {
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
+                
+                g.drawRect(xFrom, yFrom, 10, 10);
 	}
 
 	/**
