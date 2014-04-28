@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
+import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 import org.nocrala.tools.gis.data.esri.shapefile.header.ShapeFileHeader;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
@@ -58,9 +59,11 @@ public class ShapeFileParser {
 	private void parseLanduse() throws FileNotFoundException, InvalidShapeFileException, IOException
 	{
 		try (FileInputStream is = new FileInputStream(
-				"assets/shape/landuse.shp"))
+				"assets/shape/land_polygons.shp"))
 		{
-			ShapeFileReader r = new ShapeFileReader(is);
+			ValidationPreferences prefs = new ValidationPreferences();
+			prefs.setMaxNumberOfPointsPerShape(35529);
+			ShapeFileReader r = new ShapeFileReader(is, prefs);
 
 			ShapeFileHeader h = r.getHeader();
 			System.out.println("The shape type of this files is " + h.getShapeType());
@@ -107,17 +110,6 @@ public class ShapeFileParser {
 			}
 
 			System.out.println("Total shapes read: " + total);
-		}catch(FileNotFoundException ex)
-		{
-			
-		}
-		try (FileInputStream is = new FileInputStream(
-				"assets/shape/landuse.chp"))
-		{
-			ShapeFileReader r = new ShapeFileReader(is);
-
-			ShapeFileHeader h = r.getHeader();
-			System.out.println("The shape type of this files is " + h.getShapeType());
 		}catch(FileNotFoundException ex)
 		{
 			

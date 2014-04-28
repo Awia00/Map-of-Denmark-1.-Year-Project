@@ -407,8 +407,8 @@ public class MapComponent extends JComponent {
 			int i = 0;
 			for (PointData point : poly.getPoints())
 			{
-				xPoints[i] = (int) (((point.getX() - xVArea) / xlength) * componentWidth);
-				yPoints[i] = (int) (componentHeight - ((point.getY() - yVArea) / ylength) * componentHeight);
+				xPoints[i] = (int) ((((point.getX()*10000) - xVArea) / xlength) * componentWidth);
+				yPoints[i] = (int) (componentHeight - (((point.getY()*15000) - yVArea) / ylength) * componentHeight);
 				i++;
 			}
 			g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
