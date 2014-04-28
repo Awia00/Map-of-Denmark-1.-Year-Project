@@ -53,10 +53,6 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		streetsDownloadedPct = 0;
 		nodes = new ArrayList<>();
 		edges = new ArrayList<>();
-		mapOfNodes = new HashMap<>();
-
-		
-
 	}
 
 	private int convertRoadTypeToInt(String roadType)
@@ -92,12 +88,14 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void startDocument() throws SAXException
 	{
+		mapOfNodes = new HashMap<>();
 		System.out.println("start document   : ");
 	}
 
 	@Override
 	public void endDocument() throws SAXException
 	{
+		mapOfNodes = null;
 		nodesDownloadedPct = 1;
 		edgesDownloadedPct = 1;
 		streetsDownloadedPct = 1;
