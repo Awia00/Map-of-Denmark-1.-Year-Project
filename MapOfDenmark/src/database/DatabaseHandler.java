@@ -346,7 +346,7 @@ public class DatabaseHandler implements DatabaseInterface {
     private QuadTree initDataStructure() {
         getNodes();
         getEdges();
-        getStreets();
+        //getStreets();
         getCoast();
         int i = 0;
         for (Edge edge : edges) {
@@ -359,7 +359,9 @@ public class DatabaseHandler implements DatabaseInterface {
         }
 		createQuadTree();
         System.out.println("Node-to-Edge joining complete.");
-     
+        //Attempted memory release.
+        edges.clear();
+        nodes.clear();
         return QT;
     }
 

@@ -201,10 +201,13 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
 			isParsed = true;
-		} catch (Throwable err)
+                        //Release Memory
+                        openStreetMapData.close();
+                        saxParser.reset();
+                } catch (Throwable err)
 		{
 			err.printStackTrace();
-		}
+		} 
 		file = new File("assets/OSM_Natural.osm");
 		try
 		{
@@ -212,11 +215,17 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
 			isParsed = true;
+                        //Release Memory
+                        openStreetMapData.close();
+                        saxParser.reset();
 		} catch (Throwable err)
 		{
 			err.printStackTrace();
 		}
 		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
+        //Attempted memory release.
+        edges.clear();
+        nodes.clear();
 	}
 	
 	@Override

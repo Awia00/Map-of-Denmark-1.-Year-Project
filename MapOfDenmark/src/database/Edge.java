@@ -11,14 +11,16 @@ import java.awt.geom.Point2D;
  *
  * @author Anders
  */
-public class Edge implements Comparable<Edge>{
+public class Edge implements Comparable<Edge> {
 
     private final int fromNode;
     private final int toNode;
     private final int roadcode;
     private Node fromNodeTrue = null;
     private Node toNodeTrue = null;
-    private Node midNodeTrue = null;
+   // private Node midNodeTrue = null;
+    private double midX = 0;
+    private double midY = 0;
     private final int roadType;
     private final String roadName;
 
@@ -30,18 +32,17 @@ public class Edge implements Comparable<Edge>{
         this.roadName = roadName;
         this.roadcode = roadcode;
     }
-	
-	
-	public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode) {
+
+    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode) {
         this.fromNodeTrue = fromNode;
         this.toNodeTrue = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
         this.roadcode = roadcode;
-		this.fromNode = 0;
-		this.toNode = 0;
-		midNodeTrue = calcMidNode();
-		
+        this.fromNode = 0;
+        this.toNode = 0;
+        setMidNodeTrue();
+
     }
 
     protected int getFromNode() {
@@ -68,10 +69,6 @@ public class Edge implements Comparable<Edge>{
         return toNodeTrue;
     }
 
-    public Node getMidNodeTrue() {
-        return midNodeTrue;
-    }
-
     public void setFromNodeTrue(Node fromNodeTrue) {
         this.fromNodeTrue = fromNodeTrue;
     }
@@ -79,40 +76,38 @@ public class Edge implements Comparable<Edge>{
     public void setToNodeTrue(Node toNodeTrue) {
         this.toNodeTrue = toNodeTrue;
     }
-    private Node calcMidNode(){
-        Node midNode;
-        
-        double midX;
-        double midY;
-        
-        midX = (fromNodeTrue.getxCoord() + toNodeTrue.getxCoord()) / 2;
-        midY = (fromNodeTrue.getyCoord() + toNodeTrue.getyCoord()) / 2;
-        midNode = new Node(new Point2D.Double(midX,midY));
-        
-        
-        return midNode;
-                
-    }
 
     public void setMidNodeTrue() {
-        this.midNodeTrue = calcMidNode();
+
+        midX = (fromNodeTrue.getxCoord() + toNodeTrue.getxCoord()) / 2;
+        midY = (fromNodeTrue.getyCoord() + toNodeTrue.getyCoord()) / 2;
     }
 
     public int getRoadcode() {
         return roadcode;
     }
-/*
-    @Override
-    public int compareTo(Edge o) {
-        return this.getRoadcode() - o.getRoadcode();
+
+    public double getMidX() {
+        return midX;
     }
-    * */
+
+    public double getMidY() {
+        return midY;
+    }
+    /*
+     @Override
+     public int compareTo(Edge o) {
+     return this.getRoadcode() - o.getRoadcode();
+     }
+     * */
+
     @Override
     public int compareTo(Edge o) {
         return this.getRoadName().compareTo(o.getRoadName());
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "\n    E-VEJKODE: " + roadcode + "\n   E-VEJNAVN: " + roadName;
     }
 }

@@ -59,8 +59,8 @@ public class QuadTree implements Iterable<QuadTree> {
 					SEEdges = new ArrayList<>();
 			for (Edge edge : edges)
 			{
-				double px = edge.getMidNodeTrue().getxCoord();
-				double py = edge.getMidNodeTrue().getyCoord();
+				double px = edge.getMidX();
+				double py = edge.getMidY();
         // Assign edges to corresponding quad leaves
 				if (px >= x && px < x + h && py > y + h && py <= y + length)
 				{
@@ -399,7 +399,7 @@ public class QuadTree implements Iterable<QuadTree> {
 
 			for (Edge edge : t.getEdges())
 			{
-				System.out.println(edge.getMidNodeTrue().getxCoord() + ", " + edge.getMidNodeTrue().getyCoord());
+				System.out.println(edge.getMidX() + ", " + edge.getMidY());
 			}
 			System.out.println("\n####\n");
 		}

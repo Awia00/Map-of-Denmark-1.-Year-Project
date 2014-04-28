@@ -512,7 +512,7 @@ public class MapComponent extends JComponent {
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
 						g.setFont(new Font("Verdana", Font.BOLD, 12));
-						g.drawString(edge.getRoadName(), (int) (((edge.getMidNodeTrue().getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidNodeTrue().getyCoord() - yVArea) / ylength) * componentHeight));
+						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 					}
 				}
 			}
