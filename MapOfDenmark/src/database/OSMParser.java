@@ -133,7 +133,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			if (createWay)
 			{
-				if(attributes.getValue("k").equalsIgnoreCase("highway") || attributes.getValue("k").equalsIgnoreCase("natural"))
+				if(attributes.getValue("k").equalsIgnoreCase("highway") )//|| attributes.getValue("k").equalsIgnoreCase("natural"))
 				{
 					roadType = attributes.getValue("v");
 				}
@@ -208,6 +208,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			err.printStackTrace();
 		} 
+		/*
 		file = new File("assets/OSM_Natural.osm");
 		try
 		{
@@ -222,6 +223,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			err.printStackTrace();
 		}
+				*/
 		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
 	}
 	

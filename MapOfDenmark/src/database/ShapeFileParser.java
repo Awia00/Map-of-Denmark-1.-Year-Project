@@ -59,7 +59,7 @@ public class ShapeFileParser {
 	private void parseLanduse() throws FileNotFoundException, InvalidShapeFileException, IOException
 	{
 		try (FileInputStream is = new FileInputStream(
-				"assets/shape/railways.shp"))
+				"assets/shape/BestLandShape.shp"))
 		{
 			ValidationPreferences prefs = new ValidationPreferences();
 			prefs.setMaxNumberOfPointsPerShape(35529);

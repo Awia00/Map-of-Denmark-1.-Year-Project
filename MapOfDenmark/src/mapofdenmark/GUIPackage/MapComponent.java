@@ -362,7 +362,13 @@ public class MapComponent extends JComponent {
 
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
-		g.setColor(this.activeColorScheme.getBackgroundColor());
+		if(polygons.isEmpty()){
+			g.setColor(this.activeColorScheme.getBackgroundColor());
+		}
+		else
+		{
+			g.setColor(new Color(181,207,241));
+		}
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
@@ -398,7 +404,7 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
-		g.setColor(Color.red);
+		g.setColor(new Color(227,221,218));
 
 		for (PolygonShape poly : polygons)
 		{
