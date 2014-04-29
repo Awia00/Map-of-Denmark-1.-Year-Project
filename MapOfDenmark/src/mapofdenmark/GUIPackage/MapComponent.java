@@ -412,10 +412,19 @@ public class MapComponent extends JComponent {
 
 		for (PolygonShape poly : landShapePolygons)
 		{
+			PointData[] points = poly.getPoints();
+			if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 35)
+			{
+				continue;
+			}
+			if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 35)
+			{
+				continue;
+			}
 			int[] xPoints = new int[poly.getNumberOfPoints()];
 			int[] yPoints = new int[poly.getNumberOfPoints()];
 			int i = 0;
-			for (PointData point : poly.getPoints())
+			for (PointData point : points)
 			{
 				xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
 				yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
@@ -428,10 +437,19 @@ public class MapComponent extends JComponent {
 			g.setColor(new Color(137, 198, 103));
 			for (PolygonShape poly : landUseShapePolygons)
 			{
+				PointData[] points = poly.getPoints();
+				if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 100)
+				{
+					continue;
+				}
+				if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 100)
+				{
+					continue;
+				}
 				int[] xPoints = new int[poly.getNumberOfPoints()];
 				int[] yPoints = new int[poly.getNumberOfPoints()];
 				int i = 0;
-				for (PointData point : poly.getPoints())
+				for (PointData point : points)
 				{
 					xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
 					yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
