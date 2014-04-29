@@ -36,13 +36,14 @@ public class MapComponent extends JComponent {
 	// the toplevel quadtree
 	private QuadTree quadTreeToDraw;
 	protected VisibleArea visibleArea;
-	private List<PolygonShape> polygons;
+	private List<PolygonShape> landShapePolygons;
+	private List<PolygonShape> landUseShapePolygons;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-        
-        private int xFrom, yFrom, xTo, yTo;
-        
+
+	private int xFrom, yFrom, xTo, yTo;
+
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
@@ -55,9 +56,9 @@ public class MapComponent extends JComponent {
 	 * @param streets is not used at the moment
 	 * @param edges an array with all the edges in the database.
 	 */
-	public MapComponent(QuadTree quadTree, List<PolygonShape> polygons)
+	public MapComponent(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
-		initialize(quadTree, polygons);
+		initialize(quadTree, landShapePolygons, landUsePolygons);
 	}
 
 	/**
@@ -66,28 +67,31 @@ public class MapComponent extends JComponent {
 	 * @param streets not used at the moment.
 	 * @param edges an array with all the edges in the database.
 	 */
-	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
+	private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
 		quadTreeToDraw = quadTree;
 		visibleArea = new VisibleArea();
-		this.polygons = polygons;
+		this.landShapePolygons = landShapePolygons;
+		this.landUseShapePolygons = landUsePolygons;
 
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX() - quadTreeToDraw.getQuadTreeLength() / 8, quadTreeToDraw.getQuadTreeY() - quadTreeToDraw.getQuadTreeLength() / 50, quadTreeToDraw.getQuadTreeLength() / 15 * 16, quadTreeToDraw.getQuadTreeLength() / 15 * 10);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
-        
-        public void setFrom(int x, int y) {
-            this.xFrom = x;
-            this.yFrom = y;
-        }
-        
-        public void setTo(int x, int y) {
-            this.xTo = x;
-            this.yTo = y;
-        }
-        
+
+	public void setFrom(int x, int y)
+	{
+		this.xFrom = x;
+		this.yFrom = y;
+	}
+
+	public void setTo(int x, int y)
+	{
+		this.xTo = x;
+		this.yTo = y;
+	}
+
 	/**
 	 * Change the position of the visible area, such that the user can see this
 	 * at the next repaint.
@@ -362,12 +366,12 @@ public class MapComponent extends JComponent {
 
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
-		if(polygons.isEmpty()){
-			g.setColor(this.activeColorScheme.getBackgroundColor());
-		}
-		else
+		if (landShapePolygons.isEmpty())
 		{
-			g.setColor(new Color(181,207,241));
+			g.setColor(this.activeColorScheme.getBackgroundColor());
+		} else
+		{
+			g.setColor(new Color(181, 207, 241));
 		}
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
@@ -404,20 +408,37 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
-		g.setColor(new Color(227,221,218));
+		g.setColor(new Color(227, 221, 218));
 
-		for (PolygonShape poly : polygons)
+		for (PolygonShape poly : landShapePolygons)
 		{
 			int[] xPoints = new int[poly.getNumberOfPoints()];
 			int[] yPoints = new int[poly.getNumberOfPoints()];
 			int i = 0;
 			for (PointData point : poly.getPoints())
 			{
-				xPoints[i] = (int) ((((point.getX()*10000) - xVArea) / xlength) * componentWidth);
-				yPoints[i] = (int) (componentHeight - (((point.getY()*15000) - yVArea) / ylength) * componentHeight);
+				xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
+				yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
 				i++;
 			}
 			g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
+		}
+		if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
+		{
+			g.setColor(new Color(137, 198, 103));
+			for (PolygonShape poly : landUseShapePolygons)
+			{
+				int[] xPoints = new int[poly.getNumberOfPoints()];
+				int[] yPoints = new int[poly.getNumberOfPoints()];
+				int i = 0;
+				for (PointData point : poly.getPoints())
+				{
+					xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
+					yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
+					i++;
+				}
+				g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
+			}
 		}
 		for (QuadTree quadTree : bottomTrees)
 		{
@@ -574,8 +595,7 @@ public class MapComponent extends JComponent {
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
-                
-                g.drawRect(xFrom, yFrom, 10, 10);
+		g.drawRect(xFrom, yFrom, 10, 10);
 	}
 
 	/**

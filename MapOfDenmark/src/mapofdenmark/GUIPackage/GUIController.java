@@ -83,9 +83,15 @@ public class GUIController {
 				GraphCreator graph;
 				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
 
-				List<PolygonShape> polygons = new ArrayList<>();
-				if(!isKrakB){polygons=new ShapeFileParser().getPolygons();}
-				mainframe = new MainFrame(quadTree, polygons); // brug disse 
+				ShapeFileParser shapeParser = new ShapeFileParser();
+				
+				List<PolygonShape> landShapePolygons = new ArrayList<>();
+				if(!isKrakB){landShapePolygons=shapeParser.getLandShapePolygons();}
+				
+				List<PolygonShape> landUsePolygons = new ArrayList<>();
+				if(!isKrakB){landUsePolygons=shapeParser.getLandUsePolygons();}
+				
+				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
 				lframe.setVisible(false);

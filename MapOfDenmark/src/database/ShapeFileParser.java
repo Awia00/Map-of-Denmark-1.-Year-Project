@@ -32,31 +32,39 @@ import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
  */
 public class ShapeFileParser {
 
-	List<PolygonShape> polygons;
+	List<PolygonShape> landShapePolygons;
+	List<PolygonShape> landUsePolygons;
 
 	public ShapeFileParser()
 	{
-		polygons = new ArrayList<>();
+		landShapePolygons = new ArrayList<>();
+		landUsePolygons = new ArrayList<>();
 		startParsing();
 	}
 
-	public List<PolygonShape> getPolygons()
+	public List<PolygonShape> getLandShapePolygons()
 	{
-		return polygons;
+		return landShapePolygons;
+	}
+	
+	public List<PolygonShape> getLandUsePolygons()
+	{
+		return landUsePolygons;
 	}
 
 	private void startParsing()
 	{
 		try
 		{
-			parseLanduse();
+			parseLandShape();
+			parseLandUse();
 		} catch (InvalidShapeFileException | IOException ex)
 		{
 			Logger.getLogger(ShapeFileParser.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
-	private void parseLanduse() throws FileNotFoundException, InvalidShapeFileException, IOException
+	private void parseLandShape() throws FileNotFoundException, InvalidShapeFileException, IOException
 	{
 		try (FileInputStream is = new FileInputStream(
 				"assets/shape/BestLandShape.shp"))
@@ -75,17 +83,9 @@ public class ShapeFileParser {
 
 				switch (s.getShapeType())
 				{
-					case POINT:
-						PointShape aPoint = (PointShape) s;
-						// Do something with the point shape...
-						break;
-					case MULTIPOINT_Z:
-						MultiPointZShape aMultiPointZ = (MultiPointZShape) s;
-						// Do something with the MultiPointZ shape...
-						break;
 					case POLYGON:
 						PolygonShape aPolygon = (PolygonShape) s;
-						polygons.add(aPolygon);
+						landShapePolygons.add(aPolygon);
 
 						/*
 						 System.out.println("I read a Polygon with "
@@ -102,6 +102,42 @@ public class ShapeFileParser {
 						 System.out.println("point x: " + points.getX() + " y: " + points.getY());
 						 }
 						 */
+						break;
+					default:
+						System.out.println("Read other type of shape.");
+				}
+				total++;
+			}
+
+			System.out.println("Total shapes read: " + total);
+		}catch(FileNotFoundException ex)
+		{
+			
+		}
+	}
+	
+	private void parseLandUse() throws FileNotFoundException, InvalidShapeFileException, IOException
+	{
+		try (FileInputStream is = new FileInputStream(
+				"assets/shape/landuse.shp"))
+		{
+			ValidationPreferences prefs = new ValidationPreferences();
+			prefs.setMaxNumberOfPointsPerShape(35529);
+			ShapeFileReader r = new ShapeFileReader(is, prefs);
+
+			ShapeFileHeader h = r.getHeader();
+			System.out.println("The shape type of this files is " + h.getShapeType());
+
+			int total = 0;
+			AbstractShape s;
+			while ((s = r.next()) != null)
+			{
+
+				switch (s.getShapeType())
+				{
+					case POLYGON:
+						PolygonShape aPolygon = (PolygonShape) s;
+						landUsePolygons.add(aPolygon);
 						break;
 					default:
 						System.out.println("Read other type of shape.");
