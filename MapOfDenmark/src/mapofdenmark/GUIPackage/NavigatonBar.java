@@ -6,18 +6,19 @@
 
 package mapofdenmark.GUIPackage;
 
-import database.Edge;
+import database.GraphCreator;
+import database.Node;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Action;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -33,6 +34,9 @@ public class NavigatonBar extends JPanel {
     private JButton findRoute;
     private JLabel closestRoad;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    
+    private Node fromNode = null;
+    private Node toNode = null;
     
     public NavigatonBar() {
         rutevejledning = new AAJLabel("Rutevejledning ");
@@ -59,7 +63,7 @@ public class NavigatonBar extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("hello");
+                findRoute();
             }
         });
         
@@ -102,5 +106,25 @@ public class NavigatonBar extends JPanel {
         return to;
     }
    
+    public List<Node> findRoute() {
+        GraphCreator graph = GUIController.getGraph();
+        if (fromNode != null && toNode != null) {
+            System.out.println("hej");
+            graph.runDijkstra(fromNode);   
+        }
+//        System.out.println(Arrays.toString(graph.getPath(toNode).toArray()));
+        List<Node> result = graph.getPath(toNode);
+        for (Node n : result) {
+            System.out.println(n);
+        }
+        return result;
+    }
     
+    public void setFromNode(Node node) {
+        fromNode = node;
+    }
+    
+    public void setToNode(Node node) {
+        toNode = node;
+    }
 }

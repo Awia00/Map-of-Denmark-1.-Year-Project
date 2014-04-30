@@ -329,6 +329,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			{
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 toNode = edge.getFromNodeTrue();
+                                navigationBar.setToNode(toNode);
                                 navigationBar.getTo().setText(edge.getRoadName());
                                 System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
@@ -336,6 +337,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 fromNode = edge.getFromNodeTrue();
+                                navigationBar.setFromNode(fromNode);
                                 navigationBar.getFrom().setText(edge.getRoadName());
                                 drawMapComponent.setFrom(e.getX(), e.getY());
                                 repaint();
