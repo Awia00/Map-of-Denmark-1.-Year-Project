@@ -48,6 +48,7 @@ public class MapGraph {
     public double shortestPath(int from, int to) {
         DijkstraSP sp = new DijkstraSP(this.graph, from);
         if (sp.hasPathTo(to)) this.markNodesInPath(sp.pathTo(to));
+//        System.out.print("Shortest distance in meters: ");
         return sp.distTo(to);
     }
     
@@ -55,7 +56,7 @@ public class MapGraph {
         for (DirectedEdge diEdge : e) {
             Edge edge = edges.get(diEdge.ID());
             edge.setInShortestPath(true);
-            System.out.println(edge.isInShortestPath());
+//            System.out.println(edge.isInShortestPath());
         }
     }
     
@@ -75,7 +76,7 @@ public class MapGraph {
         System.out.println(dist);
         
         
-        System.out.println(g.E());
+//        System.out.println(g.E());
         
     }
 }

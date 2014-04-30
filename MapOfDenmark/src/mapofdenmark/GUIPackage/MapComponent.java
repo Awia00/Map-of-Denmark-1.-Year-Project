@@ -86,13 +86,13 @@ public class MapComponent extends JComponent {
         
         public void didFindRoute() {
             System.out.println("didFindRoute");
-            for (QuadTree q : QuadTree.getBottomTrees()) {
-                if (q.isDrawable()) {
-                    for (Edge e : q.getPathEdges()) {
-                        System.out.println(e.isInShortestPath());
-                    }
-                }
-            }
+//            for (QuadTree q : QuadTree.getBottomTrees()) {
+//                if (q.isDrawable()) {
+//                    for (Edge e : q.getPathEdges()) {
+//                        System.out.println(e.isInShortestPath());
+//                    }
+//                }
+//            }
             repaint();
             
         }
