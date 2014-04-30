@@ -60,6 +60,7 @@ import java.util.Stack;
  */
 public class DijkstraSP {
     private double[] distTo;          // distTo[v] = distance  of shortest s->v path
+	private int[] previous;
     private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
     private IndexMinPQ<Double> pq;    // priority queue of vertices
 
@@ -78,9 +79,13 @@ public class DijkstraSP {
         }
 
         distTo = new double[G.V()];
+		previous = new int[G.V()];
         edgeTo = new DirectedEdge[G.V()];
         for (int v = 0; v < G.V(); v++)
+		{
             distTo[v] = Double.POSITIVE_INFINITY;
+			previous[v] = Integer.MAX_VALUE;
+		}
         distTo[s] = 0.0;
 
         // relax vertices in order of distance from s
@@ -89,7 +94,9 @@ public class DijkstraSP {
         while (!pq.isEmpty()) {
             int v = pq.delMin();
             for (DirectedEdge e : G.adj(v))
+			{
                 relax(e);
+			}
         }
 
         // check optimality conditions
@@ -102,6 +109,10 @@ public class DijkstraSP {
         if (distTo[w] > distTo[v] + e.weight()) {
             distTo[w] = distTo[v] + e.weight();
             edgeTo[w] = e;
+			
+			if(w==e.from()){previous[w] = e.to();}
+			else{previous[w] = e.from();}
+			
             if (pq.contains(w)) pq.decreaseKey(w, distTo[w]);
             else                pq.insert(w, distTo[w]);
         }
@@ -126,6 +137,24 @@ public class DijkstraSP {
     public boolean hasPathTo(int v) {
         return distTo[v] < Double.POSITIVE_INFINITY;
     }
+	
+	public String getPath(int s, int v)
+	{
+		String path = "";
+		if(v==s)
+		{
+			path += "\nhit the final" + s;
+		}
+		else if (previous[v]== Integer.MAX_VALUE)
+		{
+			path += "no path from "+s+" to "+v;
+		}
+		else{
+			path += "\n"+getPath(s,previous[v]);
+			path+= "\nnode"+v;
+		}
+		return path;
+	}
 
     /**
      * Returns a shortest path from the source vertex <tt>s</tt> to vertex <tt>v</tt>.

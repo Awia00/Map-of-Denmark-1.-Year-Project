@@ -51,6 +51,9 @@ public class MapGraph {
         
         System.out.print("Shortest distance in meters: ");
         System.out.println(sp.distTo(to));
+		
+		System.out.println(sp.getPath(from, to));
+		
         return sp.distTo(to);
     }
     
