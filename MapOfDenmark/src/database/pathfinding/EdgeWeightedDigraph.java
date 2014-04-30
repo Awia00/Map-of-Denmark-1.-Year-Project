@@ -53,25 +53,6 @@ public class EdgeWeightedDigraph {
         for (int v = 0; v < V; v++)
             adj[v] = new Bag<DirectedEdge>();
     }
-
-    /**
-     * Initializes a random edge-weighted digraph with <tt>V</tt> vertices and <em>E</em> edges.
-     * param V the number of vertices
-     * param E the number of edges
-     * @throws java.lang.IllegalArgumentException if <tt>V</tt> < 0
-     * @throws java.lang.IllegalArgumentException if <tt>E</tt> < 0
-     */
-    public EdgeWeightedDigraph(int V, int E) {
-        this(V);
-        if (E < 0) throw new IllegalArgumentException("Number of edges in a Digraph must be nonnegative");
-        for (int i = 0; i < E; i++) {
-            int v = (int) (Math.random() * V);
-            int w = (int) (Math.random() * V);
-            double weight = Math.round(100 * Math.random()) / 100.0;
-            DirectedEdge e = new DirectedEdge(v, w, weight);
-            addEdge(e);
-        }
-    }
     /**
      * Initializes a new edge-weighted digraph that is a deep copy of <tt>G</tt>.
      * @param G the edge-weighted graph to copy

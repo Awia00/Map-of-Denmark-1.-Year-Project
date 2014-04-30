@@ -54,7 +54,7 @@ public class Edge implements Comparable<Edge> {
         isInShortestPath = b;
     }
 
-    public boolean isIsInShortestPath() {
+    public boolean isInShortestPath() {
         return isInShortestPath;
     }
     

@@ -31,7 +31,7 @@ public class GUIController {
 	private MainFrame mainframe;
 	private Timer timer;
         
-        private static EdgeWeightedDigraph graph;
+        private static MapGraph graph;
 
 	private static GUIController guiController;
 
@@ -88,8 +88,8 @@ public class GUIController {
 //				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
                                 
                                 if (isKrakB) {
-                                    MapGraph mg = new MapGraph(edges);
-                                    graph = mg.graph();
+                                    graph = new MapGraph(edges);
+                                    
                                 }
 
                                 
@@ -112,7 +112,7 @@ public class GUIController {
 
 	}
         
-        public static EdgeWeightedDigraph graph() {
+        public static MapGraph graph() {
             return graph;
         }
 

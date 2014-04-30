@@ -9,6 +9,7 @@ package mapofdenmark.GUIPackage;
 import database.Node;
 import database.pathfinding.DijkstraSP;
 import database.pathfinding.EdgeWeightedDigraph;
+import database.pathfinding.MapGraph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -113,10 +114,9 @@ public class NavigatonBar extends JPanel {
     }
    
     public void findRoute() {
-        EdgeWeightedDigraph g = GUIController.graph();
-        DijkstraSP sp = new DijkstraSP(g, (int)fromNode.getID());
-        double dist = sp.distTo((int)toNode.getID());
-        System.out.println(dist);
+        MapGraph g = GUIController.graph();
+        g.shortestPath((int)fromNode.getID(), (int)toNode.getID());
+        
         getParent().repaint();
     }
     
