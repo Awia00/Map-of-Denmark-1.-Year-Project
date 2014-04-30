@@ -24,7 +24,8 @@ public class Edge implements Comparable<Edge> {
     private final int roadType;
     private final String roadName;
     private double weight = 0;
-
+    
+    private boolean isInShortestPath;
     // Mangler TYPE
     public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weight) {
         this.fromNode = fromNode;
@@ -48,6 +49,15 @@ public class Edge implements Comparable<Edge> {
 
     }
 
+    
+    public void setInShortestPath(boolean b) {
+        isInShortestPath = b;
+    }
+
+    public boolean isIsInShortestPath() {
+        return isInShortestPath;
+    }
+    
     protected int getFromNode() {
         return fromNode;
     }
