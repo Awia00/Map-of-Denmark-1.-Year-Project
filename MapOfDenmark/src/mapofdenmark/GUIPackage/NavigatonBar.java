@@ -37,7 +37,11 @@ public class NavigatonBar extends JPanel {
     private Node fromNode = null;
     private Node toNode = null;
     
-    public NavigatonBar() {
+    MapComponent mapComponent;
+    
+    public NavigatonBar(MapComponent mc) {
+        mapComponent = mc;
+        
         rutevejledning = new AAJLabel("Rutevejledning ");
         rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
         rutevejledning.setForeground(Color.decode("#9B9B9B"));
@@ -63,6 +67,7 @@ public class NavigatonBar extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findRoute();
+                didFindRoute();
             }
         });
         
@@ -90,7 +95,7 @@ public class NavigatonBar extends JPanel {
   
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.add(new NavigatonBar());
+        frame.add(new NavigatonBar(null));
         frame.pack();
         frame.setVisible(true);
     }
@@ -121,5 +126,9 @@ public class NavigatonBar extends JPanel {
     
     public void setToNode(Node node) {
         toNode = node;
+    }
+    
+    public void didFindRoute() {
+        mapComponent.didFindRoute();
     }
 }

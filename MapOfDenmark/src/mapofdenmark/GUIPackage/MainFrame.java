@@ -110,7 +110,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 //		sideContainer = new JPanel(new MigLayout());
 //		sideContainer.add(enterAddressField, "wrap");
 //		sideContainer.add(closestRoadLabel, "wrap");
-		navigationBar = new NavigatonBar();
+		navigationBar = new NavigatonBar(drawMapComponent);
 
 		mainContainer = new JPanel(migMainLayout);
 
@@ -313,7 +313,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 toNode = edge.getFromNodeTrue();
-                                edge.setInPathFinder(true);
+                                toNode.setInShortestPath(true);
                                 System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
@@ -321,7 +321,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 fromNode = edge.getFromNodeTrue();
-                                edge.setInPathFinder(true);
+                                fromNode.setInShortestPath(true);
                                 navigationBar.getFrom().setText(edge.getRoadName());
                                 System.out.println(fromNode);
 			}

@@ -80,6 +80,18 @@ public class MapComponent extends JComponent {
 		this.setColorScheme("Standard");
 	}
 
+        public QuadTree quadTree() {
+            return quadTreeToDraw;
+        }
+        
+        public void didFindRoute() {
+            System.out.println("didFindRoute");
+            for (Edge e : quadTreeToDraw.getEdges()) {
+                if (e.getFromNodeTrue().isIsInShortestPath() || e.getToNodeTrue().isIsInShortestPath()) {
+                    System.out.println(e.getFromNodeTrue() + " " + e.getToNodeTrue());
+                }
+            }
+        }
 	public void setFrom(int x, int y)
 	{
 		this.xFrom = x;
@@ -490,7 +502,7 @@ public class MapComponent extends JComponent {
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-                                                if (edge.inPathFinder()) g.setColor(Color.red);
+                                                if (edge.getFromNodeTrue().isIsInShortestPath() || edge.getToNodeTrue().isIsInShortestPath()) g.setColor(Color.red);
                                                 else g.setColor(activeColorScheme.getPathwayColor());
 						g2.setStroke(pathRoadStrokeBorder);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));

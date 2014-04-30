@@ -9,8 +9,10 @@ package database.pathfinding;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
-import java.util.ArrayList;
+import database.Node;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,16 +21,18 @@ import java.util.List;
 public class MapGraph {
     
     EdgeWeightedDigraph graph;
+    Map<Integer, Node> nodes;
     static List<Integer> id;
     
     public MapGraph(List<Edge> edges) {
-        id = new ArrayList<>();
+        this.nodes = new HashMap<>();
         graph = new EdgeWeightedDigraph(edges.size());
         for (Edge e : edges ) {
             double weight = e.getWeight();
             int from = (int) e.getFromNodeTrue().getID();
             int to = (int) e.getToNodeTrue().getID();
-            id.add(from);
+            nodes.put(from, e.getFromNodeTrue());
+            nodes.put(to, e.getToNodeTrue());
             if (from > 0 && to > 0) {
                 graph.addEdge(new DirectedEdge(from, to, weight));
                 graph.addEdge(new DirectedEdge(to, from, weight));
@@ -43,7 +47,16 @@ public class MapGraph {
     
     public double shortestPath(int from, int to) {
         DijkstraSP sp = new DijkstraSP(this.graph, from);
+        if (sp.hasPathTo(to)) this.markNodesInPath(sp.pathTo(to));
         return sp.distTo(to);
+    }
+    
+    private void markNodesInPath(Iterable<DirectedEdge> e) {
+        for (DirectedEdge diEdge : e) {
+            assert (nodes.get(diEdge.from()) != null && nodes.get(diEdge.to()) != null);
+            nodes.get(diEdge.from()).setInShortestPath(true);
+            nodes.get(diEdge.to()).setInShortestPath(true);
+        }
     }
     
     public static void main(String[] args) {
@@ -53,21 +66,13 @@ public class MapGraph {
         MapGraph mg = new MapGraph(edges);
         
         EdgeWeightedDigraph g = mg.graph();
-//        DijkstraSP sp = new DijkstraSP(g, 615295);
-//        
-//        double dist = sp.distTo(615295);
-//        System.out.println(dist);
-        Iterable<DirectedEdge> diEdges = g.edges();
+        DijkstraSP sp = new DijkstraSP(g, 615295);
         
-        // prints adjacent edges for all vertices in the graph
-        for (Integer i : id) {
-            Bag<DirectedEdge> b = (Bag)g.adj(i);
-            System.out.println("Vertex (Node) id " + i);
-            for (DirectedEdge e : b) {
-                System.out.println(e);               
-            }
-            System.out.println("");
+        double dist = sp.distTo(615291);
+        for (DirectedEdge de : sp.pathTo(615291)) {
+            System.out.println(de);
         }
+        System.out.println(dist);
         
         
         System.out.println(g.E());

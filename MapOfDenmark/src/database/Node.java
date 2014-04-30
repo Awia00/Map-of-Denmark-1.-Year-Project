@@ -15,6 +15,8 @@ public class Node implements Comparable<Node>{
 
     private final double xCoord, yCoord;
     private final long ID;
+    
+    private boolean isInShortestPath;
 
     public Node(long ID, Point2D coords) {
         this.xCoord = coords.getX();
@@ -44,6 +46,14 @@ public class Node implements Comparable<Node>{
 
     public long getID() {
         return ID;
+    }
+    
+    public void setInShortestPath(boolean b) {
+        isInShortestPath = b;
+    }
+
+    public boolean isIsInShortestPath() {
+        return isInShortestPath;
     }
 
     @Override
