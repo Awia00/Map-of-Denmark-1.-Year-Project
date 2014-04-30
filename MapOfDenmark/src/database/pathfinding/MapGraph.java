@@ -48,7 +48,9 @@ public class MapGraph {
     public double shortestPath(int from, int to) {
         DijkstraSP sp = new DijkstraSP(this.graph, from);
         if (sp.hasPathTo(to)) this.markNodesInPath(sp.pathTo(to));
-//        System.out.print("Shortest distance in meters: ");
+        
+        System.out.print("Shortest distance in meters: ");
+        System.out.println(sp.distTo(to));
         return sp.distTo(to);
     }
     
