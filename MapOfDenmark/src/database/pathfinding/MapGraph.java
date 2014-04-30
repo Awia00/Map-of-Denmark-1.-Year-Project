@@ -22,7 +22,6 @@ public class MapGraph {
     static List<Integer> id;
     
     public MapGraph(List<Edge> edges) {
-//        List<Edge> edges = tree.getEdges();
         id = new ArrayList<>();
         graph = new EdgeWeightedDigraph(edges.size());
         for (Edge e : edges ) {
@@ -30,7 +29,10 @@ public class MapGraph {
             int from = (int) e.getFromNodeTrue().getID();
             int to = (int) e.getToNodeTrue().getID();
             id.add(from);
-            if (from > 0 && to > 0) graph.addEdge(new DirectedEdge(from, to, weight));
+            if (from > 0 && to > 0) {
+                graph.addEdge(new DirectedEdge(from, to, weight));
+                graph.addEdge(new DirectedEdge(to, from, weight));
+            }
         }
         
     }

@@ -274,7 +274,7 @@ public class DatabaseHandler implements DatabaseInterface {
             //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             Edge edge = null;
-            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, DRIVETIME FROM [jonovic_dk_db].[dbo].[edges];";
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, LENGTH FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
 
             PreparedStatement pstatement = con.prepareStatement(sql);
