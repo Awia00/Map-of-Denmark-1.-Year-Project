@@ -143,7 +143,7 @@ public class DijkstraSP {
 	public String getPath(int s, int v)
 	{
 		route = new HashSet<>();
-		return getPath2(s, v);
+		return getPathRecoursive(s, v);
 	}
 
 	public HashSet<Integer> getRoute()
@@ -151,7 +151,7 @@ public class DijkstraSP {
 		return route;
 	}
 	
-	public String getPath2(int s, int v)
+	public String getPathRecoursive(int s, int v)
 	{
 		String path = "";
 		if(v==s)
@@ -165,7 +165,7 @@ public class DijkstraSP {
 		}
 		else{
 			route.add(v);
-			path += getPath2(s,previous[v]);
+			path += getPathRecoursive(s,previous[v]);
 			path += "\nnode "+v;
 		}
 		return path;
