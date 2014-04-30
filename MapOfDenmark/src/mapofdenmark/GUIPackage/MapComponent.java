@@ -17,6 +17,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.swing.JComponent;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
@@ -38,6 +39,7 @@ public class MapComponent extends JComponent {
 	protected VisibleArea visibleArea;
 	private List<PolygonShape> landShapePolygons;
 	private List<PolygonShape> landUseShapePolygons;
+	private HashSet<Integer> route;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
@@ -73,11 +75,17 @@ public class MapComponent extends JComponent {
 		visibleArea = new VisibleArea();
 		this.landShapePolygons = landShapePolygons;
 		this.landUseShapePolygons = landUsePolygons;
+		route = new HashSet<>();
 
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX() - quadTreeToDraw.getQuadTreeLength() / 8, quadTreeToDraw.getQuadTreeY() - quadTreeToDraw.getQuadTreeLength() / 50, quadTreeToDraw.getQuadTreeLength() / 15 * 16, quadTreeToDraw.getQuadTreeLength() / 15 * 10);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
+	}
+	
+	public void setRoute(HashSet<Integer> route)
+	{
+		this.route = route;
 	}
 
         public QuadTree quadTree() {
@@ -502,6 +510,13 @@ public class MapComponent extends JComponent {
 						double y2 = edge.getToNodeTrue().getyCoord();
 						// drawing the border
 						g.setColor(activeColorScheme.getPathwayBorderColor());
+						
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 						g2.setStroke(pathRoadStrokeBorder);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
@@ -522,6 +537,13 @@ public class MapComponent extends JComponent {
 						9
 					}, 0));
 					g.setColor(this.activeColorScheme.getFerrywayColor());
+					
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 					double x1 = edge.getFromNodeTrue().getxCoord();
 					double y1 = edge.getFromNodeTrue().getyCoord();
 					double x2 = edge.getToNodeTrue().getxCoord();
@@ -543,6 +565,13 @@ public class MapComponent extends JComponent {
 
 						// drawing the road
 						g.setColor(activeColorScheme.getSmallRoadColor());
+						
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 						g2.setStroke(smallRoadStrokeBorder);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -563,6 +592,13 @@ public class MapComponent extends JComponent {
 
 						// drawing the road
 						g.setColor(activeColorScheme.getNormalRoadColor());
+						
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 						g2.setStroke(normalRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -582,6 +618,13 @@ public class MapComponent extends JComponent {
 
 						// drawing the road
 						g.setColor(activeColorScheme.getSecondaryRoadColor());
+						
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 						g2.setStroke(secondaryRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -600,6 +643,13 @@ public class MapComponent extends JComponent {
 
 					// drawing the road
 					g.setColor(activeColorScheme.getHighwayColor());
+					
+						//
+						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+							g.setColor(Color.red);
+						}
+						//
+						
 					g2.setStroke(highWayStroke);
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}

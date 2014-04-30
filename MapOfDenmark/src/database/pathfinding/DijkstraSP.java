@@ -6,6 +6,7 @@
 
 package database.pathfinding;
 
+import java.util.HashSet;
 import java.util.Stack;
 
 /*************************************************************************
@@ -63,6 +64,7 @@ public class DijkstraSP {
 	private int[] previous;
     private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
     private IndexMinPQ<Double> pq;    // priority queue of vertices
+	private HashSet<Integer> route;
 
     /**
      * Computes a shortest paths tree from <tt>s</tt> to every other vertex in
@@ -140,9 +142,21 @@ public class DijkstraSP {
 	
 	public String getPath(int s, int v)
 	{
+		route = new HashSet<>();
+		return getPath2(s, v);
+	}
+
+	public HashSet<Integer> getRoute()
+	{
+		return route;
+	}
+	
+	public String getPath2(int s, int v)
+	{
 		String path = "";
 		if(v==s)
 		{
+			route.add(s);
 			path += "\nSlutnoden " + s;
 		}
 		else if (previous[v]== Integer.MAX_VALUE)
@@ -150,7 +164,8 @@ public class DijkstraSP {
 			path += "no path from "+s+" to "+v;
 		}
 		else{
-			path += getPath(s,previous[v]);
+			route.add(v);
+			path += getPath2(s,previous[v]);
 			path += "\nnode "+v;
 		}
 		return path;

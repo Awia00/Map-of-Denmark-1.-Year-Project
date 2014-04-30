@@ -11,6 +11,7 @@ import database.DatabaseInterface;
 import database.Edge;
 import database.Node;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class MapGraph {
     EdgeWeightedDigraph graph;
     Map<Integer, Edge> edges;
     static List<Integer> id;
+	DijkstraSP sp;
     
     public MapGraph(List<Edge> edges) {
         this.edges = new HashMap<>();
@@ -46,7 +48,7 @@ public class MapGraph {
     }
     
     public double shortestPath(int from, int to) {
-        DijkstraSP sp = new DijkstraSP(this.graph, from);
+        sp = new DijkstraSP(this.graph, from);
         if (sp.hasPathTo(to)) this.markNodesInPath(sp.pathTo(to));
         
         System.out.print("Shortest distance in meters: ");
@@ -57,6 +59,11 @@ public class MapGraph {
 		
         return sp.distTo(to);
     }
+	
+	public HashSet<Integer> getRoute()
+	{
+		return sp.getRoute();
+	}
     
     private void markNodesInPath(Iterable<DirectedEdge> e) {
         for (DirectedEdge diEdge : e) {
