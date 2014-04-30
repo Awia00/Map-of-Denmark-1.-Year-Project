@@ -6,15 +6,14 @@
 
 package mapofdenmark.GUIPackage;
 
-import database.GraphCreator;
 import database.Node;
+import database.pathfinding.DijkstraSP;
+import database.pathfinding.EdgeWeightedDigraph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,6 +66,8 @@ public class NavigatonBar extends JPanel {
             }
         });
         
+        
+        
         closestRoad = new AAJLabel("");
         closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
         closestRoad.setForeground(Color.decode("#9B9B9B"));
@@ -106,18 +107,12 @@ public class NavigatonBar extends JPanel {
         return to;
     }
    
-    public List<Node> findRoute() {
-        GraphCreator graph = GUIController.getGraph();
-        if (fromNode != null && toNode != null) {
-            System.out.println("hej");
-            graph.runDijkstra(fromNode);   
-        }
-//        System.out.println(Arrays.toString(graph.getPath(toNode).toArray()));
-        List<Node> result = graph.getPath(toNode);
-        for (Node n : result) {
-            System.out.println(n);
-        }
-        return result;
+    public void findRoute() {
+        EdgeWeightedDigraph g = GUIController.graph();
+        DijkstraSP sp = new DijkstraSP(g, (int)fromNode.getID());
+        double dist = sp.distTo((int)toNode.getID());
+        System.out.println(dist);
+        getParent().repaint();
     }
     
     public void setFromNode(Node node) {

@@ -11,6 +11,8 @@ import database.Edge;
 import database.GraphCreator;
 import database.Node;
 import database.ShapeFileParser;
+import database.pathfinding.EdgeWeightedDigraph;
+import database.pathfinding.MapGraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -28,6 +30,8 @@ public class GUIController {
 	private FrameChooser frameChooser;
 	private MainFrame mainframe;
 	private Timer timer;
+        
+        private static EdgeWeightedDigraph graph;
 
 	private static GUIController guiController;
 
@@ -80,9 +84,15 @@ public class GUIController {
 				QuadTree quadTree = db.getQuadTree();
 
 				
-				GraphCreator graph;
-				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
+//				GraphCreator graph;
+//				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
+                                
+                                if (isKrakB) {
+                                    MapGraph mg = new MapGraph(edges);
+                                    graph = mg.graph();
+                                }
 
+                                
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				
 				List<PolygonShape> landShapePolygons = new ArrayList<>();
@@ -101,6 +111,10 @@ public class GUIController {
 		thread.start();
 
 	}
+        
+        public static EdgeWeightedDigraph graph() {
+            return graph;
+        }
 
 	public static void main(String[] args)
 	{

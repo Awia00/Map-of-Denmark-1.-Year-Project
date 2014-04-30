@@ -24,6 +24,8 @@ public class Edge implements Comparable<Edge> {
     private final int roadType;
     private final String roadName;
     private double weight = 0;
+    
+    private boolean inPathFinder;
 
     // Mangler TYPE
     public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weight) {
@@ -100,6 +102,14 @@ public class Edge implements Comparable<Edge> {
     
     public double getWeight(){
         return weight;
+    }
+    
+    public void setInPathFinder(boolean inPathFinder) {
+        this.inPathFinder = inPathFinder;
+    }
+    
+    public boolean inPathFinder() {
+        return inPathFinder;
     }
     /*
      @Override

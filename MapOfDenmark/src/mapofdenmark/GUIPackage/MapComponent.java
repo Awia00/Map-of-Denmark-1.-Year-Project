@@ -490,7 +490,8 @@ public class MapComponent extends JComponent {
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-						g.setColor(activeColorScheme.getPathwayColor());
+                                                if (edge.inPathFinder()) g.setColor(Color.red);
+                                                else g.setColor(activeColorScheme.getPathwayColor());
 						g2.setStroke(pathRoadStrokeBorder);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
