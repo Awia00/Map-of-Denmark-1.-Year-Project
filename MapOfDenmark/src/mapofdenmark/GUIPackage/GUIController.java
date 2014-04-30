@@ -11,9 +11,11 @@ import database.Edge;
 import database.GraphCreator;
 import database.Node;
 import database.ShapeFileParser;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
  *
@@ -81,7 +83,15 @@ public class GUIController {
 				GraphCreator graph;
 				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
 
-				mainframe = new MainFrame(quadTree, new ShapeFileParser().getPolygons()); // brug disse 
+				ShapeFileParser shapeParser = new ShapeFileParser();
+				
+				List<PolygonShape> landShapePolygons = new ArrayList<>();
+				if(!isKrakB){landShapePolygons=shapeParser.getLandShapePolygons();}
+				
+				List<PolygonShape> landUsePolygons = new ArrayList<>();
+				if(!isKrakB){landUsePolygons=shapeParser.getLandUsePolygons();}
+				
+				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
 				lframe.setVisible(false);

@@ -36,13 +36,14 @@ public class MapComponent extends JComponent {
 	// the toplevel quadtree
 	private QuadTree quadTreeToDraw;
 	protected VisibleArea visibleArea;
-	private List<PolygonShape> polygons;
+	private List<PolygonShape> landShapePolygons;
+	private List<PolygonShape> landUseShapePolygons;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-        
-        private int xFrom, yFrom, xTo, yTo;
-        
+
+	private int xFrom, yFrom, xTo, yTo;
+
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
@@ -55,9 +56,9 @@ public class MapComponent extends JComponent {
 	 * @param streets is not used at the moment
 	 * @param edges an array with all the edges in the database.
 	 */
-	public MapComponent(QuadTree quadTree, List<PolygonShape> polygons)
+	public MapComponent(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
-		initialize(quadTree, polygons);
+		initialize(quadTree, landShapePolygons, landUsePolygons);
 	}
 
 	/**
@@ -66,28 +67,31 @@ public class MapComponent extends JComponent {
 	 * @param streets not used at the moment.
 	 * @param edges an array with all the edges in the database.
 	 */
-	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
+	private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
 		quadTreeToDraw = quadTree;
 		visibleArea = new VisibleArea();
-		this.polygons = polygons;
-		
-		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX()-quadTreeToDraw.getQuadTreeLength()/8, quadTreeToDraw.getQuadTreeY()-quadTreeToDraw.getQuadTreeLength()/50, quadTreeToDraw.getQuadTreeLength()/15*16, quadTreeToDraw.getQuadTreeLength()/15*10);
+		this.landShapePolygons = landShapePolygons;
+		this.landUseShapePolygons = landUsePolygons;
+
+		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX() - quadTreeToDraw.getQuadTreeLength() / 8, quadTreeToDraw.getQuadTreeY() - quadTreeToDraw.getQuadTreeLength() / 50, quadTreeToDraw.getQuadTreeLength() / 15 * 16, quadTreeToDraw.getQuadTreeLength() / 15 * 10);
 
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
-        
-        public void setFrom(int x, int y) {
-            this.xFrom = x;
-            this.yFrom = y;
-        }
-        
-        public void setTo(int x, int y) {
-            this.xTo = x;
-            this.yTo = y;
-        }
-        
+
+	public void setFrom(int x, int y)
+	{
+		this.xFrom = x;
+		this.yFrom = y;
+	}
+
+	public void setTo(int x, int y)
+	{
+		this.xTo = x;
+		this.yTo = y;
+	}
+
 	/**
 	 * Change the position of the visible area, such that the user can see this
 	 * at the next repaint.
@@ -150,7 +154,7 @@ public class MapComponent extends JComponent {
 			zoomconstant = (mapYEndCoord - mapYStartCoord) / visibleArea.getyLength();
 		}
 		int fixRounds = 0;
-		while ((visibleArea.getxLength() * zoomconstant) < (quadTreeToDraw.getQuadTreeLength()/100000) && fixRounds != 20)
+		while ((visibleArea.getxLength() * zoomconstant) < (quadTreeToDraw.getQuadTreeLength() / 100000) && fixRounds != 20)
 		{
 			zoomconstant += 0.02;
 			fixRounds++;
@@ -236,7 +240,7 @@ public class MapComponent extends JComponent {
 	 */
 	public void zoomOut(double mouseXCoord, double mouseYCoord)
 	{
-		if (visibleArea.getyLength() + quadTreeToDraw.getQuadTreeLength()/10 >= quadTreeToDraw.getQuadTreeLength())
+		if (visibleArea.getyLength() + quadTreeToDraw.getQuadTreeLength() / 10 >= quadTreeToDraw.getQuadTreeLength())
 		{
 			return;
 		}
@@ -268,7 +272,7 @@ public class MapComponent extends JComponent {
 	 */
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength()/100000))
+		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 100000))
 		{
 			return;
 		}
@@ -359,12 +363,18 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
-		
+
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
-		g.setColor(this.activeColorScheme.getBackgroundColor());
+		if (landShapePolygons.isEmpty())
+		{
+			g.setColor(this.activeColorScheme.getBackgroundColor());
+		} else
+		{
+			g.setColor(new Color(181, 207, 241));
+		}
 		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
-		
+
 		ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
 		double xlength = visibleArea.getxLength();
 		double ylength = visibleArea.getyLength();
@@ -397,12 +407,57 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-		
-		g.setColor(Color.red);
-		int[ ] factorial1 = { 10, 20, 50, 200, 300};
-		int[ ] factorial2 = { 10, 20, 30, 100, 50};	
-		g2.fillPolygon(factorial1, factorial2, factorial1.length);
-		
+
+		g.setColor(new Color(227, 221, 218));
+
+		for (PolygonShape poly : landShapePolygons)
+		{
+			PointData[] points = poly.getPoints();
+			if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 35)
+			{
+				continue;
+			}
+			if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 35)
+			{
+				continue;
+			}
+			int[] xPoints = new int[poly.getNumberOfPoints()];
+			int[] yPoints = new int[poly.getNumberOfPoints()];
+			int i = 0;
+			for (PointData point : points)
+			{
+				xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
+				yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
+				i++;
+			}
+			g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
+		}
+		if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
+		{
+			g.setColor(new Color(137, 198, 103));
+			for (PolygonShape poly : landUseShapePolygons)
+			{
+				PointData[] points = poly.getPoints();
+				if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 100)
+				{
+					continue;
+				}
+				if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 100)
+				{
+					continue;
+				}
+				int[] xPoints = new int[poly.getNumberOfPoints()];
+				int[] yPoints = new int[poly.getNumberOfPoints()];
+				int i = 0;
+				for (PointData point : points)
+				{
+					xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
+					yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
+					i++;
+				}
+				g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
+			}
+		}
 		for (QuadTree quadTree : bottomTrees)
 		{
 			// checks that they should be drawn, this is set when the visibleArea is updated.
@@ -416,12 +471,12 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 
 					// drawing the border
-					g.setColor(new Color(255-50,239-50,213-50));
+					g.setColor(new Color(255 - 50, 239 - 50, 213 - 50));
 					g2.setStroke(new BasicStroke(1.4f));
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/60))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 60))
 				{
 					for (Edge edge : quadTree.getPathEdges())
 					{
@@ -453,7 +508,7 @@ public class MapComponent extends JComponent {
 					double y2 = edge.getToNodeTrue().getyCoord();
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/20))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 20))
 				{
 					for (Edge edge : quadTree.getSmallEdges())
 					{
@@ -472,7 +527,7 @@ public class MapComponent extends JComponent {
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/5))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 				{
 					for (Edge edge : quadTree.getNormalEdges())
 					{
@@ -492,7 +547,7 @@ public class MapComponent extends JComponent {
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/2))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
 					for (Edge edge : quadTree.getSecondaryEdges())
 					{
@@ -528,7 +583,7 @@ public class MapComponent extends JComponent {
 					g2.setStroke(highWayStroke);
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength()/50))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 50))
 				{
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
@@ -558,12 +613,12 @@ public class MapComponent extends JComponent {
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
-                
-                g.drawRect(xFrom, yFrom, 10, 10);
+		g.drawRect(xFrom, yFrom, 10, 10);
 	}
 
 	/**
 	 * Set the activeColorScheme to one of the three modes.
+	 *
 	 * @param colorScheme a name of a color scheme that should be set.
 	 */
 	protected void setColorScheme(String colorScheme)

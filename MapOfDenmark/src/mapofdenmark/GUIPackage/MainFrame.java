@@ -73,18 +73,17 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	Timer timer = new Timer();
 	Timer mouseStillTimer = new Timer();
 
-	public MainFrame(QuadTree quadTree, List<PolygonShape> polygons)
+	public MainFrame(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
 		// EVT MODTAGE streets I CONSTRUCTOR.
-		initialize(quadTree, polygons);
+		initialize(quadTree, landShapePolygons, landUsePolygons);
 		addListeners();
 	}
 
-	private void initialize(QuadTree quadTree, List<PolygonShape> polygons)
+	private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
 		try
 		{
-
 			setIconImage(ImageIO.read(new File("assets/Icon48.png")));
 
 		} catch (IOException ex)
@@ -101,7 +100,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(quadTree,polygons);
+		drawMapComponent = new MapComponent(quadTree,landShapePolygons,landUsePolygons);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
