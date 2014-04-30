@@ -143,15 +143,15 @@ public class DijkstraSP {
 		String path = "";
 		if(v==s)
 		{
-			path += "\nhit the final" + s;
+			path += "\nSlutnoden" + s;
 		}
 		else if (previous[v]== Integer.MAX_VALUE)
 		{
 			path += "no path from "+s+" to "+v;
 		}
 		else{
-			path += "\n"+getPath(s,previous[v]);
-			path+= "\nnode"+v;
+			path += getPath(s,previous[v]);
+			path += "\nnode"+v;
 		}
 		return path;
 	}
