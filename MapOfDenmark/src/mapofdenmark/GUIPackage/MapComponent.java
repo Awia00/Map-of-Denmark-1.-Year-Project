@@ -512,7 +512,7 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getPathwayBorderColor());
 						
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
@@ -539,7 +539,7 @@ public class MapComponent extends JComponent {
 					g.setColor(this.activeColorScheme.getFerrywayColor());
 					
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
@@ -567,7 +567,7 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getSmallRoadColor());
 						
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
@@ -594,7 +594,7 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getNormalRoadColor());
 						
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
@@ -620,7 +620,7 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getSecondaryRoadColor());
 						
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
@@ -645,7 +645,7 @@ public class MapComponent extends JComponent {
 					g.setColor(activeColorScheme.getHighwayColor());
 					
 						//
-						if(route.contains((int)edge.getFromNodeTrue().getID()) || route.contains((int)edge.getToNodeTrue().getID())){
+						if(route.contains((int)edge.getFromNodeTrue().getID()) && route.contains((int)edge.getToNodeTrue().getID())){
 							g.setColor(Color.red);
 						}
 						//
