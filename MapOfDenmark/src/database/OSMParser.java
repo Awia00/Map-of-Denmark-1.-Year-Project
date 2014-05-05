@@ -209,7 +209,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			{
 				if(fromNode != null)
 				{
-					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, -1));
+					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, convertRoadTypeToSpeedLimit(roadType)));
 					nodesDownloadedPct += (double)1/6500000;
 					fromNode = node;
 				}
