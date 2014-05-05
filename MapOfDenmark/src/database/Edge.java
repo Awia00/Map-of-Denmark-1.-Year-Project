@@ -25,7 +25,6 @@ public class Edge implements Comparable<Edge> {
     private final String roadName;
     private double weightTime = Double.MAX_VALUE;
     private double length = Double.MAX_VALUE;
-    private boolean isInShortestPath;
     // KRAK Constructor
     public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weightTime, double length) {
         this.fromNodeID = fromNode;
@@ -58,15 +57,6 @@ public class Edge implements Comparable<Edge> {
    public double getLength(){
        return length;
    }
-
-    
-    public void setInShortestPath(boolean b) {
-        isInShortestPath = b;
-    }
-
-    public boolean isInShortestPath() {
-        return isInShortestPath;
-    }
     
     protected int getFromID() {
         return fromNodeID;
