@@ -635,7 +635,7 @@ public class MapComponent extends JComponent {
 					g.setColor(activeColorScheme.getHighwayColor());
 					
 						//
-						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
+						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
 							g.setColor(Color.red);
 						}
 						//
