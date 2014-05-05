@@ -1,6 +1,7 @@
 
 package database.pathfinding;
 
+import java.util.HashSet;
 import java.util.Stack;
 
 /*************************************************************************
@@ -38,7 +39,7 @@ import java.util.Stack;
 public class EdgeWeightedDigraph {
     private final int V;
     private int E;
-    private Bag<DirectedEdge>[] adj;
+    private HashSet<DirectedEdge>[] adj;
     
     /**
      * Initializes an empty edge-weighted digraph with <tt>V</tt> vertices and 0 edges.
@@ -49,9 +50,9 @@ public class EdgeWeightedDigraph {
         if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
         this.V = V;
         this.E = 0;
-        adj = (Bag<DirectedEdge>[]) new Bag[V];
+        adj = (HashSet<DirectedEdge>[]) new HashSet[V];
         for (int v = 0; v < V; v++)
-            adj[v] = new Bag<DirectedEdge>();
+            adj[v] = new HashSet<DirectedEdge>();
     }
     /**
      * Initializes a new edge-weighted digraph that is a deep copy of <tt>G</tt>.
@@ -117,7 +118,7 @@ public class EdgeWeightedDigraph {
      * @return all edges in the edge-weighted graph as an Iterable.
      */
     public Iterable<DirectedEdge> edges() {
-        Bag<DirectedEdge> list = new Bag<DirectedEdge>();
+        HashSet<DirectedEdge> list = new HashSet<DirectedEdge>();
         for (int v = 0; v < V; v++) {
             for (DirectedEdge e : adj(v)) {
                 list.add(e);

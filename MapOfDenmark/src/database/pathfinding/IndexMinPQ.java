@@ -5,7 +5,6 @@
  */
 
 package database.pathfinding;
-
 /*************************************************************************
  *  Compilation:  javac IndexMinPQ.java
  *  Execution:    java IndexMinPQ
