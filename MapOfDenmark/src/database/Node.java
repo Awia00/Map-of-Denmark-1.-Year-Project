@@ -14,7 +14,8 @@ import java.awt.geom.Point2D;
 public class Node implements Comparable<Node>{
 
     private final double xCoord, yCoord;
-    private final int ID;    
+    private final int ID;   
+	private double distTo;
     
 
     public Node(int ID, Point2D coords) {
@@ -40,9 +41,18 @@ public class Node implements Comparable<Node>{
     public int getID() {
         return ID;
     }
-    
-    
 
+	public void setDistTo(double distTo)
+	{
+		this.distTo = distTo;
+	}
+
+	public double getDistTo()
+	{
+		return distTo;
+	}
+    
+	
     @Override
     public int compareTo(Node o) {
         return this.getID() - o.getID();
