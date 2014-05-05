@@ -223,6 +223,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			fromNode = null;
 			nodesOnWay = new ArrayList<>();
 			createWay = false;
+                        
 		}
 	}
 
@@ -240,6 +241,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
                         //Release Memory
                         openStreetMapData.close();
                         saxParser.reset();
+                        
                 } catch (Throwable err)
 		{
 			err.printStackTrace();
@@ -261,7 +263,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		}
 				*/
 		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
-	}
+        }
 	
 	@Override
 	public ArrayList<Edge> getEdgeList()
