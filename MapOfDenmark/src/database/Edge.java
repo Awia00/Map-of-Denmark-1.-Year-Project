@@ -13,41 +13,51 @@ import java.awt.geom.Point2D;
  */
 public class Edge implements Comparable<Edge> {
 
-    private final int fromNode;
-    private final int toNode;
+    private final int fromNodeID;
+    private final int toNodeID;
     private final int roadcode;
-    private Node fromNodeTrue = null;
-    private Node toNodeTrue = null;
+    private Node fromNode = null;
+    private Node toNode = null;
    // private Node midNodeTrue = null;
     private double midX = 0;
     private double midY = 0;
     private final int roadType;
     private final String roadName;
-    private double weight = 0;
-    
+    private double weightTime = Double.MAX_VALUE;
+    private double length = Double.MAX_VALUE;
     private boolean isInShortestPath;
-    // Mangler TYPE
-    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weight) {
+    // KRAK Constructor
+    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weightTime, double length) {
+        this.fromNodeID = fromNode;
+        this.toNodeID = toNode;
+        this.roadType = roadType;
+        this.roadName = roadName;
+        this.roadcode = roadcode;
+        this.weightTime = weightTime;
+        this.length = length;
+        
+    }
+    //OSM Constructor
+    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode, int velocity) {
         this.fromNode = fromNode;
         this.toNode = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
         this.roadcode = roadcode;
-        this.weight = weight;
+        this.fromNodeID = 0;
+        this.toNodeID = 0;
+        setMidNode();
+        setLength();
+        this.weightTime = this.length / velocity;
     }
-
-    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode, double weight) {
-        this.fromNodeTrue = fromNode;
-        this.toNodeTrue = toNode;
-        this.roadType = roadType;
-        this.roadName = roadName;
-        this.roadcode = roadcode;
-        this.fromNode = 0;
-        this.toNode = 0;
-        this.weight = weight;
-        setMidNodeTrue();
-
-    }
+    
+   public void setLength(){
+       if(length == Double.MAX_VALUE) length = Math.sqrt( Math.pow(fromNode.getxCoord()-toNode.getxCoord(),2) + Math.pow(fromNode.getyCoord()-toNode.getyCoord(),2) );
+   }
+    
+   public double getLength(){
+       return length;
+   }
 
     
     public void setInShortestPath(boolean b) {
@@ -58,12 +68,12 @@ public class Edge implements Comparable<Edge> {
         return isInShortestPath;
     }
     
-    protected int getFromNode() {
-        return fromNode;
+    protected int getFromID() {
+        return fromNodeID;
     }
 
-    protected int getToNode() {
-        return toNode;
+    protected int getToID() {
+        return toNodeID;
     }
 
     public String getRoadName() {
@@ -74,26 +84,26 @@ public class Edge implements Comparable<Edge> {
         return roadType;
     }
 
-    public Node getFromNodeTrue() {
-        return fromNodeTrue;
+    public Node getFromNode() {
+        return fromNode;
     }
 
-    public Node getToNodeTrue() {
-        return toNodeTrue;
+    public Node getToNode() {
+        return toNode;
     }
 
-    public void setFromNodeTrue(Node fromNodeTrue) {
-        this.fromNodeTrue = fromNodeTrue;
+    public void setFromNode(Node fromNode) {
+        this.fromNode = fromNode;
     }
 
-    public void setToNodeTrue(Node toNodeTrue) {
-        this.toNodeTrue = toNodeTrue;
+    public void setToNode(Node toNode) {
+        this.toNode = toNode;
     }
 
-    public void setMidNodeTrue() {
+    public void setMidNode() {
 
-        midX = (fromNodeTrue.getxCoord() + toNodeTrue.getxCoord()) / 2;
-        midY = (fromNodeTrue.getyCoord() + toNodeTrue.getyCoord()) / 2;
+        midX = (fromNode.getxCoord() + toNode.getxCoord()) / 2;
+        midY = (fromNode.getyCoord() + toNode.getyCoord()) / 2;
     }
 
     public int getRoadcode() {
@@ -109,7 +119,7 @@ public class Edge implements Comparable<Edge> {
     }
     
     public double getWeight(){
-        return weight;
+        return weightTime;
     }
     /*
      @Override

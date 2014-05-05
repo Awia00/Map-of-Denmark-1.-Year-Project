@@ -299,7 +299,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				callSmoothZoom(e.getX(), e.getY(), 1);
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                toNode = edge.getFromNodeTrue();
+                                toNode = edge.getFromNode();
                                 edge.setInShortestPath(true);
                                 System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 				callSmoothZoom(e.getX(), e.getY(), -1);
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                fromNode = edge.getFromNodeTrue();
+                                fromNode = edge.getFromNode();
                                 edge.setInShortestPath(true);
                                 navigationBar.getFrom().setText(edge.getRoadName());
                                 System.out.println(fromNode);
@@ -316,7 +316,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                 if (e.getButton() == MouseEvent.BUTTON3)
 			{
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                toNode = edge.getFromNodeTrue();
+                                toNode = edge.getFromNode();
                                 navigationBar.setToNode(toNode);
                                 navigationBar.getTo().setText(edge.getRoadName());
                                 System.out.println(toNode);
@@ -324,7 +324,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			{
 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                fromNode = edge.getFromNodeTrue();
+                                fromNode = edge.getFromNode();
                                 navigationBar.setFromNode(fromNode);
                                 navigationBar.getFrom().setText(edge.getRoadName());
                                 drawMapComponent.setFrom(e.getX(), e.getY());

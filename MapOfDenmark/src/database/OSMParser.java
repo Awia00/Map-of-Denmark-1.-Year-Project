@@ -44,6 +44,8 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	private List<Node> nodesOnWay = new ArrayList<>();
 	private String roadName = "";
 	private String roadType = "";
+        
+        private int ID = 0;
 
 	public OSMParser()
 	{
@@ -54,7 +56,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		nodes = new ArrayList<>();
 		edges = new ArrayList<>();
 	}
-
+        
+        private int getID(){
+            return this.ID++;
+        }
 	private int convertRoadTypeToInt(String roadType)
 	{
 		if(roadType == null){ return -1;}
@@ -113,8 +118,9 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	{
 		if (qName.equals("node"))
 		{
-			Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
-			//System.out.println(node);
+			//Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
+                        Node node = new Node(getID(), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
+                        //System.out.println(node);
 			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
 			nodes.add(node);
 			nodesDownloadedPct += (double)1/3500000;
