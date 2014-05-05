@@ -89,6 +89,36 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		}
 		return -1;
 	}
+        
+        private int convertRoadTypeToSpeedLimit(String roadType)
+	{
+		if(roadType == null){ return -1;}
+		else if (roadType.equalsIgnoreCase("motorway"))
+		{
+			return 130;
+		}
+		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
+		{
+			return 80;
+		}
+		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary"))
+		{
+			return 45;
+		}
+		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		{
+			return 50;
+		}
+		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
+		{
+			return 0;
+		}
+		else if (roadType.equalsIgnoreCase("coastline"))
+		{
+			return 0;
+		}
+		return -1;
+	}
 
 	@Override
 	public void startDocument() throws SAXException

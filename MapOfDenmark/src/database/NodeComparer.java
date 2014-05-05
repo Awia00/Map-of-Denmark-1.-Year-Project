@@ -15,7 +15,7 @@ public class NodeComparer implements Comparator<Node>{
     public int compare(Node o1, Node o2) {
         Node n1 = o1;
         Node n2 = o2;
-        return Integer.compare(n1.getID(), n2.getID());
+        return n1.getID() - n2.getID();
     }
     
 }
