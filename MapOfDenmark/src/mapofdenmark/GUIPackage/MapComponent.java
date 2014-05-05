@@ -514,11 +514,10 @@ public class MapComponent extends JComponent {
 						//g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
 						// drawing the road
-                                                if (edge.isInShortestPath()) {
-                                                    System.out.println("is in shortest path");
-                                                    g.setColor(Color.red);
-                                                }
-                                                else g.setColor(activeColorScheme.getPathwayColor());
+						g.setColor(activeColorScheme.getPathwayColor());
+						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
+							g.setColor(Color.red);
+						}
 						g2.setStroke(pathRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
