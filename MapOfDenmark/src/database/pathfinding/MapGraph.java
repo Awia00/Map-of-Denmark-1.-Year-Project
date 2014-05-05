@@ -32,8 +32,8 @@ public class MapGraph {
         int id = 0;
         for (Edge e : edges ) {
             double weight = e.getWeight();
-            int from = (int) e.getFromNodeTrue().getID();
-            int to = (int) e.getToNodeTrue().getID();
+            int from = (int) e.getFromNode().getID();
+            int to = (int) e.getToNode().getID();
             if (from > 0 && to > 0) {
                 graph.addEdge(new DirectedEdge(from, to, weight, id));
                 graph.addEdge(new DirectedEdge(to, from, weight, id));
