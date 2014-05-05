@@ -53,6 +53,7 @@ public class GUIController {
 		// Solution with thread taken from StackOverflow: http://stackoverflow.com/questions/9419252/why-does-this-simple-java-swing-program-freeze
 		Thread thread = new Thread() {
 			@Override
+			@SuppressWarnings("empty-statement")
 			public void run()
 			{
 				frameChooser.setVisible(false);
@@ -80,7 +81,7 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-                if(isKrakB){graph = new MapGraph(edges)};
+                if(isKrakB){graph = new MapGraph(edges);}
                                 
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				
