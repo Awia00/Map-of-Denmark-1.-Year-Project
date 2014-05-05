@@ -286,7 +286,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getInt(7));
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7));
                 edges.add(edge);
                 i++;
                 edgesDownloadedPct += (double) 1 / 812301;

@@ -14,23 +14,16 @@ import java.awt.geom.Point2D;
 public class Node implements Comparable<Node>{
 
     private final double xCoord, yCoord;
-    private final long ID;
-    
+    private final int ID;    
     
 
-    public Node(long ID, Point2D coords) {
+    public Node(int ID, Point2D coords) {
         this.xCoord = coords.getX();
         this.yCoord = coords.getY();
         this.ID = ID;
     }
-    
-	public Node(int id, Point2D coords) {
-        this.xCoord = coords.getX();
-        this.yCoord = coords.getY();
-        this.ID =  (long)id;
-    }
 	
-    public Node( Point2D coords) {
+    public Node(Point2D coords) {
         this.xCoord = coords.getX();
         this.yCoord = coords.getY();
         this.ID = -1;
