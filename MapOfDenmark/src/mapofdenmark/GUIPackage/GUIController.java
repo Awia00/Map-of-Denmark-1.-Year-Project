@@ -10,6 +10,7 @@ import database.DatabaseInterface;
 import database.Edge;
 import database.ShapeFileParser;
 import database.pathfinding.MapGraph;
+import database.pathfinding.WeightedMapGraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -28,7 +29,7 @@ public class GUIController {
 	private MainFrame mainframe;
 	private Timer timer;
         
-        private static MapGraph graph;
+        private static WeightedMapGraph graph;
 
 	private static GUIController guiController;
 
@@ -81,7 +82,7 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-                if(isKrakB){graph = new MapGraph(edges);}
+                if(isKrakB){graph = new WeightedMapGraph(edges);}
                                 
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				
@@ -102,7 +103,7 @@ public class GUIController {
 
 	}
         
-        public static MapGraph graph() {
+        public static WeightedMapGraph getGraph() {
             return graph;
         }
 
