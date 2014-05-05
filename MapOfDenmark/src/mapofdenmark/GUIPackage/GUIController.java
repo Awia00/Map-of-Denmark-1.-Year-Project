@@ -80,7 +80,7 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-                graph = new MapGraph(edges);
+                if(isKrakB){graph = new MapGraph(edges)};
                                 
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				
