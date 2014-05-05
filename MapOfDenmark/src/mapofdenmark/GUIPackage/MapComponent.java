@@ -437,11 +437,11 @@ public class MapComponent extends JComponent {
 		for (PolygonShape poly : landShapePolygons)
 		{
 			PointData[] points = poly.getPoints();
-			if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 35)
+			if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 8)
 			{
 				continue;
 			}
-			if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 35 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 35)
+			if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 8)
 			{
 				continue;
 			}
