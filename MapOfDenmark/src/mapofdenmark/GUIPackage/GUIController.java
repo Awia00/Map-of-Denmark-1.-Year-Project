@@ -82,7 +82,8 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-                if(isKrakB){graph = new WeightedMapGraph(edges);}
+                
+				graph = new WeightedMapGraph(edges);
                                 
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				
