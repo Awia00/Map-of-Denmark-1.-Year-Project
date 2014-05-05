@@ -8,6 +8,8 @@ package database.pathfinding;
 
 import database.Edge;
 import database.Node;
+import database.NodeDistToComparator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,34 +23,32 @@ import java.util.PriorityQueue;
  * @authorNewVersion  Anders Wind - awis@itu.dk
  *
  * @buildDate 05-05-2014
- * @author Anders Wind - awis@itu.dk
+ * @author Anders Wind - anextNodeis@itu.dk
  */
 public class Dijakstra {
 
 	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
-	private HashMap<Node, Double> distTo; // the distance to the Node
 	private HashMap<Node, Edge> edgeTo; // the edge to Node
 	
 	private Node fromNode;
 	private PriorityQueue pQueue;
 	private List<Node> route;
 
-	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Comparator<Edge> comparator)
+	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode)
 	{
 		this.graph = graph;
 		this.fromNode = fromNode;
-		distTo = new HashMap<>();
 		for(Node node : graph.keySet())
 		{
-			distTo.put(node, Double.POSITIVE_INFINITY);
+			node.setDistTo(Double.POSITIVE_INFINITY);
 		}
-		pQueue = new PriorityQueue(100, comparator);
+		pQueue = new PriorityQueue(100, new NodeDistToComparator());
 		createRoutes();
 	}
 	
 	private void createRoutes()
 	{
-		distTo.put(fromNode, 0.0);
+		fromNode.setDistTo(0);
 
         // relax vertices in order of distance from s
 		pQueue.add(fromNode);
@@ -63,51 +63,68 @@ public class Dijakstra {
 	
 	private Node getPrevious(Node node)
 	{
-		return null;
+		Edge e = edgeTo.get(node);
+		if(node.equals(e.getFromNode())){return e.getToNode();}
+		else return e.getFromNode();
 	}
 	
-	private void relaxDriveTime(Edge e, Node node)
+	private void relaxDriveTime(Edge e, Node prevNode)
 	{
-		Node w;
-		if(node.equals(e.getFromNode())){ w = e.getToNode();}
-		else
-		{w = e.getFromNode();} 
-        if (distTo.get(w) > distTo.get(node) + e.getWeight()) {
-            distTo.put(w,distTo.get(node) + e.getWeight());
-			edgeTo.put(w, e);
+		Node nextNode;
+		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
+		else{nextNode = e.getFromNode();} 
+		
+        if (nextNode.getDistTo() > prevNode.getDistTo() + e.getWeight()) {
+            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight());
+			edgeTo.put(nextNode, e);
 			
-			if (pQueue.contains(w)){ pQueue.remove(w);pQueue.add(w);}
-            else pQueue.add(w);
+			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
+            else pQueue.add(nextNode);
 		}
 	}
 	
-	private void relaxLength(Edge e, Node node)
+	private void relaxLength(Edge e, Node prevNode)
 	{
-		Node w;
-		if(node.equals(e.getFromNode())){ w = e.getToNode();}
-		else
-		{w = e.getFromNode();} 
-        if (distTo.get(w) > distTo.get(node) + e.getLength()) {
-            distTo.put(w,distTo.get(node) + e.getLength());
-			edgeTo.put(w, e);
-			if (pQueue.contains(w)){ pQueue.remove(w);pQueue.add(w);}
-            else pQueue.add(w);
+		Node nextNode;
+		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
+		else{nextNode = e.getFromNode();} 
+		
+        if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
+            nextNode.setDistTo(prevNode.getDistTo()+e.getLength());
+			edgeTo.put(nextNode, e);
+			
+			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
+            else pQueue.add(nextNode);
 		}
 	}
 	
 	public boolean hasPathTo(Node to)
 	{
-		return true;
+		if(edgeTo.containsKey(to))return true;
+		else return false;
 	}
 	
 	public List<Node> getRoute(Node toNode)
 	{
-		return null;
+		route = new ArrayList<>();
+		getPathRecoursive(toNode);
+		return route;
 	}
 	
-	private void getPathRecoursive(Node from, Node to)
+	private void getPathRecoursive(Node toNode)
 	{
-		
+		if(toNode.equals(fromNode))
+		{
+			route.add(toNode);
+		}
+		else if (hasPathTo(toNode))
+		{
+			return;
+		}
+		else{
+			route.add(toNode);
+			getPathRecoursive(getPrevious(toNode));
+		}
 	}
 	
 }

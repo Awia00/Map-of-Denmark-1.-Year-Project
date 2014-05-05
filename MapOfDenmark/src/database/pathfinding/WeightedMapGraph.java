@@ -62,9 +62,9 @@ public class WeightedMapGraph {
 		return graph;
 	}
 	
-	public void runDij(Node from, Comparator<Edge> comparator)
+	public void runDij(Node from)
 	{
-		dij = new Dijakstra(graph, from, comparator);
+		dij = new Dijakstra(graph, from);
 	}
 	
 	public List<Node> calculateRoute(Node to)
