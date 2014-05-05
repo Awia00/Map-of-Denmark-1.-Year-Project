@@ -8,6 +8,7 @@ package database.pathfinding;
 
 import database.Edge;
 import database.Node;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,13 +24,20 @@ import java.util.List;
  */
 public class WeightedMapGraph {
 	
-	HashMap<Node, HashSet<Edge>> graph;
+	private final HashMap<Node, HashSet<Edge>> graph;
+	private Dijakstra dij;
 
 	public WeightedMapGraph(List<Edge> edges)
 	{
 		graph = new HashMap<>();
 		for(final Edge edge : edges)
 		{
+			// checks for bad values
+			if (edge.getFromNode().getID() < 0 || edge.getToNode().getID() < 0 || edge.getLength() < 0 || edge.getWeight() < 0
+					|| edge.getLength() == Integer.MAX_VALUE || edge.getWeight() == Integer.MAX_VALUE)
+			{
+				continue;
+			}
 			if(graph.containsKey(edge.getFromNode()))
 			{
 				graph.get(edge.getFromNode()).add(edge);
@@ -49,4 +57,18 @@ public class WeightedMapGraph {
 		}
 	}
 
+	public HashMap<Node, HashSet<Edge>> getGraph()
+	{
+		return graph;
+	}
+	
+	public void runDij(Node from, Comparator<Edge> comparator)
+	{
+		dij = new Dijakstra(graph, from, comparator);
+	}
+	
+	public List<Node> calculateRoute(Node to)
+	{
+		return dij.getRoute(to);
+	}
 }
