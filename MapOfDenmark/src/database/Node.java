@@ -37,7 +37,7 @@ public class Node implements Comparable<Node>{
         return yCoord;
     }
 
-    public long getID() {
+    public int getID() {
         return ID;
     }
     
@@ -45,7 +45,7 @@ public class Node implements Comparable<Node>{
 
     @Override
     public int compareTo(Node o) {
-        return  (int)(long)(this.getID() - o.getID());
+        return  (this.getID() - o.getID());
     }
 
 	@Override

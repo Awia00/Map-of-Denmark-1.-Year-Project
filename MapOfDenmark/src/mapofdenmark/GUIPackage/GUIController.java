@@ -8,7 +8,6 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
-import database.GraphCreator;
 import database.Node;
 import database.ShapeFileParser;
 import database.pathfinding.EdgeWeightedDigraph;
