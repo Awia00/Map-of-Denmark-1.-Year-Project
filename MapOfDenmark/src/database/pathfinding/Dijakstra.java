@@ -57,7 +57,7 @@ public class Dijakstra {
             Node v = (Node) pQueue.poll();
             for (Edge e : graph.get(v))
 			{
-                relaxLength(e, v);
+                relaxDriveTime(e, v);
 			}
         }
 	}
