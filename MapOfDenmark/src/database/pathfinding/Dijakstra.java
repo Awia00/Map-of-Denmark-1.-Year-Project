@@ -38,6 +38,7 @@ public class Dijakstra {
 	{
 		this.graph = graph;
 		this.fromNode = fromNode;
+		edgeTo = new HashMap<>();
 		for(Node node : graph.keySet())
 		{
 			node.setDistTo(Double.POSITIVE_INFINITY);
@@ -56,11 +57,16 @@ public class Dijakstra {
             Node v = (Node) pQueue.poll();
             for (Edge e : graph.get(v))
 			{
-                relaxDriveTime(e, v);
+                relaxLength(e, v);
 			}
         }
 	}
-	
+
+	public Node getFromNode()
+	{
+		return fromNode;
+	}
+
 	private Node getPrevious(Node node)
 	{
 		Edge e = edgeTo.get(node);
@@ -117,7 +123,7 @@ public class Dijakstra {
 		{
 			route.add(toNode);
 		}
-		else if (hasPathTo(toNode))
+		else if (!hasPathTo(toNode))
 		{
 			return;
 		}
