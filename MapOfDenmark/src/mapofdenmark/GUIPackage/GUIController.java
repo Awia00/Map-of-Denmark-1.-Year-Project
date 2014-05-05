@@ -8,10 +8,7 @@ package mapofdenmark.GUIPackage;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
-import database.GraphCreator;
-import database.Node;
 import database.ShapeFileParser;
-import database.pathfinding.EdgeWeightedDigraph;
 import database.pathfinding.MapGraph;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,15 +80,7 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-				
-//				GraphCreator graph;
-//				graph = new GraphCreator(db.getEdgeList(), db.getListOfNodes());
-                                
-                                if (isKrakB) {
-                                    graph = new MapGraph(edges);
-                                    
-                                }
-
+                graph = new MapGraph(edges);
                                 
 				ShapeFileParser shapeParser = new ShapeFileParser();
 				

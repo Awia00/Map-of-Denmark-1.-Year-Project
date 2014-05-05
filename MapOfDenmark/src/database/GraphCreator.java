@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import sun.security.provider.certpath.Vertex;
 
 /**
  *
@@ -40,14 +39,13 @@ public class GraphCreator {
 
     private void createGraphStructure(Edge[] edges, Node[] nodes) {
         for (Edge edge : edges) {
-            graph.put(edge.getFromNodeTrue(), new LinkedList<Edge>());
-            graph.get(edge.getFromNodeTrue()).add(edge);
-            graph.put(edge.getToNodeTrue(), new LinkedList<Edge>());
-            graph.get(edge.getToNodeTrue()).add(edge);
+            graph.put(edge.getFromNode(), new LinkedList<Edge>());
+            graph.get(edge.getFromNode()).add(edge);
+            graph.put(edge.getToNode(), new LinkedList<Edge>());
+            graph.get(edge.getToNode()).add(edge);
             
             
         }
-
     }
 
     /**
@@ -57,7 +55,18 @@ public class GraphCreator {
      * 
      * 
      */
-
+public LinkedList<Node> runDijkstra2(GraphCreator graph, Node source){
+    
+    for (Node node : nodes){
+        
+    }
+    
+    LinkedList results = new LinkedList<>();
+    return results;
+}
+    
+    
+    
     public void runDijkstra(Node source) {
         settledNodes = new HashSet<>();
         unSettledNodes = new HashSet<>();
@@ -89,8 +98,8 @@ public class GraphCreator {
 
     private double getDistance(Node node, Node target) {
         for (Edge edge : edges) {
-            if (edge.getFromNodeTrue().equals(node)
-                    && edge.getToNodeTrue().equals(target)) {
+            if (edge.getFromNode().equals(node)
+                    && edge.getToNode().equals(target)) {
                 return edge.getWeight();
             }
         }
@@ -100,9 +109,9 @@ public class GraphCreator {
     private List<Node> getNeighbors(Node node) {
         List<Node> neighbors = new ArrayList<>();
         for (Edge edge : edges) {
-            if (edge.getFromNodeTrue().equals(node)
-                    && !isSettled(edge.getToNodeTrue())) {
-                neighbors.add(edge.getToNodeTrue());
+            if (edge.getFromNode().equals(node)
+                    && !isSettled(edge.getToNode())) {
+                neighbors.add(edge.getToNode());
             }
         }
         return neighbors;
@@ -181,13 +190,13 @@ public class GraphCreator {
             for (Object edgeObject : graph.get(parent)) {
                 Edge edge = (Edge) edgeObject;
 
-                if (!distTo.containsKey(edge.getFromNodeTrue()) || !distTo.containsKey(edge.getToNodeTrue())) {
-                    if (parent != edge.getFromNodeTrue()) {
-                        queue.add(edge.getFromNodeTrue());
-                        distTo.put(edge.getFromNodeTrue(), distTo.get(parent) + 1);
+                if (!distTo.containsKey(edge.getFromNode()) || !distTo.containsKey(edge.getToNode())) {
+                    if (parent != edge.getFromNode()) {
+                        queue.add(edge.getFromNode());
+                        distTo.put(edge.getFromNode(), distTo.get(parent) + 1);
                     } else {
-                        queue.add(edge.getToNodeTrue());
-                        distTo.put(edge.getToNodeTrue(), distTo.get(parent) + 1);
+                        queue.add(edge.getToNode());
+                        distTo.put(edge.getToNode(), distTo.get(parent) + 1);
                     }
                 }
             }

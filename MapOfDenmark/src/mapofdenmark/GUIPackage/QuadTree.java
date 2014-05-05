@@ -372,36 +372,4 @@ public class QuadTree implements Iterable<QuadTree> {
 	{
 		return SE;
 	}
-
-	// Class testing
-	public static void main(String[] args)
-	{
-		List<Edge> edges = new ArrayList<>();
-		for (int i = 0; i < 35; i++)
-		{
-			Edge edge = new Edge(0, 0, 0, null, 0,0);
-			edge.setFromNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199))));
-			edge.setToNodeTrue(new Node(new Point2D.Double(QuadTree.randomInRange(0, 199), QuadTree.randomInRange(0, 199))));
-			edge.setMidNodeTrue();
-			edges.add(edge);
-		}
-		QuadTree q = new QuadTree(edges, 0, 0, 200);
-
-		//q.printTrees(q);
-		Set<QuadTree> qt = new LinkedHashSet<>();
-		qt = q.getChildQuadTrees(q);
-		System.out.println(qt.size());
-		for (QuadTree t : qt)
-		{
-			System.out.println(t);
-			System.out.println("Tree x: " + t.getQuadTreeX() + " y: " + t.getQuadTreeY() + " length: " + t.getQuadTreeLength());
-			System.out.println("Tree has: " + t.getEdges().size() + " points");
-
-			for (Edge edge : t.getEdges())
-			{
-				System.out.println(edge.getMidX() + ", " + edge.getMidY());
-			}
-			System.out.println("\n####\n");
-		}
-	}
 }

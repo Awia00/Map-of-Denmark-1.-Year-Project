@@ -274,7 +274,7 @@ public class DatabaseHandler implements DatabaseInterface {
             //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             Edge edge = null;
-            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, LENGTH FROM [jonovic_dk_db].[dbo].[edges];";
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, DRIVETIME, LENGTH FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
 
             PreparedStatement pstatement = con.prepareStatement(sql);
@@ -286,7 +286,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6));
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7));
                 edges.add(edge);
                 i++;
                 edgesDownloadedPct += (double) 1 / 812301;
@@ -351,9 +351,9 @@ public class DatabaseHandler implements DatabaseInterface {
         int i = 0;
         for (Edge edge : edges) {
             if (edge.getRoadType() != 74) {
-                edge.setFromNodeTrue(getNode(edge.getFromNode()));
-                edge.setToNodeTrue(getNode(edge.getToNode()));
-                edge.setMidNodeTrue();
+                edge.setFromNode(getNode(edge.getFromID()));
+                edge.setToNode(getNode(edge.getToID()));
+                edge.setMidNode();
             }
             //System.out.println(i++);
         }
@@ -381,12 +381,12 @@ public class DatabaseHandler implements DatabaseInterface {
             while (rs.next()) {
                 Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
                 Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
-                edge = new Edge(0, 0, 74, "", 0, 0);
+                edge = new Edge(0, 0, 74, "", 0, Double.MAX_VALUE, Double.MAX_VALUE);
                 Node fromNode = new Node(startNode);
                 Node toNode = new Node(endNode);
-                edge.setFromNodeTrue(fromNode);
-                edge.setToNodeTrue(toNode);
-                edge.setMidNodeTrue();
+                edge.setFromNode(fromNode);
+                edge.setToNode(toNode);
+                edge.setMidNode();
                 //nodes.add(toNode);
                 //nodes.add(fromNode);
                 edges.add(edge);
