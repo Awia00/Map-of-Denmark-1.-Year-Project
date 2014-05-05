@@ -10,11 +10,13 @@ import database.Node;
 import database.pathfinding.DijkstraSP;
 import database.pathfinding.EdgeWeightedDigraph;
 import database.pathfinding.MapGraph;
+import database.pathfinding.WeightedMapGraph;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +39,8 @@ public class NavigatonBar extends JPanel {
     
     private Node fromNode = null;
     private Node toNode = null;
+	
+	private WeightedMapGraph wGraph;
     
     MapComponent mapComponent;
     
@@ -86,6 +90,8 @@ public class NavigatonBar extends JPanel {
 //        add(visVej, "cell 0 3, align right");
         add(closestRoad, "cell 0 4, align left");
         add(findRoute, "cell 0 3");
+		
+		wGraph = GUIController.getGraph();
     }
     
     
@@ -114,22 +120,36 @@ public class NavigatonBar extends JPanel {
     }
    
     public void findRoute() {
-        MapGraph g = GUIController.graph();
-        g.shortestPath(fromNode.getID(), toNode.getID());
-        
-		mapComponent.setRoute(g.getRoute());
+        //g.shortestPath(fromNode.getID(), toNode.getID());
         getParent().repaint();
     }
     
     public void setFromNode(Node node) {
         fromNode = node;
+		wGraph.runDij(node);
     }
     
     public void setToNode(Node node) {
         toNode = node;
+		HashSet<Integer> set = new HashSet<>();
+		for(Node node2 : wGraph.calculateRoute(node))
+		{
+			set.add(new Integer(node2.getID()));
+		}
+		mapComponent.setRoute(set);
     }
     
     public void didFindRoute() {
         mapComponent.didFindRoute();
     }
 }
+
+
+/*
+HashSet<Integer> set = new HashSet<>();
+		for(Node node2 : wGraph.calculateRoute(node))
+		{
+			set.add(node.getID());
+		}
+		mapComponent.setRoute(set);
+*/
