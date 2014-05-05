@@ -300,7 +300,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 toNode = edge.getFromNode();
-                                edge.setInShortestPath(true);
                                 System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
@@ -308,12 +307,11 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                 
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 fromNode = edge.getFromNode();
-                                edge.setInShortestPath(true);
                                 navigationBar.getFrom().setText(edge.getRoadName());
                                 System.out.println(fromNode);
 			}
 		}
-                if (e.getButton() == MouseEvent.BUTTON3)
+            if (e.getButton() == MouseEvent.BUTTON3)
 			{
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 toNode = edge.getFromNode();
@@ -322,7 +320,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
                                 System.out.println(toNode);
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
-
                                 Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
                                 fromNode = edge.getFromNode();
                                 navigationBar.setFromNode(fromNode);
