@@ -64,7 +64,10 @@ public class WeightedMapGraph {
 	
 	public void runDij(Node from)
 	{
-		dij = new Dijakstra(graph, from);
+		if(dij == null || !dij.getFromNode().equals(from))
+		{
+			dij = new Dijakstra(graph, from);
+		}
 	}
 	
 	public List<Node> calculateRoute(Node to)
