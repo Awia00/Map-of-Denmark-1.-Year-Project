@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import sun.security.provider.certpath.Vertex;
 
 /**
  *
@@ -47,7 +46,6 @@ public class GraphCreator {
             
             
         }
-
     }
 
     /**
@@ -57,7 +55,18 @@ public class GraphCreator {
      * 
      * 
      */
-
+public LinkedList<Node> runDijkstra2(GraphCreator graph, Node source){
+    
+    for (Node node : nodes){
+        
+    }
+    
+    LinkedList results = new LinkedList<>();
+    return results;
+}
+    
+    
+    
     public void runDijkstra(Node source) {
         settledNodes = new HashSet<>();
         unSettledNodes = new HashSet<>();
