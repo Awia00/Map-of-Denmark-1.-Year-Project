@@ -117,6 +117,7 @@ public class NavigatonBar extends JPanel {
         MapGraph g = GUIController.graph();
         g.shortestPath((int)fromNode.getID(), (int)toNode.getID());
         
+		mapComponent.setRoute(g.getRoute());
         getParent().repaint();
     }
     
