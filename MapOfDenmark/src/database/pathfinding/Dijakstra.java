@@ -25,8 +25,9 @@ import java.util.PriorityQueue;
  */
 public class Dijakstra {
 
-	private HashMap<Node, HashSet<Edge>> graph;
-	private HashMap<Node, Double> distTo;
+	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
+	private HashMap<Node, Double> distTo; // the distance to the Node
+	private HashMap<Node, Edge> edgeTo; // the edge to Node
 	
 	private Node fromNode;
 	private PriorityQueue pQueue;
@@ -50,18 +51,14 @@ public class Dijakstra {
 		distTo.put(fromNode, 0.0);
 
         // relax vertices in order of distance from s
-        pq.insert(s, distTo[s]);
-		pQueue.add(graph.get(fromNode));
-        while (!pq.isEmpty()) {
-            int v = pq.delMin();
-            for (DirectedEdge e : G.adj(v))
+		pQueue.add(fromNode);
+        while (!pQueue.isEmpty()) {
+            Node v = (Node) pQueue.poll();
+            for (Edge e : graph.get(v))
 			{
-                relax(e);
+                relaxDriveTime(e, v);
 			}
         }
-
-        // check optimality conditions
-        assert check(G, s);
 	}
 	
 	private Node getPrevious(Node node)
@@ -69,9 +66,33 @@ public class Dijakstra {
 		return null;
 	}
 	
-	private void relax()
+	private void relaxDriveTime(Edge e, Node node)
 	{
-		
+		Node w;
+		if(node.equals(e.getFromNode())){ w = e.getToNode();}
+		else
+		{w = e.getFromNode();} 
+        if (distTo.get(w) > distTo.get(node) + e.getWeight()) {
+            distTo.put(w,distTo.get(node) + e.getWeight());
+			edgeTo.put(w, e);
+			
+			if (pQueue.contains(w)){ pQueue.remove(w);pQueue.add(w);}
+            else pQueue.add(w);
+		}
+	}
+	
+	private void relaxLength(Edge e, Node node)
+	{
+		Node w;
+		if(node.equals(e.getFromNode())){ w = e.getToNode();}
+		else
+		{w = e.getFromNode();} 
+        if (distTo.get(w) > distTo.get(node) + e.getLength()) {
+            distTo.put(w,distTo.get(node) + e.getLength());
+			edgeTo.put(w, e);
+			if (pQueue.contains(w)){ pQueue.remove(w);pQueue.add(w);}
+            else pQueue.add(w);
+		}
 	}
 	
 	public boolean hasPathTo(Node to)
