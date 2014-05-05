@@ -43,15 +43,16 @@ public class Edge implements Comparable<Edge> {
         this.roadType = roadType;
         this.roadName = roadName;
         this.roadcode = roadcode;
-        this.fromNodeID = 0;
-        this.toNodeID = 0;
+        this.fromNodeID = 1;
+        this.toNodeID = 1;
         setMidNode();
         setLength();
         this.weightTime = this.length / velocity;
     }
     
    public void setLength(){
-       if(length == Double.MAX_VALUE) length = Math.sqrt( Math.pow(fromNode.getxCoord()-toNode.getxCoord(),2) + Math.pow(fromNode.getyCoord()-toNode.getyCoord(),2) );
+       if(length == Double.MAX_VALUE) 
+		   length = Math.sqrt( Math.pow(fromNode.getxCoord()-toNode.getxCoord(),2) + Math.pow(fromNode.getyCoord()-toNode.getyCoord(),2) );
    }
     
    public double getLength(){
