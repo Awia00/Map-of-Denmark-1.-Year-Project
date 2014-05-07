@@ -126,17 +126,20 @@ public class NavigatonBar extends JPanel {
     
     public void setFromNode(Node node) {
         fromNode = node;
-		wGraph.runDij(node);
     }
     
     public void setToNode(Node node) {
         toNode = node;
+		wGraph.runDij(fromNode, toNode);
 //		HashSet<Integer> set = new HashSet<>();
 //		for(Node node2 : wGraph.calculateRoute(node))
 //		{
 //			set.add(new Integer(node2.getID()));
 //		}
 //		mapComponent.setRoute(set);
+		
+		mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
+		
         mapComponent.setRoute(wGraph.drawablePath2D(node));
     }
     

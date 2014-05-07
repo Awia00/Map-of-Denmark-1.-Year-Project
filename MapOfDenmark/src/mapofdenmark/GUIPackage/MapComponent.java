@@ -6,21 +6,17 @@
 package mapofdenmark.GUIPackage;
 
 import database.Edge;
-import database.Street;
+import database.Node;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import javax.swing.JComponent;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
@@ -43,6 +39,7 @@ public class MapComponent extends JComponent {
 	private List<PolygonShape> landShapePolygons;
 	private List<PolygonShape> landUseShapePolygons;
 	private Path2D route;
+	private List<Node> routeNodes;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
@@ -85,18 +82,25 @@ public class MapComponent extends JComponent {
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
-	
+
 	public void setRoute(Path2D route)
 	{
 		this.route = route;
 	}
 
-        public QuadTree quadTree() {
-            return quadTreeToDraw;
-        }
-        
-        public void didFindRoute() {
-            System.out.println("didFindRoute");
+	public void setRouteNodes(List<Node> routeNodes)
+	{
+		this.routeNodes = routeNodes;
+	}
+
+	public QuadTree quadTree()
+	{
+		return quadTreeToDraw;
+	}
+
+	public void didFindRoute()
+	{
+		System.out.println("didFindRoute");
 //            for (QuadTree q : QuadTree.getBottomTrees()) {
 //                if (q.isDrawable()) {
 //                    for (Edge e : q.getPathEdges()) {
@@ -104,9 +108,10 @@ public class MapComponent extends JComponent {
 //                    }
 //                }
 //            }
-            repaint();
-            
-        }
+		repaint();
+
+	}
+
 	public void setFrom(int x, int y)
 	{
 		this.xFrom = x;
@@ -430,6 +435,8 @@ public class MapComponent extends JComponent {
 		//BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.7, (zoomFactorStroke * 0.1) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
+		BasicStroke routeStroke = new BasicStroke((float) (Math.max(5, (zoomFactorStroke * 2.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+
 		// sets the rendering hints so that it uses ANTI-ALIASING to render the edges.
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
@@ -532,13 +539,12 @@ public class MapComponent extends JComponent {
 						9
 					}, 0));
 					g.setColor(this.activeColorScheme.getFerrywayColor());
-					
-						//
+
+					//
 //						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
 //							g.setColor(Color.blue);
 //						}
-						//
-						
+					//
 					double x1 = edge.getFromNode().getxCoord();
 					double y1 = edge.getFromNode().getyCoord();
 					double x2 = edge.getToNode().getxCoord();
@@ -561,7 +567,7 @@ public class MapComponent extends JComponent {
 						// drawing the road
 						g.setColor(activeColorScheme.getSmallRoadColor());
 						g2.setStroke(smallRoadStroke);
-                                                //
+						//
 //						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
 //							g.setColor(Color.blue);
 //						}
@@ -581,16 +587,14 @@ public class MapComponent extends JComponent {
 						//g.setColor(activeColorScheme.getNormalRoadBorderColor());
 						//g2.setStroke(normalRoadStrokeBorder);
 						//g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
-
 						// drawing the road
 						g.setColor(activeColorScheme.getNormalRoadColor());
-						
+
 						//
 //						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
 //							g.setColor(Color.blue);
 //						}
 						//
-						
 						g2.setStroke(normalRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -610,13 +614,12 @@ public class MapComponent extends JComponent {
 
 						// drawing the road
 						g.setColor(activeColorScheme.getSecondaryRoadColor());
-						
+
 						//
 //						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
 //							g.setColor(Color.blue);
 //						}
 						//
-						
 						g2.setStroke(secondaryRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -632,16 +635,14 @@ public class MapComponent extends JComponent {
 					//g.setColor(activeColorScheme.getHighwayBorderColor());
 					//g2.setStroke(highWayStrokeBorder);
 					//g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
-
 					// drawing the road
 					g.setColor(activeColorScheme.getHighwayColor());
-					
-						//
+
+					//
 //						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
 //							g.setColor(Color.blue);
 //						}
-						//
-						
+					//
 					g2.setStroke(highWayStroke);
 					g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 				}
@@ -654,14 +655,46 @@ public class MapComponent extends JComponent {
 						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 					}
 				}
-                                g2.draw(route);
+				g2.draw(route);
 //                                System.out.println(route.getBounds());
 			}
 		}
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		if (routeNodes != null)
+		{
+			g.setColor(Color.blue);
+			g2.setStroke(routeStroke);
+			/*
+			Path2D routePath = new Path2D.Double();
+			boolean first = true;
+			for (Node node : routeNodes)
+			{
+				if(first){routePath.moveTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));first=false;continue;}
+				routePath.lineTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+			}
+			g2.draw(routePath);
+			*/
+			
+			Node fromNode = null;
+			for(Node node : routeNodes)
+			{
+				if(fromNode != null)
+				{
+					g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+					fromNode = node;
+				}
+				else
+				{
+					fromNode = node;
+				}
+			}
+			
+			
+		}
+		
 		g2.setStroke(new BasicStroke(1));
 		g.setColor(Color.blue);
-                
+
 		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
