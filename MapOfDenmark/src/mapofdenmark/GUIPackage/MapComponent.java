@@ -515,8 +515,8 @@ public class MapComponent extends JComponent {
 
 						// drawing the road
 						g.setColor(activeColorScheme.getPathwayColor());
-						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
-							g.setColor(Color.red);
+						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
+							g.setColor(Color.blue);
 						}
 						g2.setStroke(pathRoadStroke);
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
@@ -531,8 +531,8 @@ public class MapComponent extends JComponent {
 					g.setColor(this.activeColorScheme.getFerrywayColor());
 					
 						//
-						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
-							g.setColor(Color.red);
+						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
+							g.setColor(Color.blue);
 						}
 						//
 						
@@ -559,8 +559,8 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getSmallRoadColor());
 						g2.setStroke(smallRoadStroke);
                                                 //
-						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
-							g.setColor(Color.red);
+						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
+							g.setColor(Color.blue);
 						}
 						g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 					}
@@ -584,7 +584,7 @@ public class MapComponent extends JComponent {
 						
 						//
 						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
-							g.setColor(Color.red);
+							g.setColor(Color.blue);
 						}
 						//
 						
@@ -609,8 +609,8 @@ public class MapComponent extends JComponent {
 						g.setColor(activeColorScheme.getSecondaryRoadColor());
 						
 						//
-						if(route.contains((int)edge.getFromNode().getID()) && route.contains((int)edge.getToNode().getID())){
-							g.setColor(Color.red);
+						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
+							g.setColor(Color.blue);
 						}
 						//
 						
@@ -635,7 +635,7 @@ public class MapComponent extends JComponent {
 					
 						//
 						if(route.contains(edge.getFromNode().getID()) && route.contains(edge.getToNode().getID())){
-							g.setColor(Color.red);
+							g.setColor(Color.blue);
 						}
 						//
 						
