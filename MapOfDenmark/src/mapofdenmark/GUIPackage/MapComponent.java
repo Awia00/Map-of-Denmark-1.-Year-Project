@@ -655,14 +655,14 @@ public class MapComponent extends JComponent {
 					}
 				}
                                 g2.draw(route);
-                                System.out.println(route.getBounds());
+//                                System.out.println(route.getBounds());
 			}
 		}
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g2.setStroke(new BasicStroke(1));
 		g.setColor(Color.blue);
                 
-//		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
+		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
@@ -678,7 +678,6 @@ public class MapComponent extends JComponent {
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
-		g.drawRect(xFrom, yFrom, 10, 10);
 	}
 
 	/**

@@ -41,9 +41,10 @@ public class FrameChooser extends JFrame {
     public FrameChooser()
     {
         makeFrame();
+        
     }
     
-    public void makeFrame()
+    private void makeFrame()
     {
         //frame = new JFrame("Map of Denmark");
         
@@ -96,6 +97,7 @@ public class FrameChooser extends JFrame {
         
         
         pack();
+        setLocationRelativeTo(null);
         setResizable(false);
         repaint();
         setVisible(true);
