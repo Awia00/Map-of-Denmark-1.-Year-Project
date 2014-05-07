@@ -8,7 +8,7 @@ package database.pathfinding;
 
 import database.Edge;
 import database.Node;
-import java.util.Comparator;
+import java.awt.geom.Path2D;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,4 +74,17 @@ public class WeightedMapGraph {
 	{
 		return dij.getRoute(to);
 	}
+        
+        public Path2D drawablePath2D(Node to) {
+            List<Node> nodes = dij.getRoute(to);
+            
+            Path2D path = new Path2D.Double();
+            for (Node n : nodes) {
+                if (n.equals(nodes.get(0))) { path.moveTo(n.getxCoord(), n.getyCoord()); }
+                else path.lineTo(n.getxCoord(), n.getyCoord());
+                System.out.println(n.getxCoord() + " " + n.getyCoord());
+            }
+            System.out.println(path.getBounds());
+            return path;
+        }
 }
