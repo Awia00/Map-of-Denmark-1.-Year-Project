@@ -662,22 +662,18 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		if (routeNodes != null)
 		{
+			int jumpOver = 1;
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 20)){jumpOver = 2;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 10)){jumpOver = 3;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/5)){jumpOver = 6;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/2)){jumpOver = 8;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength())){jumpOver = 10;}
 			g.setColor(Color.blue);
 			g2.setStroke(routeStroke);
-			/*
-			Path2D routePath = new Path2D.Double();
-			boolean first = true;
-			for (Node node : routeNodes)
-			{
-				if(first){routePath.moveTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));first=false;continue;}
-				routePath.lineTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
-			}
-			g2.draw(routePath);
-			*/
-			
 			Node fromNode = null;
-			for(Node node : routeNodes)
+			for(int i = 0 ; i < routeNodes.size() ; i+=jumpOver)
 			{
+				Node node = routeNodes.get(i);
 				if(fromNode != null)
 				{
 					g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
@@ -688,8 +684,16 @@ public class MapComponent extends JComponent {
 					fromNode = node;
 				}
 			}
-			
-			
+			/*
+			Path2D routePath = new Path2D.Double();
+			boolean first = true;
+			for (Node node : routeNodes)
+			{
+				if(first){routePath.moveTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));first=false;continue;}
+				routePath.lineTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+			}
+			g2.draw(routePath);
+			*/
 		}
 		
 		g2.setStroke(new BasicStroke(1));
