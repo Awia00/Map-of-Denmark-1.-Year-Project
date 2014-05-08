@@ -100,16 +100,24 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
                 //motortrafikvej amtsvej
 		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
 		{
-			return 80;
+			return 110;
 		}
                 //hovedvej kommunevej
-		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary"))
+		else if (roadType.equalsIgnoreCase("secondary"))
+		{
+			return 90;
+		}
+		else if (roadType.equalsIgnoreCase("tertiary"))
 		{
 			return 80;
 		}
-		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		else if (roadType.equalsIgnoreCase("residential"))
 		{
 			return 50;
+		}
+		else if (roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		{
+			return 30;
 		}
 		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
