@@ -35,6 +35,8 @@ public class FrameChooser extends JFrame {
     private Container topContainer;
     private Container botContainer;
     private BufferedImage myPicture;
+    private BufferedImage krakLogo;
+    private BufferedImage osmLogo;
     
     private JButton krakButton, openButton;
     
@@ -50,7 +52,11 @@ public class FrameChooser extends JFrame {
         
         try {
                 myPicture = ImageIO.read(new File("assets/Icon48.png"));
+                krakLogo = ImageIO.read(new File ("assets/krak.gif"));
+                osmLogo = ImageIO.read(new File ("assets/osm.png"));
                 setIconImage(myPicture);
+                
+                System.out.println(krakLogo + " " + osmLogo);
                 
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,8 +74,11 @@ public class FrameChooser extends JFrame {
         topContainer = new JPanel();
        
         botContainer = new JPanel();
+        botContainer.setLayout(new MigLayout("", "[center][center]", "[center][center]"));
         
-        krakButton = new JButton("Krak data");
+        krakButton = new JButton("");
+        krakButton.setFocusable(false);
+        krakButton.setIcon(new ImageIcon(krakLogo));
         krakButton.addActionListener(new ActionListener() {
 
             @Override
@@ -78,7 +87,9 @@ public class FrameChooser extends JFrame {
 				GUIController.startLoading(true);
             }
         });
-        openButton = new JButton("Open-street-map data");
+        openButton = new JButton("");
+        openButton.setFocusable(false);
+        openButton.setIcon(new ImageIcon(osmLogo));
         openButton.addActionListener(new ActionListener() {
 
             @Override
@@ -86,10 +97,21 @@ public class FrameChooser extends JFrame {
 				GUIController.startLoading(false);
             }
         });
-        botContainer.add(krakButton);
-        botContainer.add(openButton);
         
-        topContainer.add(logoLabel);
+        JLabel osm = new JLabel("OpenStreetMap");
+        osm.setFont(FontLoader.getFontWithSize("Roboto-Regular", 14f));
+        
+        JLabel krak = new JLabel("Krak");
+        krak.setFont(FontLoader.getFontWithSize("Roboto-Regular", 14f));
+        
+        botContainer.add(krakButton, "cell 0 0");
+        botContainer.add(openButton, "cell 1 0");
+        botContainer.add(krak, "cell 0 1");
+        botContainer.add(osm, "cell 1 1");
+        
+        JLabel header = new JLabel("Please select a dataset");
+        header.setFont(FontLoader.getFontWithSize("Roboto-Regular", 18f));
+        topContainer.add(header);
         
         mainContainer.add(topContainer, "align center, wrap");
         mainContainer.add(botContainer, "wrap");
