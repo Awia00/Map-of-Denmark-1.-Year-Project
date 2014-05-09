@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import mapofdenmark.GUIPackage.QuadTree;
@@ -44,6 +45,8 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	private List<Node> nodesOnWay = new ArrayList<>();
 	private String roadName = "";
 	private String roadType = "";
+	
+	private HashSet<String> tempRoadTypeList = new HashSet<>();
         
         private int ID = 0;
 
@@ -63,19 +66,19 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	private int convertRoadTypeToInt(String roadType)
 	{
 		if(roadType == null){ return -1;}
-		else if (roadType.equalsIgnoreCase("motorway"))
+		else if (roadType.equalsIgnoreCase("motorway") || roadType.equalsIgnoreCase("motorway_link"))
 		{
 			return 1;
 		}
-		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
+		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link"))
 		{
 			return 3;
 		}
-		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary"))
+		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("tunnel")||roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 5;
 		}
-		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("road"))
 		{
 			return 6;
 		}
@@ -87,12 +90,13 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			return 75;
 		}
+		tempRoadTypeList.add(roadType);
 		return -1;
 	}
         
         private int convertRoadTypeToSpeedLimit(String roadType)
 	{
-		if(roadType == null){ return -1;}
+		if(roadType == null){return -1;}
 		else if (roadType.equalsIgnoreCase("motorway"))
 		{
 			return 130;
@@ -103,15 +107,15 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			return 110;
 		}
                 //hovedvej kommunevej
-		else if (roadType.equalsIgnoreCase("secondary"))
+		else if (roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("motorway_link"))
 		{
 			return 90;
 		}
-		else if (roadType.equalsIgnoreCase("tertiary"))
+		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link") || roadType.equalsIgnoreCase("tunnel"))
 		{
 			return 80;
 		}
-		else if (roadType.equalsIgnoreCase("residential"))
+		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("road")||roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 50;
 		}
@@ -140,6 +144,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endDocument() throws SAXException
 	{
+		for(String roadType : tempRoadTypeList)
+		{
+			System.out.println(roadType);
+		}
 		mapOfNodes = null;
 		nodesDownloadedPct = 1;
 		edgesDownloadedPct = 1;
