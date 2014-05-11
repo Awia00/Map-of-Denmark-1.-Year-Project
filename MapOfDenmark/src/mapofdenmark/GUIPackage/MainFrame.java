@@ -53,12 +53,14 @@ import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 public class MainFrame extends JFrame implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
 	private MapComponent drawMapComponent;
-	private Container mainContainer, sideContainer;
+	private Container mainContainer;
 	private NavigatonBar navigationBar;
-	private JLabel mapOfDenmarkLabel;
 	protected JLabel closestRoadLabel;
 	private JTextField enterAddressField;
 	private JButton searchButton;
+	
+	private JMenu colorSchemeMenu;
+	private JMenuItem standardItem, nightItem, colorblindItem;
 	private Dimension screenSize;
 
 	private Point oldPosition;
@@ -67,7 +69,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	private Node fromNode = null;
 	private Node toNode = null;
 
-	private boolean mapInFocus;
 	private int pressedKeyCode;
 	protected double timerDoneIn = 0;
 	protected double timerDoneOut = 0;
@@ -76,9 +77,13 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	public MainFrame(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
 	{
-		// EVT MODTAGE streets I CONSTRUCTOR.
 		initialize(quadTree, landShapePolygons, landUsePolygons);
 		addListeners();
+		
+		revalidate();
+		repaint();
+		pack();
+		setVisible(true);
 	}
 
 	private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons)
@@ -102,21 +107,15 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 		// components
 		drawMapComponent = new MapComponent(quadTree, landShapePolygons, landUsePolygons);
-		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
 
-		// Structure
-//		sideContainer = new JPanel(new MigLayout());
-//		sideContainer.add(enterAddressField, "wrap");
-//		sideContainer.add(closestRoadLabel, "wrap");
 		navigationBar = new NavigatonBar(drawMapComponent);
 
 		mainContainer = new JPanel(migMainLayout);
 
 		getContentPane().add(mainContainer);
-		//mainContainer.add(mapOfDenmarkLabel, "cell 1 0");
 		mainContainer.add(navigationBar, "cell 0 1");
 		mainContainer.add(drawMapComponent, "cell 1 1,"
 				+ "width " + (int) (screenSize.width / 2.5) + ":" + (int) (screenSize.width - 125) + ":, "
@@ -127,53 +126,26 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		this.setJMenuBar(menubar);
 
 		// create the Color scheme menu
-		JMenu colorSchemeMenu = new JMenu("Color scheme");
+		colorSchemeMenu = new JMenu("Color scheme");
 		menubar.add(colorSchemeMenu);
 		colorSchemeMenu.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
 
 		// create the Stardard menu item
-		JMenuItem standardItem = new JMenuItem("Standard");
+		standardItem = new JMenuItem("Standard");
 		standardItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
-		standardItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				drawMapComponent.setColorScheme("Standard");
-			}
-		});
-
+		
 		// create the Night menu item
-		JMenuItem nightItem = new JMenuItem("Night");
+		nightItem = new JMenuItem("Night");
 		nightItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
-		nightItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				drawMapComponent.setColorScheme("Night");
-			}
-		});
-
+		
 		// create the Coloblind menu item 
-		JMenuItem colorblindItem = new JMenuItem("Colorblind");
+		colorblindItem = new JMenuItem("Colorblind");
 		colorblindItem.setFont(FontLoader.getFontWithSize("Roboto-Light", 14f));
-		colorblindItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				drawMapComponent.setColorScheme("Colorblind");
-			}
-		});
+		
 		// add the menu items to the Color scheme menu
 		colorSchemeMenu.add(standardItem);
 		colorSchemeMenu.add(nightItem);
 		colorSchemeMenu.add(colorblindItem);
-
-		// Action listeners
-		// rdy up
-		revalidate();
-		repaint();
-		pack();
-		setVisible(true);
 
 	}
 
@@ -183,6 +155,29 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		this.drawMapComponent.addMouseMotionListener(this);
 		this.drawMapComponent.addMouseWheelListener(this);
 		this.drawMapComponent.addKeyListener(this);
+		standardItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Standard");
+			}
+		});
+		nightItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Night");
+			}
+		});
+		colorblindItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				drawMapComponent.setColorScheme("Colorblind");
+			}
+		});
+		
+		
 	}
 
 	/**
