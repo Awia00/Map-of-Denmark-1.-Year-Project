@@ -16,10 +16,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import net.miginfocom.swing.MigLayout;
 
@@ -33,15 +35,20 @@ public class NavigatonBar extends JPanel {
 	private PlaceholderTextField to;
 	private JLabel rutevejledning;
 	private Button visVej;
+	private JButton printRoute;
 	private JButton findRoute;
 	private JLabel closestRoad;
+
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	private Node fromNode = null;
 	private Node toNode = null;
-        
-        private JTextArea directions;
-        private List<String> directionKeys;
+
+	private JTextArea directions;
+	private List<String> directionKeys;
+
+	private JFrame routeFrame;
+	private JScrollPane routeScroll;
 
 	private WeightedMapGraph wGraph;
 
@@ -50,11 +57,12 @@ public class NavigatonBar extends JPanel {
 	public NavigatonBar(MapComponent mc)
 	{
 		mapComponent = mc;
-                
 
 		rutevejledning = new AAJLabel("Rutevejledning ");
 		rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
 		rutevejledning.setForeground(Color.decode("#9B9B9B"));
+		printRoute = new JButton("Print directions");
+		printRoute.setEnabled(false);
 
 		from = new PlaceholderTextField("");
 		from.setPlaceholder("Fra");
@@ -80,14 +88,23 @@ public class NavigatonBar extends JPanel {
 				didFindRoute();
 			}
 		});
+		
+		printRoute.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				createRouteDirectionFrame();
+			}
+		});
 
 		closestRoad = new AAJLabel("");
 		closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
 		closestRoad.setForeground(Color.decode("#9B9B9B"));
-                
-                directions = new JTextArea(50, 20);
-                directions.setEditable(false);
-                directions.setMinimumSize(new Dimension(200, 600));
+
+		directions = new JTextArea(50, 20);
+		directions.setEditable(false);
+		directions.setMinimumSize(new Dimension(200, 600));
 
 		setLayout(new MigLayout("", "[center]", "[][][][]50[][]"));
 
@@ -97,9 +114,29 @@ public class NavigatonBar extends JPanel {
 //        add(visVej, "cell 0 3, align right");
 		add(closestRoad, "cell 0 4, align left");
 		add(findRoute, "cell 0 3");
-                add(directions, " cell 0 5");
+		add(printRoute, " cell 0 5");
 
 		wGraph = GUIController.getGraph();
+	}
+
+	private void createRouteDirectionFrame()
+	{
+		if (wGraph.hasRoute(toNode))
+		{
+			if(routeFrame != null){
+				routeFrame.dispose();
+				routeFrame = null;
+			}
+			routeScroll = new JScrollPane(directions);
+			routeFrame = new JFrame("Directions"); // evt fra bla til bla
+			//routeFrame.add(directions);
+			routeFrame.setPreferredSize(new Dimension(300,800));
+			routeFrame.add(routeScroll);
+			
+			routeFrame.pack();
+			routeFrame.repaint();
+			routeFrame.setVisible(true);
+		}
 	}
 
 	@Override
@@ -139,47 +176,57 @@ public class NavigatonBar extends JPanel {
 
 	public void setFromNode(Node node)
 	{
-                directions.setText("");
-                
+		directions.setText("");
+
 		fromNode = node;
 		if (toNode != null)
 		{
-                        
 			wGraph.runDij(fromNode, toNode);
-			mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-                        displayDirections();
+			if(wGraph.hasRoute(toNode))
+			{
+				mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
+				printRoute.setEnabled(true);
+				displayDirections();
+			}
 		}
+		
+		// wGraph.hasRoute(toNode) tjek med denne også
 	}
 
 	public void setToNode(Node node)
 	{
-                directions.setText("");
-                
+		directions.setText("");
+
 		toNode = node;
 		if (fromNode != null)
 		{
-                    
 			wGraph.runDij(fromNode, toNode);
-			mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-                        displayDirections();
+			if ( wGraph.hasRoute(toNode))
+			{
+				mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
+				printRoute.setEnabled(true);
+				displayDirections();
+			}
 		}
-
-		//mapComponent.setRoute(wGraph.drawablePath2D(node));
+		
+		// wGraph.hasRoute(toNode) tjek med denne også
 	}
-        
-        private void displayDirections() {
-            HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
-                        directionKeys = new ArrayList<>(wGraph.getDirectionKeys());
-                        Collections.reverse(directionKeys);
-                        double total = 0;
-                        for (String s : directionKeys) {
-                            double length = directionsMap.get(s) / 1000;
-                            directions.append(s + " " + String.format("%.2f", length) + " km \n");
-                            total += length;
-                            
-                        }
-                        directions.append("Total distance " + String.format("%.2f", total) + " km \n");
-        }
+
+	private void displayDirections()
+	{
+		HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
+		directionKeys = new ArrayList<>(wGraph.getDirectionKeys());
+		Collections.reverse(directionKeys);
+		double total = 0;
+		for (String s : directionKeys)
+		{
+			double length = directionsMap.get(s) / 1000;
+			directions.append(s + " " + String.format("%.2f", length) + " km \n");
+			total += length;
+
+		}
+		directions.append("\nTotal distance " + String.format("%.2f", total) + " km \n");
+	}
 
 	public void didFindRoute()
 	{
@@ -189,10 +236,10 @@ public class NavigatonBar extends JPanel {
 
 
 /*
-HashSet<Integer> set = new HashSet<>();
-		for(Node node2 : wGraph.calculateRoute(node))
-		{
-			set.add(node.getID());
-		}
-		mapComponent.setRoute(set);
-*/
+ HashSet<Integer> set = new HashSet<>();
+ for(Node node2 : wGraph.calculateRoute(node))
+ {
+ set.add(node.getID());
+ }
+ mapComponent.setRoute(set);
+ */
