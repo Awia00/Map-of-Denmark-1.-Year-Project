@@ -39,7 +39,8 @@ public class MapComponent extends JComponent {
 	private List<PolygonShape> landShapePolygons;
 	private List<PolygonShape> landUseShapePolygons;
 	private Path2D route;
-	private List<Node> routeNodes;
+	
+        private List<Node> routeNodes;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
