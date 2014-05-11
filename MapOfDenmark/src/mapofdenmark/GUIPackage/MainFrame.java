@@ -21,6 +21,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -62,9 +63,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private Point oldPosition;
 	private Point newPosition;
-        
-        private Node fromNode = null;
-        private Node toNode = null;
+
+	private Node fromNode = null;
+	private Node toNode = null;
 
 	private boolean mapInFocus;
 	private int pressedKeyCode;
@@ -100,7 +101,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
 
 		// components
-		drawMapComponent = new MapComponent(quadTree,landShapePolygons,landUsePolygons);
+		drawMapComponent = new MapComponent(quadTree, landShapePolygons, landUsePolygons);
 		//mapOfDenmarkLabel = new JLabel("The Map of Denmark");
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
@@ -297,37 +298,61 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			if (e.getButton() == MouseEvent.BUTTON3)
 			{
 				callSmoothZoom(e.getX(), e.getY(), 1);
-                                
-                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                toNode = edge.getFromNode();
-                                System.out.println(toNode);
+
+				Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+				toNode = edge.getFromNode();
+				System.out.println(toNode);
+				return;
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
 				callSmoothZoom(e.getX(), e.getY(), -1);
-                                
-                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                fromNode = edge.getFromNode();
-                                navigationBar.getFrom().setText(edge.getRoadName());
-                                System.out.println(fromNode);
+
+				Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+				fromNode = edge.getFromNode();
+				navigationBar.getFrom().setText(edge.getRoadName());
+				System.out.println(fromNode);
+				return;
 			}
 		}
-            if (e.getButton() == MouseEvent.BUTTON3)
+		if (e.getButton() == MouseEvent.BUTTON3)
+		{
+			Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+			double mouseMapX = drawMapComponent.convertMouseXToMap(e.getX());
+			double mouseMapY = drawMapComponent.convertMouseYToMap(e.getY());
+			double fromDistance = Point2D.distance(edge.getFromNode().getxCoord(), edge.getFromNode().getyCoord(), mouseMapX, mouseMapY);
+			double toDistance = Point2D.distance(edge.getToNode().getxCoord(), edge.getToNode().getyCoord(), mouseMapX, mouseMapY);
+			if(fromDistance<=toDistance)
 			{
-                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                toNode = edge.getFromNode();
-                                navigationBar.setToNode(toNode);
-                                navigationBar.getTo().setText(edge.getRoadName());
-                                System.out.println(toNode);
-			} else if (e.getButton() == MouseEvent.BUTTON1)
-			{
-                                Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-                                fromNode = edge.getFromNode();
-                                navigationBar.setFromNode(fromNode);
-                                navigationBar.getFrom().setText(edge.getRoadName());
-                                drawMapComponent.setFrom(e.getX(), e.getY());
-                                repaint();
+				toNode = edge.getFromNode();
 			}
-                
+			else
+			{
+				toNode = edge.getToNode();
+			}
+			navigationBar.setToNode(toNode);
+			navigationBar.getTo().setText(edge.getRoadName());
+			System.out.println(toNode);
+		} else if (e.getButton() == MouseEvent.BUTTON1)
+		{
+			Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
+			double mouseMapX = drawMapComponent.convertMouseXToMap(e.getX());
+			double mouseMapY = drawMapComponent.convertMouseYToMap(e.getY());
+			double fromDistance = Point2D.distance(edge.getFromNode().getxCoord(), edge.getFromNode().getyCoord(), mouseMapX, mouseMapY);
+			double toDistance = Point2D.distance(edge.getToNode().getxCoord(), edge.getToNode().getyCoord(), mouseMapX, mouseMapY);
+			if(fromDistance<=toDistance)
+			{
+				fromNode = edge.getFromNode();
+			}
+			else
+			{
+				fromNode = edge.getToNode();
+			}
+			navigationBar.setFromNode(fromNode);
+			navigationBar.getFrom().setText(edge.getRoadName());
+			drawMapComponent.setFrom(e.getX(), e.getY());
+			repaint();
+		}
+
 	}
 
 	@Override
@@ -413,7 +438,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			public void run()
 			{
 				Edge e = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
-                                String closestRoadString = e.getRoadName();
+				String closestRoadString = e.getRoadName();
 				// this implementation is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
 				StringBuilder sb = new StringBuilder(closestRoadString);
 
@@ -433,7 +458,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 	}
 
 	/**
-	 * Call the callSmoothZoom which either zooms in or out depending on the value of the WheelRotation.
+	 * Call the callSmoothZoom which either zooms in or out depending on the
+	 * value of the WheelRotation.
+	 *
 	 * @param e
 	 */
 	@Override
