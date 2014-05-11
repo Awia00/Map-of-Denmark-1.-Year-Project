@@ -74,7 +74,7 @@ public class WeightedMapGraph {
 
 	public void runDij(Node from, Node to)
 	{
-			dij = new Dijakstra(graph, from, to);
+		dij = new Dijakstra(graph, from, to);
 	}
 
 	public List<Node> calculateRoute(Node to)
