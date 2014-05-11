@@ -121,11 +121,11 @@ public class WeightedMapGraph {
                 int next = 0;
                 if (!(i+1 == route.length)) next = i+1;
                 HashSet<Edge> edges = graph.get(route[i]);
-                System.out.println(edges.size());
+                //System.out.println(edges.size());
                 for (Edge edge : edges) {
                     if ((edge.getFromNode().equals(route[next]) || edge.getToNode().equals(route[next]))) {
-                        System.out.println("Found edge");
-                        System.out.println(edge.getRoadName());
+                        //System.out.println("Found edge");
+                        //System.out.println(edge.getRoadName());
                         double dist;
                         if (directions.get(edge.getRoadName()) == null) dist = 0;
                         else dist = directions.get(edge.getRoadName());
