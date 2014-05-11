@@ -28,8 +28,8 @@ public class GUIController {
 	private FrameChooser frameChooser;
 	private MainFrame mainframe;
 	private Timer timer;
-        
-        private static WeightedMapGraph graph;
+
+	private static WeightedMapGraph graph;
 
 	private static GUIController guiController;
 
@@ -82,17 +82,18 @@ public class GUIController {
 				List<Edge> edges = db.getEdgeList();
 				QuadTree quadTree = db.getQuadTree();
 
-                
 				graph = new WeightedMapGraph(edges);
-                                
-				ShapeFileParser shapeParser = new ShapeFileParser();
-				
+
 				List<PolygonShape> landShapePolygons = new ArrayList<>();
-				if(!isKrakB){landShapePolygons=shapeParser.getLandShapePolygons();}
-				
 				List<PolygonShape> landUsePolygons = new ArrayList<>();
-				if(!isKrakB){landUsePolygons=shapeParser.getLandUsePolygons();}
-				
+				if (!isKrakB)
+				{
+					ShapeFileParser shapeParser = new ShapeFileParser();
+
+					landShapePolygons = shapeParser.getLandShapePolygons();
+
+					landUsePolygons = shapeParser.getLandUsePolygons();
+				}
 				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
@@ -103,15 +104,16 @@ public class GUIController {
 		thread.start();
 
 	}
-        
-        public static WeightedMapGraph getGraph() {
-            return graph;
-        }
+
+	public static WeightedMapGraph getGraph()
+	{
+		return graph;
+	}
 
 	public static void main(String[] args)
 	{
 		guiController = new GUIController();
-                
+
 	}
 
 }

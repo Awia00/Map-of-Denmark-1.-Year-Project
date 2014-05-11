@@ -54,10 +54,7 @@ public class FrameChooser extends JFrame {
                 myPicture = ImageIO.read(new File("assets/Icon48.png"));
                 krakLogo = ImageIO.read(new File ("assets/krak.gif"));
                 osmLogo = ImageIO.read(new File ("assets/osm.png"));
-                setIconImage(myPicture);
-                
-                System.out.println(krakLogo + " " + osmLogo);
-                
+                setIconImage(myPicture);                
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }

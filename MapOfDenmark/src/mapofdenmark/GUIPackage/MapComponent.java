@@ -39,7 +39,8 @@ public class MapComponent extends JComponent {
 	private List<PolygonShape> landShapePolygons;
 	private List<PolygonShape> landUseShapePolygons;
 	private Path2D route;
-	private List<Node> routeNodes;
+	
+        private List<Node> routeNodes;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
@@ -435,7 +436,8 @@ public class MapComponent extends JComponent {
 		//BasicStroke pathRoadStrokeBorder = new BasicStroke((float) (Math.max(1.7, (zoomFactorStroke * 0.1) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke pathRoadStroke = new BasicStroke((float) (Math.max(1, (zoomFactorStroke * 0.1))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
-		BasicStroke routeStroke = new BasicStroke((float) (Math.max(5, (zoomFactorStroke * 2.3))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+		BasicStroke routeStroke = new BasicStroke((float) (Math.max(4, (zoomFactorStroke * 2.05))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+		BasicStroke routeBorderStroke = new BasicStroke((float) (Math.max(5, (zoomFactorStroke * 2.3))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
 		// sets the rendering hints so that it uses ANTI-ALIASING to render the edges.
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -659,23 +661,29 @@ public class MapComponent extends JComponent {
 //                                System.out.println(route.getBounds());
 			}
 		}
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		
 		if (routeNodes != null)
 		{
 			int jumpOver = 1;
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 20)){jumpOver = 2;}
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 10)){jumpOver = 3;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 15)){jumpOver = 2;}
+			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 7)){jumpOver = 3;}
 			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/5)){jumpOver = 6;}
 			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/2)){jumpOver = 8;}
 			if(xlength >= (quadTreeToDraw.getQuadTreeLength())){jumpOver = 10;}
-			g.setColor(Color.blue);
-			g2.setStroke(routeStroke);
+			
+			Color colorBorder = new Color(37,35,83);
 			Node fromNode = null;
-			for(int i = 0 ; i < routeNodes.size() ; i+=jumpOver)
+			int i;
+			for(i = 0; i < routeNodes.size() ; i+=jumpOver)
 			{
 				Node node = routeNodes.get(i);
 				if(fromNode != null)
 				{
+					g2.setStroke(routeBorderStroke);
+					g.setColor(colorBorder);
+					g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+					g2.setStroke(routeStroke);
+					g.setColor(Color.blue);
 					g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 					fromNode = node;
 				}
@@ -684,16 +692,17 @@ public class MapComponent extends JComponent {
 					fromNode = node;
 				}
 			}
-			/*
-			Path2D routePath = new Path2D.Double();
-			boolean first = true;
-			for (Node node : routeNodes)
+			if (i > routeNodes.size()-1 || i < routeNodes.size()-1)
 			{
-				if(first){routePath.moveTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));first=false;continue;}
-				routePath.lineTo((int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+				Node node = routeNodes.get(routeNodes.size()-1);
+				g2.setStroke(routeBorderStroke);
+				g.setColor(colorBorder);
+				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+				g2.setStroke(routeStroke);
+				g.setColor(Color.blue);
+				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 			}
-			g2.draw(routePath);
-			*/
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		}
 		
 		g2.setStroke(new BasicStroke(1));
