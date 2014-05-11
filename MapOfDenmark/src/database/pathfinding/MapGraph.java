@@ -68,7 +68,7 @@ public class MapGraph {
     private void markNodesInPath(Iterable<DirectedEdge> e) {
         for (DirectedEdge diEdge : e) {
             Edge edge = edges.get(diEdge.ID());
-            edge.setInShortestPath(true);
+//            edge.setInShortestPath(true);
 //            System.out.println(edge.isInShortestPath());
         }
     }

@@ -30,14 +30,15 @@ public class Dijakstra {
 	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
 	private HashMap<Node, Edge> edgeTo; // the edge to Node
 	
-	private Node fromNode;
+	private Node fromNode, toNode;
 	private PriorityQueue pQueue;
 	private List<Node> route;
 
-	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode)
+	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Node toNode)
 	{
 		this.graph = graph;
 		this.fromNode = fromNode;
+		this.toNode = toNode;
 		edgeTo = new HashMap<>();
 		for(Node node : graph.keySet())
 		{
@@ -55,6 +56,7 @@ public class Dijakstra {
 		pQueue.add(fromNode);
         while (!pQueue.isEmpty()) {
             Node v = (Node) pQueue.poll();
+			if (v.equals(toNode)){break;}
             for (Edge e : graph.get(v))
 			{
                 relaxDriveTime(e, v);
@@ -81,7 +83,7 @@ public class Dijakstra {
 		else{nextNode = e.getFromNode();} 
 		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getWeight()) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight());
+            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/130);
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
@@ -96,7 +98,7 @@ public class Dijakstra {
 		else{nextNode = e.getFromNode();} 
 		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getLength());
+            nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2)));
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
