@@ -76,6 +76,15 @@ public class WeightedMapGraph {
 	{
 		dij = new Dijakstra(graph, from, to);
 	}
+	
+	public boolean hasRoute(Node to)
+	{
+		if (dij != null)
+		{
+			return dij.hasPathTo(to);
+		}
+		return false;
+	}
 
 	public List<Node> calculateRoute(Node to)
 	{
