@@ -673,7 +673,8 @@ public class MapComponent extends JComponent {
 			
 			Color colorBorder = new Color(37,35,83);
 			Node fromNode = null;
-			for(int i = 0 ; i < routeNodes.size() ; i+=jumpOver)
+			int i;
+			for(i = 0; i < routeNodes.size() ; i+=jumpOver)
 			{
 				Node node = routeNodes.get(i);
 				if(fromNode != null)
@@ -690,6 +691,16 @@ public class MapComponent extends JComponent {
 				{
 					fromNode = node;
 				}
+			}
+			if (i > routeNodes.size()-1 || i < routeNodes.size()-1)
+			{
+				Node node = routeNodes.get(routeNodes.size()-1);
+				g2.setStroke(routeBorderStroke);
+				g.setColor(colorBorder);
+				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
+				g2.setStroke(routeStroke);
+				g.setColor(Color.blue);
+				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 			}
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		}
