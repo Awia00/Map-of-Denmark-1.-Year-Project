@@ -46,8 +46,8 @@ public class MapComponent extends JComponent {
 	private List<PolygonShape> landShapePolygons;
 	private List<PolygonShape> landUseShapePolygons;
 	private Path2D route;
-	
-        private List<Node> routeNodes;
+
+	private List<Node> routeNodes;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
@@ -57,17 +57,17 @@ public class MapComponent extends JComponent {
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
-        
-        private boolean toSet;
-        private boolean fromSet;
-        
-        BufferedImage toIcon = null;
-        BufferedImage fromIcon = null;
-        
-        Node fromNode;
-        Node toNode;
-        
-        int moveIconX, moveIconY;
+
+	private boolean toSet;
+	private boolean fromSet;
+
+	BufferedImage toIcon = null;
+	BufferedImage fromIcon = null;
+
+	Node fromNode;
+	Node toNode;
+
+	int moveIconX, moveIconY;
 
 	private ColorScheme activeColorScheme;
 
@@ -95,19 +95,20 @@ public class MapComponent extends JComponent {
 		this.landShapePolygons = landShapePolygons;
 		this.landUseShapePolygons = landUsePolygons;
 		route = new Path2D.Double();
-                
-                
-                                    try {
-                                        toIcon = ImageIO.read(new File("assets/to.png"));
-                                        fromIcon = ImageIO.read(new File("assets/from.png"));
-                                       
-                                    } catch (IOException ex) {
-                                        Logger.getLogger(MapComponent.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+
+		try
+		{
+			toIcon = ImageIO.read(new File("assets/to.png"));
+			fromIcon = ImageIO.read(new File("assets/from.png"));
+
+		} catch (IOException ex)
+		{
+			Logger.getLogger(MapComponent.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX() - quadTreeToDraw.getQuadTreeLength() / 8, quadTreeToDraw.getQuadTreeY() - quadTreeToDraw.getQuadTreeLength() / 50, quadTreeToDraw.getQuadTreeLength() / 15 * 16, quadTreeToDraw.getQuadTreeLength() / 15 * 10);
-                moveIconX = 0;
-                moveIconY = 0;
+		moveIconX = 0;
+		moveIconY = 0;
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
@@ -116,25 +117,26 @@ public class MapComponent extends JComponent {
 	{
 		this.route = route;
 	}
-        
-        public void setTo(boolean to) {
-            toSet = to;
-        }
-        
-        public void setFrom(boolean from) {
-            fromSet = from;
-        }
 
-        public void setFromNode(Node fromNode) {
-            this.fromNode = fromNode;
-        }
+	public void setTo(boolean to)
+	{
+		toSet = to;
+	}
 
-        public void setToNode(Node toNode) {
-            this.toNode = toNode;
-        }
+	public void setFrom(boolean from)
+	{
+		fromSet = from;
+	}
 
-        
-        
+	public void setFromNode(Node fromNode)
+	{
+		this.fromNode = fromNode;
+	}
+
+	public void setToNode(Node toNode)
+	{
+		this.toNode = toNode;
+	}
 
 	public void setRouteNodes(List<Node> routeNodes)
 	{
@@ -185,8 +187,8 @@ public class MapComponent extends JComponent {
 		double yMapCoord = yCoord / getHeight() * visibleArea.getyLength() * 1.2;
 		visibleArea.setCoord(visibleArea.getxCoord() + xMapCoord, visibleArea.getyCoord() + yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
 //                System.out.println(xMapCoord + " " + yMapCoord);
-                
-        }
+
+	}
 
 	/**
 	 * The dragNDropZoom method takes in 4 coordinates which describes a
@@ -548,24 +550,6 @@ public class MapComponent extends JComponent {
 			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
-                            
-                                        
-                            int iconOffsetX = fromIcon.getWidth() / 2;
-                            int iconOffsetY = fromIcon.getHeight();
-                            // Draw a pin at destination
-                                if (toSet) {
-                                double toIconX = toNode.getxCoord();
-                                double toIconY = toNode.getyCoord();
-                                    g2.drawImage(toIcon, (int) (((toIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((toIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    toSet = false;
-                                }
-                            // Draw a pin at start
-                                if (fromSet) {
-                                    double fromIconX = fromNode.getxCoord();
-                                    double fromIconY = fromNode.getyCoord();
-                                    g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    fromSet = false;
-                                }
 				for (Edge edge : quadTree.getCoastLineEdges())
 				{
 					double x1 = edge.getFromNode().getxCoord();
@@ -725,26 +709,41 @@ public class MapComponent extends JComponent {
 					}
 				}
 				g2.draw(route);
-                                
+
 			}
 		}
-		
+
 		if (routeNodes != null)
 		{
 			int jumpOver = 1;
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 15)){jumpOver = 2;}
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength() / 7)){jumpOver = 3;}
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/5)){jumpOver = 6;}
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength()/2)){jumpOver = 8;}
-			if(xlength >= (quadTreeToDraw.getQuadTreeLength())){jumpOver = 10;}
-			
-			Color colorBorder = new Color(37,35,83);
+			if (xlength >= (quadTreeToDraw.getQuadTreeLength() / 15))
+			{
+				jumpOver = 2;
+			}
+			if (xlength >= (quadTreeToDraw.getQuadTreeLength() / 7))
+			{
+				jumpOver = 3;
+			}
+			if (xlength >= (quadTreeToDraw.getQuadTreeLength() / 5))
+			{
+				jumpOver = 6;
+			}
+			if (xlength >= (quadTreeToDraw.getQuadTreeLength() / 2))
+			{
+				jumpOver = 8;
+			}
+			if (xlength >= (quadTreeToDraw.getQuadTreeLength()))
+			{
+				jumpOver = 10;
+			}
+
+			Color colorBorder = new Color(37, 35, 83);
 			Node fromNode = null;
 			int i;
-			for(i = 0; i < routeNodes.size() ; i+=jumpOver)
+			for (i = 0; i < routeNodes.size(); i += jumpOver)
 			{
 				Node node = routeNodes.get(i);
-				if(fromNode != null)
+				if (fromNode != null)
 				{
 					g2.setStroke(routeBorderStroke);
 					g.setColor(colorBorder);
@@ -753,15 +752,14 @@ public class MapComponent extends JComponent {
 					g.setColor(Color.blue);
 					g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 					fromNode = node;
-				}
-				else
+				} else
 				{
 					fromNode = node;
 				}
 			}
-			if (i > routeNodes.size()-1 || i < routeNodes.size()-1)
+			if (i > routeNodes.size() - 1 || i < routeNodes.size() - 1)
 			{
-				Node node = routeNodes.get(routeNodes.size()-1);
+				Node node = routeNodes.get(routeNodes.size() - 1);
 				g2.setStroke(routeBorderStroke);
 				g.setColor(colorBorder);
 				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
@@ -770,8 +768,26 @@ public class MapComponent extends JComponent {
 				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 			}
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			int iconOffsetX = fromIcon.getWidth() / 2;
+			int iconOffsetY = fromIcon.getHeight();
+			// Draw a pin at destination
+			if (toSet)
+			{
+				double toIconX = toNode.getxCoord();
+				double toIconY = toNode.getyCoord();
+				g2.drawImage(toIcon, (int) (((toIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((toIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+//                                    toSet = false;
+			}
+			// Draw a pin at start
+			if (fromSet)
+			{
+				double fromIconX = fromNode.getxCoord();
+				double fromIconY = fromNode.getyCoord();
+				g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+//                                    fromSet = false;
+			}
 		}
-		
+
 		g2.setStroke(new BasicStroke(1));
 		g.setColor(Color.blue);
 
