@@ -407,7 +407,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
 			int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
 			drawMapComponent.moveVisibleArea(x, y);
-                        System.out.println(x + " " + y);
+            //System.out.println(x + " " + y);
 		}
 		repaint();
 	}
