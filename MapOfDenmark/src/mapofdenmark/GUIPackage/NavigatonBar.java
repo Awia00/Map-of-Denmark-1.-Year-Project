@@ -5,9 +5,11 @@
  */
 package mapofdenmark.GUIPackage;
 
+import database.Edge;
 import database.Node;
 import database.pathfinding.WeightedMapGraph;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,12 +19,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -31,13 +35,14 @@ import net.miginfocom.swing.MigLayout;
  */
 public class NavigatonBar extends JPanel {
 
-	private PlaceholderTextField from;
-	private PlaceholderTextField to;
+	private PlaceholderTextField from, to, searchAddress;
 	private JLabel rutevejledning;
+	private Container roadInfo;
+		private JTextField roadNameField, velocityField, roadTypeField;
 	private Button visVej;
-	private JButton printRoute;
-	private JButton findRoute;
+	private JButton printRoute,findRoute, findAddress;
 	private JLabel closestRoad;
+	private Edge closestRoadEdge;
 
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -63,7 +68,15 @@ public class NavigatonBar extends JPanel {
 		rutevejledning.setForeground(Color.decode("#9B9B9B"));
 		printRoute = new JButton("Print directions");
 		printRoute.setEnabled(false);
-
+		
+		
+		searchAddress = new PlaceholderTextField("");
+		searchAddress.setPlaceholder("Find Address...");
+		searchAddress.setColumns(20);
+		searchAddress.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
+		searchAddress.setForeground(Color.decode("#4A4A4A"));
+		
+		
 		from = new PlaceholderTextField("");
 		from.setPlaceholder("Fra");
 		from.setColumns(20);
@@ -76,6 +89,23 @@ public class NavigatonBar extends JPanel {
 		to.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
 		to.setForeground(Color.decode("#4A4A4A"));
 
+		roadNameField = new JTextField("roadname");
+		roadNameField.setEditable(false);
+		roadNameField.setBorder(null);
+		velocityField = new JTextField("velocity");
+		velocityField.setEditable(false);
+		velocityField.setBorder(null);
+		roadTypeField = new JTextField("roadtype");
+		roadTypeField.setEditable(false);
+		roadTypeField.setBorder(null);
+		
+		roadInfo = new JPanel();
+		roadInfo.setLayout(new BoxLayout(roadInfo, BoxLayout.Y_AXIS));
+		roadInfo.setBackground(Color.white);
+		roadInfo.add(roadNameField);
+		roadInfo.add(velocityField);
+		roadInfo.add(roadTypeField);
+		
 //        visVej = new Button("button");
 		//visVej.setText("Vis");
 		findRoute = new JButton("Find Route");
@@ -97,6 +127,8 @@ public class NavigatonBar extends JPanel {
 				createRouteDirectionFrame();
 			}
 		});
+		
+		findAddress = new JButton("Find the address");
 
 		closestRoad = new AAJLabel("");
 		closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
@@ -106,15 +138,21 @@ public class NavigatonBar extends JPanel {
 		directions.setEditable(false);
 		directions.setMinimumSize(new Dimension(200, 600));
 
-		setLayout(new MigLayout("", "[center]", "[][][][]50[][]"));
+		setLayout(new MigLayout("", "[center]", "[][][]50[][][]200[grow]"));
 
 		add(rutevejledning, "cell 0 0, align left");
-		add(from, "cell 0 1");
-		add(to, "cell 0 2");
-//        add(visVej, "cell 0 3, align right");
-		add(closestRoad, "cell 0 4, align left");
-		add(findRoute, "cell 0 3");
-		add(printRoute, " cell 0 5");
+		add(searchAddress, "cell 0 1");
+		add(findAddress, "cell 0 2, align right");
+		
+		add(from, "cell 0 3");
+		add(to, "cell 0 4");
+		add(printRoute, " cell 0 5, align right");
+		
+		add(roadInfo,"cell 0 6, dock south");
+		
+		//add(visVej, "cell 0 3, align right");
+		//add(closestRoad, "cell 0 4, align left");
+		//add(findRoute, "cell 0 3");
 
 		wGraph = GUIController.getGraph();
 	}
@@ -139,6 +177,14 @@ public class NavigatonBar extends JPanel {
 		}
 	}
 
+	public void setClosestRoadEdge(Edge closestRoadEdge)
+	{
+		this.closestRoadEdge = closestRoadEdge;
+		roadNameField.setText(closestRoadEdge.getRoadName());
+		velocityField.setText(""+closestRoadEdge.getLength()/closestRoadEdge.getWeight());
+		roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
+	}
+	
 	@Override
 	public Dimension getPreferredSize()
 	{
@@ -221,11 +267,11 @@ public class NavigatonBar extends JPanel {
 		for (String s : directionKeys)
 		{
 			double length = directionsMap.get(s) / 1000;
-			directions.append(s + " " + String.format("%.2f", length) + " km \n");
+			directions.append("Kør ad "+s + "\n\t\t" + String.format("%.2f", length) + " km \n-------------------------------\n");
 			total += length;
 
 		}
-		directions.append("\nTotal distance " + String.format("%.2f", total) + " km \n");
+		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
 	}
 
 	public void didFindRoute()

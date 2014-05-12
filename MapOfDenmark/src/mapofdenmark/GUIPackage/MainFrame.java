@@ -293,19 +293,10 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			if (e.getButton() == MouseEvent.BUTTON3)
 			{
 				callSmoothZoom(e.getX(), e.getY(), 1);
-
-				Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-				toNode = edge.getFromNode();
-				System.out.println(toNode);
 				return;
 			} else if (e.getButton() == MouseEvent.BUTTON1)
 			{
 				callSmoothZoom(e.getX(), e.getY(), -1);
-
-				Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
-				fromNode = edge.getFromNode();
-				navigationBar.getFrom().setText(edge.getRoadName());
-				System.out.println(fromNode);
 				return;
 			}
 		}
@@ -443,6 +434,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 					sb.replace(i, i + 1, "<br>");
 				}
 
+				navigationBar.setClosestRoadEdge(e);
 				navigationBar.getClosestRoad().setText("<html>" + sb.toString() + " </html>");
 				navigationBar.repaint();
 			}
