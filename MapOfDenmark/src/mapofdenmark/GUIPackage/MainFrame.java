@@ -307,6 +307,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			double mouseMapY = drawMapComponent.convertMouseYToMap(e.getY());
 			double fromDistance = Point2D.distance(edge.getFromNode().getxCoord(), edge.getFromNode().getyCoord(), mouseMapX, mouseMapY);
 			double toDistance = Point2D.distance(edge.getToNode().getxCoord(), edge.getToNode().getyCoord(), mouseMapX, mouseMapY);
+                        
+//                        drawMapComponent.setTo(true);
 			if(fromDistance<=toDistance)
 			{
 				toNode = edge.getFromNode();
@@ -315,7 +317,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			{
 				toNode = edge.getToNode();
 			}
+                        
 			navigationBar.setToNode(toNode);
+                        drawMapComponent.setTo(e.getX(), e.getY());
 			navigationBar.getTo().setText(edge.getRoadName());
 			System.out.println(toNode);
 		} else if (e.getButton() == MouseEvent.BUTTON1)
@@ -403,6 +407,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			int x = (int) getDeltaPoint(oldPosition, newPosition).getX();
 			int y = (int) getDeltaPoint(oldPosition, newPosition).getY();
 			drawMapComponent.moveVisibleArea(x, y);
+                        System.out.println(x + " " + y);
 		}
 		repaint();
 	}

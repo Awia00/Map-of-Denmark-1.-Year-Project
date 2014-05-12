@@ -12,12 +12,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
@@ -50,6 +57,17 @@ public class MapComponent extends JComponent {
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
 	protected final double zoomInConstant = 0.98;
 	protected final double zoomOutConstant = 1.02;
+        
+        private boolean toSet;
+        private boolean fromSet;
+        
+        BufferedImage toIcon = null;
+        BufferedImage fromIcon = null;
+        
+        Node fromNode;
+        Node toNode;
+        
+        int moveIconX, moveIconY;
 
 	private ColorScheme activeColorScheme;
 
@@ -77,9 +95,19 @@ public class MapComponent extends JComponent {
 		this.landShapePolygons = landShapePolygons;
 		this.landUseShapePolygons = landUsePolygons;
 		route = new Path2D.Double();
+                
+                
+                                    try {
+                                        toIcon = ImageIO.read(new File("assets/to.png"));
+                                        fromIcon = ImageIO.read(new File("assets/from.png"));
+                                       
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(MapComponent.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
 
 		visibleArea.setCoord(quadTreeToDraw.getQuadTreeX() - quadTreeToDraw.getQuadTreeLength() / 8, quadTreeToDraw.getQuadTreeY() - quadTreeToDraw.getQuadTreeLength() / 50, quadTreeToDraw.getQuadTreeLength() / 15 * 16, quadTreeToDraw.getQuadTreeLength() / 15 * 10);
-
+                moveIconX = 0;
+                moveIconY = 0;
 		// set the initial Color scheme to Standard Color scheme
 		this.setColorScheme("Standard");
 	}
@@ -88,6 +116,25 @@ public class MapComponent extends JComponent {
 	{
 		this.route = route;
 	}
+        
+        public void setTo(boolean to) {
+            toSet = to;
+        }
+        
+        public void setFrom(boolean from) {
+            fromSet = from;
+        }
+
+        public void setFromNode(Node fromNode) {
+            this.fromNode = fromNode;
+        }
+
+        public void setToNode(Node toNode) {
+            this.toNode = toNode;
+        }
+
+        
+        
 
 	public void setRouteNodes(List<Node> routeNodes)
 	{
@@ -137,7 +184,9 @@ public class MapComponent extends JComponent {
 		double xMapCoord = xCoord / getWidth() * visibleArea.getxLength() * 1.2;
 		double yMapCoord = yCoord / getHeight() * visibleArea.getyLength() * 1.2;
 		visibleArea.setCoord(visibleArea.getxCoord() + xMapCoord, visibleArea.getyCoord() + yMapCoord, visibleArea.getxLength(), visibleArea.getyLength());
-	}
+//                System.out.println(xMapCoord + " " + yMapCoord);
+                
+        }
 
 	/**
 	 * The dragNDropZoom method takes in 4 coordinates which describes a
@@ -499,6 +548,24 @@ public class MapComponent extends JComponent {
 			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
+                            
+                                        
+                            int iconOffsetX = fromIcon.getWidth() / 2;
+                            int iconOffsetY = fromIcon.getHeight();
+                            // Draw a pin at destination
+                                if (toSet) {
+                                double toIconX = toNode.getxCoord();
+                                double toIconY = toNode.getyCoord();
+                                    g2.drawImage(toIcon, (int) (((toIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((toIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+//                                    toSet = false;
+                                }
+                            // Draw a pin at start
+                                if (fromSet) {
+                                    double fromIconX = fromNode.getxCoord();
+                                    double fromIconY = fromNode.getyCoord();
+                                    g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+//                                    fromSet = false;
+                                }
 				for (Edge edge : quadTree.getCoastLineEdges())
 				{
 					double x1 = edge.getFromNode().getxCoord();
@@ -658,7 +725,7 @@ public class MapComponent extends JComponent {
 					}
 				}
 				g2.draw(route);
-//                                System.out.println(route.getBounds());
+                                
 			}
 		}
 		

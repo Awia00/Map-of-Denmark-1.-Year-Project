@@ -225,6 +225,8 @@ public class NavigatonBar extends JPanel {
 		directions.setText("");
 
 		fromNode = node;
+                mapComponent.setFrom(true);
+                mapComponent.setFromNode(fromNode);
 		if (toNode != null)
 		{
 			wGraph.runDij(fromNode, toNode);
@@ -244,6 +246,9 @@ public class NavigatonBar extends JPanel {
 		directions.setText("");
 
 		toNode = node;
+                mapComponent.setTo(true);
+                mapComponent.setToNode(toNode);
+//                mapComponent.setTo((int) fromNode.getyCoord(), (int)toNode.getyCoord());
 		if (fromNode != null)
 		{
 			wGraph.runDij(fromNode, toNode);
@@ -262,7 +267,7 @@ public class NavigatonBar extends JPanel {
 	{
 		HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
 		directionKeys = new ArrayList<>(wGraph.getDirectionKeys());
-		Collections.reverse(directionKeys);
+		Collections.reverse(directionKeys); //needs reversing because the roads are apprently loaded in opposite direction (relative to to/from)
 		double total = 0;
 		for (String s : directionKeys)
 		{
