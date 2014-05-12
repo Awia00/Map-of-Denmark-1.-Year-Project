@@ -181,7 +181,7 @@ public class NavigatonBar extends JPanel {
 	{
 		this.closestRoadEdge = closestRoadEdge;
 		roadNameField.setText(closestRoadEdge.getRoadName());
-		velocityField.setText(""+String.format("%f", closestRoadEdge.getLength()/closestRoadEdge.getWeight()));
+		velocityField.setText(""+String.format("%.0f", closestRoadEdge.getLength()/closestRoadEdge.getWeight())+"km/t");
 		roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
 	}
 	
@@ -276,6 +276,7 @@ public class NavigatonBar extends JPanel {
 		double total = 0;
 		for(Edge edge : routeEdges)
 		{
+			if(edge.getRoadName().contains("Fra-/tilkørsel") && edge.getLength() <= 0.1){continue;}
 			if(currentRoad.equals(""))currentRoad = edge.getRoadName();
 			if(!currentRoad.equals(edge.getRoadName()))
 			{
@@ -283,16 +284,18 @@ public class NavigatonBar extends JPanel {
 				currentRoad = edge.getRoadName();
 				currentLength = 0;
 			}
-			else currentLength += edge.getLength()/100;
-			total += edge.getLength()/100;
+			else currentLength += edge.getLength()/1000;
+			total += edge.getLength()/1000;
 		}
-		if (directions.getText().equals(""))
+		if (directions.getText().equals("") || currentLength != 0)
 		{
 			directions.append("Kør ad "+currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
 		}
 		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
 	}
 
+	//Kør ad Fra-/tilkørsel
+	
 	public void didFindRoute()
 	{
 		mapComponent.didFindRoute();
