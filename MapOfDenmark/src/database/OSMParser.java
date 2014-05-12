@@ -45,10 +45,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	private List<Node> nodesOnWay = new ArrayList<>();
 	private String roadName = "";
 	private String roadType = "";
-	
+
 	private HashSet<String> tempRoadTypeList = new HashSet<>();
-        
-        private int ID = 0;
+
+	private int ID = 0;
 
 	public OSMParser()
 	{
@@ -59,75 +59,69 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		nodes = new ArrayList<>();
 		edges = new ArrayList<>();
 	}
-        
-        private int getID(){
-            return this.ID++;
-        }
+
+	private int getID()
+	{
+		return this.ID++;
+	}
+
 	private int convertRoadTypeToInt(String roadType)
 	{
-		if(roadType == null){ return -1;}
-		else if (roadType.equalsIgnoreCase("motorway") || roadType.equalsIgnoreCase("motorway_link"))
+		if (roadType == null)
+		{
+			return -1;
+		} else if (roadType.equalsIgnoreCase("motorway") || roadType.equalsIgnoreCase("motorway_link"))
 		{
 			return 1;
-		}
-		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link"))
+		} else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link"))
 		{
 			return 3;
-		}
-		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("tunnel")||roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
+		} else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("tunnel") || roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 5;
-		}
-		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("road"))
+		} else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("road"))
 		{
 			return 6;
-		}
-		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
+		} else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
 			return 8;
-		}
-		else if (roadType.equalsIgnoreCase("coastline"))
+		} else if (roadType.equalsIgnoreCase("coastline"))
 		{
 			return 75;
 		}
 		tempRoadTypeList.add(roadType);
 		return -1;
 	}
-        
-        private int convertRoadTypeToSpeedLimit(String roadType)
+
+	private int convertRoadTypeToSpeedLimit(String roadType)
 	{
-		if(roadType == null){return -1;}
-		else if (roadType.equalsIgnoreCase("motorway"))
+		if (roadType == null)
+		{
+			return -1;
+		} else if (roadType.equalsIgnoreCase("motorway"))
 		{
 			return 130;
-		}
-                //motortrafikvej amtsvej
+		} //motortrafikvej amtsvej
 		else if (roadType.equalsIgnoreCase("trunk") || roadType.equalsIgnoreCase("primary"))
 		{
 			return 110;
-		}
-                //hovedvej kommunevej
+		} //hovedvej kommunevej
 		else if (roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("motorway_link"))
 		{
 			return 90;
-		}
-		else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link") || roadType.equalsIgnoreCase("tunnel"))
+		} else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("trunk_link") || roadType.equalsIgnoreCase("primary_link") || roadType.equalsIgnoreCase("tunnel"))
 		{
 			return 80;
-		}
-		else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("road")||roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
+		} else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("road") || roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 50;
-		}
-		else if (roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		} else if (roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
 		{
 			return 30;
-		}
-		else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
+		} else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
 			return -1;
-		}
-		else if (roadType.equalsIgnoreCase("coastline"))
+		} else if (roadType.equalsIgnoreCase("coastline"))
 		{
 			return -1;
 		}
@@ -144,7 +138,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endDocument() throws SAXException
 	{
-		for(String roadType : tempRoadTypeList)
+		for (String roadType : tempRoadTypeList)
 		{
 			System.out.println(roadType);
 		}
@@ -167,11 +161,11 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		if (qName.equals("node"))
 		{
 			//Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
-                        Node node = new Node(getID(), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
-                        //System.out.println(node);
+			Node node = new Node(getID(), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")) * 100000, Double.parseDouble(attributes.getValue("lat")) * 150000));
+			//System.out.println(node);
 			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
 			nodes.add(node);
-			nodesDownloadedPct += (double)1/3500000;
+			nodesDownloadedPct += (double) 1 / 3500000;
 			return;
 		} else if (qName.equals("way"))
 		{
@@ -187,21 +181,21 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		{
 			if (createWay)
 			{
-				if(attributes.getValue("k").equalsIgnoreCase("highway") )//|| attributes.getValue("k").equalsIgnoreCase("natural"))
+				if (attributes.getValue("k").equalsIgnoreCase("highway"))//|| attributes.getValue("k").equalsIgnoreCase("natural"))
 				{
 					roadType = attributes.getValue("v");
 				}
-				if(attributes.getValue("k").equalsIgnoreCase("name"))
+				if (attributes.getValue("k").equalsIgnoreCase("name"))
 				{
 					roadName = attributes.getValue("v");
 				}
 			}
 		} else if (qName.equals("bounds"))
 		{
-			minX = Double.parseDouble(attributes.getValue("minlon"))*10000;
-			minY = Double.parseDouble(attributes.getValue("minlat"))*15000;
-			maxX = Double.parseDouble(attributes.getValue("maxlon"))*10000;
-			maxY = Double.parseDouble(attributes.getValue("maxlat"))*15000;
+			minX = Double.parseDouble(attributes.getValue("minlon")) * 100000;
+			minY = Double.parseDouble(attributes.getValue("minlat")) * 150000;
+			maxX = Double.parseDouble(attributes.getValue("maxlon")) * 100000;
+			maxY = Double.parseDouble(attributes.getValue("maxlat")) * 150000;
 			System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
 			return;
 		}
@@ -221,17 +215,19 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		if (qName.equals("way"))
 		{
 			Node fromNode = null;
-			for(Node node : nodesOnWay)
+			if (convertRoadTypeToInt(roadType) != -1)
 			{
-				if(fromNode != null)
+				for (Node node : nodesOnWay)
 				{
-					edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, convertRoadTypeToSpeedLimit(roadType)));
-					nodesDownloadedPct += (double)1/6500000;
-					fromNode = node;
-				}
-				else
-				{
-					fromNode = node;
+					if (fromNode != null)
+					{
+						edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, convertRoadTypeToSpeedLimit(roadType)));
+						nodesDownloadedPct += (double) 1 / 6500000;
+						fromNode = node;
+					} else
+					{
+						fromNode = node;
+					}
 				}
 			}
 
@@ -241,7 +237,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			fromNode = null;
 			nodesOnWay = new ArrayList<>();
 			createWay = false;
-                        
+
 		}
 	}
 
@@ -256,41 +252,40 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			SAXParser saxParser = factory.newSAXParser();
 			saxParser.parse(openStreetMapData, this);
 			isParsed = true;
-                        //Release Memory
-                        openStreetMapData.close();
-                        saxParser.reset();
-                        
-                } catch (Throwable err)
-		{
-			err.printStackTrace();
-		} 
-		/*
-		file = new File("assets/OSM_Natural.osm");
-		try
-		{
-			InputStream openStreetMapData = new FileInputStream(file);
-			SAXParser saxParser = factory.newSAXParser();
-			saxParser.parse(openStreetMapData, this);
-			isParsed = true;
-                        //Release Memory
-                        openStreetMapData.close();
-                        saxParser.reset();
+			//Release Memory
+			openStreetMapData.close();
+			saxParser.reset();
+
 		} catch (Throwable err)
 		{
 			err.printStackTrace();
 		}
-				*/
-		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX-minX, maxY-minY));
-        }
-	
+		/*
+		 file = new File("assets/OSM_Natural.osm");
+		 try
+		 {
+		 InputStream openStreetMapData = new FileInputStream(file);
+		 SAXParser saxParser = factory.newSAXParser();
+		 saxParser.parse(openStreetMapData, this);
+		 isParsed = true;
+		 //Release Memory
+		 openStreetMapData.close();
+		 saxParser.reset();
+		 } catch (Throwable err)
+		 {
+		 err.printStackTrace();
+		 }
+		 */
+		quadTree = new QuadTree(edges, minX, minY, Math.max(maxX - minX, maxY - minY));
+	}
+
 	@Override
 	public ArrayList<Edge> getEdgeList()
 	{
 		if (isParsed)
 		{
 			return edges;
-		}
-		else
+		} else
 		{
 			initiateParsing();
 			return edges;
@@ -300,11 +295,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public ArrayList<Node> getListOfNodes()
 	{
-		if(isParsed)
+		if (isParsed)
 		{
 			return nodes;
-		}
-		else
+		} else
 		{
 			initiateParsing();
 			return nodes;
@@ -332,11 +326,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public QuadTree getQuadTree()
 	{
-		if(isParsed)
+		if (isParsed)
 		{
 			return quadTree;
-		}
-		else
+		} else
 		{
 			initiateParsing();
 			return quadTree;
