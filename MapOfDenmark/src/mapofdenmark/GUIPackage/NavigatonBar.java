@@ -181,7 +181,7 @@ public class NavigatonBar extends JPanel {
 	{
 		this.closestRoadEdge = closestRoadEdge;
 		roadNameField.setText(closestRoadEdge.getRoadName());
-		velocityField.setText(""+closestRoadEdge.getLength()/closestRoadEdge.getWeight());
+		velocityField.setText(""+String.format("%f", closestRoadEdge.getLength()/closestRoadEdge.getWeight()));
 		roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
 	}
 	
@@ -265,16 +265,30 @@ public class NavigatonBar extends JPanel {
 
 	private void displayDirections()
 	{
-		HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
-		directionKeys = new ArrayList<>(wGraph.getDirectionKeys());
-		Collections.reverse(directionKeys); //needs reversing because the roads are apprently loaded in opposite direction (relative to to/from)
+		
+		//HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
+		List<Edge> routeEdges = wGraph.getDirections(toNode);
+		Collections.reverse(routeEdges); //needs reversing because the roads are apprently loaded in opposite direction (relative to to/from)
+		directions.setText("");
+		
+		String currentRoad = "";
+		double currentLength = 0;
 		double total = 0;
-		for (String s : directionKeys)
+		for(Edge edge : routeEdges)
 		{
-			double length = directionsMap.get(s) / 1000;
-			directions.append("Kør ad "+s + "\n\t\t" + String.format("%.2f", length) + " km \n-------------------------------\n");
-			total += length;
-
+			if(currentRoad.equals(""))currentRoad = edge.getRoadName();
+			if(!currentRoad.equals(edge.getRoadName()))
+			{
+				directions.append("Kør ad "+currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
+				currentRoad = edge.getRoadName();
+				currentLength = 0;
+			}
+			else currentLength += edge.getLength()/100;
+			total += edge.getLength()/100;
+		}
+		if (directions.getText().equals(""))
+		{
+			directions.append("Kør ad "+currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
 		}
 		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
 	}
