@@ -500,11 +500,11 @@ public class MapComponent extends JComponent {
 		for (PolygonShape poly : landShapePolygons)
 		{
 			PointData[] points = poly.getPoints();
-			if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 8)
+			if (points[0].getX() * 100000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getY() * 150000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 8)
 			{
 				continue;
 			}
-			if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 8)
+			if (points[0].getX() * 100000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 8 || points[0].getX() * 150000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 8)
 			{
 				continue;
 			}
@@ -513,8 +513,8 @@ public class MapComponent extends JComponent {
 			int i = 0;
 			for (PointData point : points)
 			{
-				xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
-				yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
+				xPoints[i] = (int) ((((point.getX() * 100000) - xVArea) / xlength) * componentWidth);
+				yPoints[i] = (int) (componentHeight - (((point.getY() * 150000) - yVArea) / ylength) * componentHeight);
 				i++;
 			}
 			g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
@@ -525,11 +525,11 @@ public class MapComponent extends JComponent {
 			for (PolygonShape poly : landUseShapePolygons)
 			{
 				PointData[] points = poly.getPoints();
-				if (points[0].getX() * 10000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getY() * 15000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 100)
+				if (points[0].getX() * 100000 < xVArea - quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getY() * 150000 < yVArea - quadTreeToDraw.getQuadTreeLength() / 100)
 				{
 					continue;
 				}
-				if (points[0].getX() * 10000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getX() * 15000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 100)
+				if (points[0].getX() * 100000 > xVArea + xlength + quadTreeToDraw.getQuadTreeLength() / 100 || points[0].getX() * 150000 > yVArea + ylength + quadTreeToDraw.getQuadTreeLength() / 100)
 				{
 					continue;
 				}
@@ -538,8 +538,8 @@ public class MapComponent extends JComponent {
 				int i = 0;
 				for (PointData point : points)
 				{
-					xPoints[i] = (int) ((((point.getX() * 10000) - xVArea) / xlength) * componentWidth);
-					yPoints[i] = (int) (componentHeight - (((point.getY() * 15000) - yVArea) / ylength) * componentHeight);
+					xPoints[i] = (int) ((((point.getX() * 100000) - xVArea) / xlength) * componentWidth);
+					yPoints[i] = (int) (componentHeight - (((point.getY() * 150000) - yVArea) / ylength) * componentHeight);
 					i++;
 				}
 				g2.fillPolygon(xPoints, yPoints, Math.min(xPoints.length, yPoints.length));
