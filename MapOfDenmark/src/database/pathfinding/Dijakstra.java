@@ -83,7 +83,7 @@ public class Dijakstra {
 		else{nextNode = e.getFromNode();} 
 		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getWeight()) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/130);
+            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130*1000));
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
@@ -98,7 +98,7 @@ public class Dijakstra {
 		else{nextNode = e.getFromNode();} 
 		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2)));
+            nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/1000);
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
