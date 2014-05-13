@@ -14,16 +14,21 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -54,6 +59,11 @@ public class NavigatonBar extends JPanel {
 
 	private JFrame routeFrame;
 	private JScrollPane routeScroll;
+        
+        private JRadioButton shortestRoute;
+        private JRadioButton fastestRoute;
+        private boolean isShortestRoute;
+        private boolean isFastestRoute;
 
 	private WeightedMapGraph wGraph;
 
@@ -135,8 +145,40 @@ public class NavigatonBar extends JPanel {
 		directions = new JTextArea(50, 20);
 		directions.setEditable(false);
 		directions.setMinimumSize(new Dimension(200, 600));
+                
+                shortestRoute = new JRadioButton("Shortest Route");
+                shortestRoute.setSelected(false);
+                shortestRoute.addActionListener(new ActionListener() {
 
-		setLayout(new MigLayout("", "[center]", "[][][]50[][][]200[grow]"));
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        isShortestRoute = shortestRoute.isSelected();
+                        isFastestRoute = false;
+                        System.out.println("Shortest Route" + " " + isShortestRoute);
+                        System.out.println("Fastest Route" + " " + isFastestRoute);
+                        
+                    }
+                });
+                
+                fastestRoute = new JRadioButton("Fastest Route");
+                fastestRoute.setSelected(true);
+                fastestRoute.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        isFastestRoute = fastestRoute.isSelected();
+                        isShortestRoute = false;
+                        System.out.println("Fastest Route" + " " + isFastestRoute);
+                        System.out.println("Shortest Route" + " " + isShortestRoute);
+                        
+                    }
+                });
+                
+                ButtonGroup bg = new ButtonGroup();
+                bg.add(fastestRoute);
+                bg.add(shortestRoute);
+
+		setLayout(new MigLayout("", "[center]", "[][][]50[][][][][]200[grow]"));
 
 		add(rutevejledning, "cell 0 0, align left");
 		add(searchAddress, "cell 0 1");
@@ -145,8 +187,11 @@ public class NavigatonBar extends JPanel {
 		add(from, "cell 0 3");
 		add(to, "cell 0 4");
 		add(printRoute, " cell 0 5, align right");
+                
+                add(fastestRoute, "cell 0 6, align left");
+                add(shortestRoute, "cell 0 7, align left");
 
-		add(roadInfo, "cell 0 6, dock south");
+		add(roadInfo, "cell 0 8, dock south");
 
 		//add(visVej, "cell 0 3, align right");
 		//add(closestRoad, "cell 0 4, align left");
