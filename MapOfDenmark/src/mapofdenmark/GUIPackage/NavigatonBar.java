@@ -38,9 +38,9 @@ public class NavigatonBar extends JPanel {
 	private PlaceholderTextField from, to, searchAddress;
 	private JLabel rutevejledning;
 	private Container roadInfo;
-		private JTextField roadNameField, velocityField, roadTypeField;
+	private JTextField roadNameField, velocityField, roadTypeField;
 	private Button visVej;
-	private JButton printRoute,findRoute, findAddress;
+	private JButton printRoute, findRoute, findAddress;
 	private JLabel closestRoad;
 	private Edge closestRoadEdge;
 
@@ -68,15 +68,13 @@ public class NavigatonBar extends JPanel {
 		rutevejledning.setForeground(Color.decode("#9B9B9B"));
 		printRoute = new JButton("Print directions");
 		printRoute.setEnabled(false);
-		
-		
+
 		searchAddress = new PlaceholderTextField("");
 		searchAddress.setPlaceholder("Find Address...");
 		searchAddress.setColumns(20);
 		searchAddress.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
 		searchAddress.setForeground(Color.decode("#4A4A4A"));
-		
-		
+
 		from = new PlaceholderTextField("");
 		from.setPlaceholder("Fra");
 		from.setColumns(20);
@@ -98,14 +96,14 @@ public class NavigatonBar extends JPanel {
 		roadTypeField = new JTextField("roadtype");
 		roadTypeField.setEditable(false);
 		roadTypeField.setBorder(null);
-		
+
 		roadInfo = new JPanel();
 		roadInfo.setLayout(new BoxLayout(roadInfo, BoxLayout.Y_AXIS));
 		roadInfo.setBackground(Color.white);
 		roadInfo.add(roadNameField);
 		roadInfo.add(velocityField);
 		roadInfo.add(roadTypeField);
-		
+
 //        visVej = new Button("button");
 		//visVej.setText("Vis");
 		findRoute = new JButton("Find Route");
@@ -118,7 +116,7 @@ public class NavigatonBar extends JPanel {
 				didFindRoute();
 			}
 		});
-		
+
 		printRoute.addActionListener(new ActionListener() {
 
 			@Override
@@ -127,7 +125,7 @@ public class NavigatonBar extends JPanel {
 				createRouteDirectionFrame();
 			}
 		});
-		
+
 		findAddress = new JButton("Find the address");
 
 		closestRoad = new AAJLabel("");
@@ -143,17 +141,16 @@ public class NavigatonBar extends JPanel {
 		add(rutevejledning, "cell 0 0, align left");
 		add(searchAddress, "cell 0 1");
 		add(findAddress, "cell 0 2, align right");
-		
+
 		add(from, "cell 0 3");
 		add(to, "cell 0 4");
 		add(printRoute, " cell 0 5, align right");
-		
-		add(roadInfo,"cell 0 6, dock south");
-		
+
+		add(roadInfo, "cell 0 6, dock south");
+
 		//add(visVej, "cell 0 3, align right");
 		//add(closestRoad, "cell 0 4, align left");
 		//add(findRoute, "cell 0 3");
-
 		wGraph = GUIController.getGraph();
 	}
 
@@ -161,16 +158,17 @@ public class NavigatonBar extends JPanel {
 	{
 		if (wGraph.hasRoute(toNode))
 		{
-			if(routeFrame != null){
+			if (routeFrame != null)
+			{
 				routeFrame.dispose();
 				routeFrame = null;
 			}
 			routeScroll = new JScrollPane(directions);
 			routeFrame = new JFrame("Directions"); // evt fra bla til bla
 			//routeFrame.add(directions);
-			routeFrame.setPreferredSize(new Dimension(300,800));
+			routeFrame.setPreferredSize(new Dimension(300, 800));
 			routeFrame.add(routeScroll);
-			
+
 			routeFrame.pack();
 			routeFrame.repaint();
 			routeFrame.setVisible(true);
@@ -181,10 +179,10 @@ public class NavigatonBar extends JPanel {
 	{
 		this.closestRoadEdge = closestRoadEdge;
 		roadNameField.setText(closestRoadEdge.getRoadName());
-		velocityField.setText(""+closestRoadEdge.getLength()/closestRoadEdge.getWeight());
+		velocityField.setText("" + String.format("%.0f", closestRoadEdge.getLength() / closestRoadEdge.getWeight()) + " km/t");
 		roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize()
 	{
@@ -225,19 +223,19 @@ public class NavigatonBar extends JPanel {
 		directions.setText("");
 
 		fromNode = node;
-                mapComponent.setFrom(true);
-                mapComponent.setFromNode(fromNode);
+		mapComponent.setFrom(true);
+		mapComponent.setFromNode(fromNode);
 		if (toNode != null)
 		{
 			wGraph.runDij(fromNode, toNode);
-			if(wGraph.hasRoute(toNode))
+			if (wGraph.hasRoute(toNode))
 			{
 				mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
 		}
-		
+
 		// wGraph.hasRoute(toNode) tjek med denne også
 	}
 
@@ -246,39 +244,66 @@ public class NavigatonBar extends JPanel {
 		directions.setText("");
 
 		toNode = node;
-                mapComponent.setTo(true);
-                mapComponent.setToNode(toNode);
+		mapComponent.setTo(true);
+		mapComponent.setToNode(toNode);
 //                mapComponent.setTo((int) fromNode.getyCoord(), (int)toNode.getyCoord());
 		if (fromNode != null)
 		{
 			wGraph.runDij(fromNode, toNode);
-			if ( wGraph.hasRoute(toNode))
+			if (wGraph.hasRoute(toNode))
 			{
 				mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
 		}
-		
+
 		// wGraph.hasRoute(toNode) tjek med denne også
 	}
 
 	private void displayDirections()
 	{
-		HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
-		directionKeys = new ArrayList<>(wGraph.getDirectionKeys());
-		Collections.reverse(directionKeys); //needs reversing because the roads are apprently loaded in opposite direction (relative to to/from)
-		double total = 0;
-		for (String s : directionKeys)
-		{
-			double length = directionsMap.get(s) / 1000;
-			directions.append("Kør ad "+s + "\n\t\t" + String.format("%.2f", length) + " km \n-------------------------------\n");
-			total += length;
 
+		//HashMap<String, Double> directionsMap = wGraph.getDirections(toNode);
+		List<Edge> routeEdges = wGraph.getDirections(toNode);
+		Collections.reverse(routeEdges); //needs reversing because the roads are apprently loaded in opposite direction (relative to to/from)
+		directions.setText("");
+
+		String currentRoad = "";
+		double currentLength = 0;
+		double total = 0;
+		for (Edge edge : routeEdges)
+		{
+			
+			if (currentRoad.equals(""))
+			{
+				currentRoad = edge.getRoadName();
+			}
+			if (!currentRoad.equals(edge.getRoadName()))
+			{
+				if (currentRoad.contains("Fra-/tilkørsel"))
+				{
+					directions.append("Tag " + currentRoad + "\n\n-------------------------------\n");
+					currentRoad = edge.getRoadName();
+					continue;
+				}
+				directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength() / 1000)) + " km \n-------------------------------\n");
+				currentRoad = edge.getRoadName();
+				currentLength = 0;
+			} else
+			{
+				currentLength += edge.getLength() / 1000;
+			}
+			total += edge.getLength() / 1000;
+		}
+		if (directions.getText().equals("") || currentLength != 0)
+		{
+			directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
 		}
 		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
 	}
 
+	//Kør ad Fra-/tilkørsel
 	public void didFindRoute()
 	{
 		mapComponent.didFindRoute();

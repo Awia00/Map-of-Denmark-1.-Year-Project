@@ -8,6 +8,7 @@ package database.pathfinding;
 import database.Edge;
 import database.Node;
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -26,12 +27,12 @@ public class WeightedMapGraph {
 
 	private final HashMap<Node, HashSet<Edge>> graph;
 	private Dijakstra dij;
-        private LinkedHashSet<String> directionKeys;
+	private LinkedHashSet<String> directionKeys;
 
 	public WeightedMapGraph(List<Edge> edges)
 	{
 		graph = new HashMap<>();
-                directionKeys = new LinkedHashSet<>();
+		directionKeys = new LinkedHashSet<>();
 		for (final Edge edge : edges)
 		{
 			// checks for bad values
@@ -46,6 +47,7 @@ public class WeightedMapGraph {
 			} else
 			{
 				graph.put(edge.getFromNode(), new HashSet<Edge>() {
+
 					
 					{
 						add(edge);
@@ -58,6 +60,7 @@ public class WeightedMapGraph {
 			} else
 			{
 				graph.put(edge.getToNode(), new HashSet<Edge>() {
+
 					
 					{
 						add(edge);
@@ -76,7 +79,7 @@ public class WeightedMapGraph {
 	{
 		dij = new Dijakstra(graph, from, to);
 	}
-	
+
 	public boolean hasRoute(Node to)
 	{
 		if (dij != null)
@@ -110,37 +113,55 @@ public class WeightedMapGraph {
 		System.out.println(path.getBounds());
 		return path;
 	}
-        
-        public HashMap<String, Double> getDirections(Node to) {
-            
-            directionKeys.clear();
-            Node[] route = calculateRoute(to).toArray(new Node[calculateRoute(to).size()]);
-            HashMap<String, Double> directions = new HashMap<>();
 
-            for (int i = 0; i < route.length; i++) {
-                int next = 0;
-                if (!(i+1 == route.length)) next = i+1;
-                HashSet<Edge> edges = graph.get(route[i]);
-                //System.out.println(edges.size());
-                for (Edge edge : edges) {
-                    if ((edge.getFromNode().equals(route[next]) || edge.getToNode().equals(route[next]))) {
-                        //System.out.println("Found edge");
-                        //System.out.println(edge.getRoadName());
-                        double dist;
-                        if (directions.get(edge.getRoadName()) == null) dist = 0;
-                        else dist = directions.get(edge.getRoadName());
+	public List<Edge> getDirections(Node to)
+	{
+
+		directionKeys.clear();
+		Node[] route = calculateRoute(to).toArray(new Node[calculateRoute(to).size()]);
+		//HashMap<String, Double> directions = new HashMap<>();
+		List<Edge> listToReturn = new ArrayList<>();
+
+		for (int i = 0; i < route.length; i++)
+		{
+			int next = 0;
+			if (!(i + 1 == route.length))
+			{
+				next = i + 1;
+			}
+			HashSet<Edge> edges = graph.get(route[i]);
+			//System.out.println(edges.size());
+			for (Edge edge : edges)
+			{
+				if ((edge.getFromNode().equals(route[next]) || edge.getToNode().equals(route[next])))
+				{
+					listToReturn.add(edge);
+					directionKeys.add(edge.getRoadName());
+				}
+			}
+		}
+		//System.out.println("Directions size " + directions.size());
+		return listToReturn;
+	}
+	
+	/*
+	//System.out.println("Found edge");
+					//System.out.println(edge.getRoadName());
+					double dist;
+					if (directions.get(edge.getRoadName()) == null)
+					{
+						dist = 0;
+					} else
+					{
+						dist = directions.get(edge.getRoadName());
+					}
 //                        dist = directions.get(edge.getRoadName());
-                        directions.put(edge.getRoadName(), dist+edge.getLength());
-                        directionKeys.add(edge.getRoadName());
-                    }
-                
-                }
-            }
-            System.out.println("Directions size " + directions.size());
-            return directions;
-        }
-        
-        public LinkedHashSet<String> getDirectionKeys() {
-            return directionKeys;
-        }
+					directions.put(edge.getRoadName(), dist + edge.getLength());
+					
+	*/
+
+	public LinkedHashSet<String> getDirectionKeys()
+	{
+		return directionKeys;
+	}
 }
