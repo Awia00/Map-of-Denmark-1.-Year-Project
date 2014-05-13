@@ -274,7 +274,7 @@ public class DatabaseHandler implements DatabaseInterface {
             //Get time, Connection and ResultSet
             Long time = System.currentTimeMillis();
             Edge edge = null;
-            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, DRIVETIME, LENGTH FROM [jonovic_dk_db].[dbo].[edges];";
+            String sql = "SELECT FNODE#, TNODE#, TYP, VEJNAVN, VEJKODE, SPEED, LENGTH FROM [jonovic_dk_db].[dbo].[edges];";
             Connection con = cpds.getConnection();
 
             PreparedStatement pstatement = con.prepareStatement(sql);
@@ -286,7 +286,7 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7));
+                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(7)/(rs.getDouble(6)*1.15), rs.getDouble(7));
                 edges.add(edge);
                 i++;
                 edgesDownloadedPct += (double) 1 / 812301;
