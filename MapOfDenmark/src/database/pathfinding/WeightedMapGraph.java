@@ -79,7 +79,12 @@ public class WeightedMapGraph {
 	{
 		dij = new Dijakstra(graph, from, to);
 	}
-
+        
+        public void setHeurestic(boolean b) {
+            System.out.println("boolean b " + b);
+            dij.setDrivetimeHeurestic(b);
+        }   
+        
 	public boolean hasRoute(Node to)
 	{
 		if (dij != null)

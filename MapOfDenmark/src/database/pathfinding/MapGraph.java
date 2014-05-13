@@ -72,7 +72,7 @@ public class MapGraph {
 //            System.out.println(edge.isInShortestPath());
         }
     }
-    
+     
     public static void main(String[] args) {
         
         DatabaseInterface db = Database.db(true);
