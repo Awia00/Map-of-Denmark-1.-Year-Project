@@ -82,6 +82,8 @@ public class Dijakstra {
 		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
 		else{nextNode = e.getFromNode();} 
 		
+		if(edgeTo.containsKey(nextNode)) return;
+		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getWeight()) {
             nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130*1000));
 			edgeTo.put(nextNode, e);
@@ -96,6 +98,8 @@ public class Dijakstra {
 		Node nextNode;
 		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
 		else{nextNode = e.getFromNode();} 
+		
+		if(edgeTo.containsKey(nextNode)) return;
 		
         if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
             nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/1000);
