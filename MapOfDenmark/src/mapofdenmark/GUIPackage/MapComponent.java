@@ -731,8 +731,9 @@ public class MapComponent extends JComponent {
 				g.setColor(Color.blue);
 				g.drawLine((int) (((fromNode.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((fromNode.getyCoord() - yVArea) / ylength) * componentHeight), (int) (((node.getxCoord() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((node.getyCoord() - yVArea) / ylength) * componentHeight));
 			}
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			int iconOffsetX = fromIcon.getWidth() / 2;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);	
+		}
+                int iconOffsetX = fromIcon.getWidth() / 2;
 			int iconOffsetY = fromIcon.getHeight();
 			// Draw a pin at destination
 			if (toSet)
@@ -750,7 +751,6 @@ public class MapComponent extends JComponent {
 				g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
 //                                    fromSet = false;
 			}
-		}
 
 		g2.setStroke(new BasicStroke(1));
 		g.setColor(Color.blue);
