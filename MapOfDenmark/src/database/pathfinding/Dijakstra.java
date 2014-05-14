@@ -50,7 +50,6 @@ public class Dijakstra {
 	
 	private void createRoutes(boolean heuristic)
 	{
-            System.out.println("heurestic " + heuristic);
 		fromNode.setDistTo(0);
 
         // relax vertices in order of distance from s
