@@ -143,6 +143,7 @@ public class NavigatonBar extends JPanel {
         directions.setMinimumSize(new Dimension(200, 600));
 
         reset = new JButton("Reset");
+        reset.setEnabled(false);
         reset.addActionListener(new ActionListener() {
 
             @Override
@@ -158,7 +159,7 @@ public class NavigatonBar extends JPanel {
                 mapComponent.repaint();
                 from.setText("");
                 to.setText("");
-
+                reset.setEnabled(false);
             }
         });
 
@@ -287,6 +288,7 @@ public class NavigatonBar extends JPanel {
         fromNode = node;
         mapComponent.setFrom(true);
         mapComponent.setFromNode(fromNode);
+        reset.setEnabled(true);
         if (toNode != null) {
             wGraph.runDij(fromNode, toNode, isFastestRoute);
             if (wGraph.hasRoute(toNode)) {
@@ -305,7 +307,7 @@ public class NavigatonBar extends JPanel {
         toNode = node;
         mapComponent.setTo(true);
         mapComponent.setToNode(toNode);
-//                mapComponent.setTo((int) fromNode.getyCoord(), (int)toNode.getyCoord());
+        reset.setEnabled(true);
         if (fromNode != null) {
             wGraph.runDij(fromNode, toNode, isFastestRoute);
             if (wGraph.hasRoute(toNode)) {
