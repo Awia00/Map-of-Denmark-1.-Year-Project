@@ -71,7 +71,7 @@ public class NavigatonBar extends JPanel {
     public NavigatonBar(MapComponent mc) {
         mapComponent = mc;
 
-        rutevejledning = new AAJLabel("Rutevejledning ");
+        rutevejledning = new AAJLabel("Get Directions ");
         rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
         rutevejledning.setForeground(Color.decode("#9B9B9B"));
         printRoute = new JButton("Print directions");
@@ -114,15 +114,7 @@ public class NavigatonBar extends JPanel {
 
 //        visVej = new Button("button");
         //visVej.setText("Vis");
-        findRoute = new JButton("Find Route");
-        findRoute.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                findRoute();
-                didFindRoute();
-            }
-        });
+//        findRoute = new JButton("Find Route");
 
         printRoute.addActionListener(new ActionListener() {
 
@@ -132,7 +124,7 @@ public class NavigatonBar extends JPanel {
             }
         });
 
-        findAddress = new JButton("Find the address");
+        findAddress = new JButton("Search");
 
         closestRoad = new AAJLabel("");
         closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
@@ -277,11 +269,6 @@ public class NavigatonBar extends JPanel {
         return to;
     }
 
-    public void findRoute() {
-        //g.shortestPath(fromNode.getID(), toNode.getID());
-        getParent().repaint();
-    }
-
     public void setFromNode(Node node) {
         directions.setText("");
 
@@ -353,11 +340,6 @@ public class NavigatonBar extends JPanel {
             directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
         }
         directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
-    }
-
-    //Kør ad Fra-/tilkørsel
-    public void didFindRoute() {
-        mapComponent.didFindRoute();
     }
 }
 

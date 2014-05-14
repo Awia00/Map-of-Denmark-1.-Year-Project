@@ -65,6 +65,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
 	private Point oldPosition;
 	private Point newPosition;
+        
+        private String closestRoadString;
 
 	private Node fromNode = null;
 	private Node toNode = null;
@@ -110,6 +112,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 		closestRoadLabel = new AAJLabel("Closest road");
 		enterAddressField = new JTextField("Enter Address... ");
 		searchButton = new JButton("Search");
+                closestRoadString = "";
 
 		navigationBar = new NavigatonBar(drawMapComponent);
 
@@ -428,7 +431,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			public void run()
 			{
 				Edge e = drawMapComponent.findClosestRoad(mouseEvent.getX(), mouseEvent.getY());
-				String closestRoadString = e.getRoadName();
+				closestRoadString = e.getRoadName();
 				// this implementation is copied from http://stackoverflow.com/questions/4212675/wrap-the-string-after-a-number-of-character-word-wise-in-java
 				StringBuilder sb = new StringBuilder(closestRoadString);
 

@@ -140,20 +140,6 @@ public class MapComponent extends JComponent {
 		return quadTreeToDraw;
 	}
 
-	public void didFindRoute()
-	{
-		System.out.println("didFindRoute");
-//            for (QuadTree q : QuadTree.getBottomTrees()) {
-//                if (q.isDrawable()) {
-//                    for (Edge e : q.getPathEdges()) {
-//                        System.out.println(e.isInShortestPath());
-//                    }
-//                }
-//            }
-		repaint();
-
-	}
-
 	public void setFrom(int x, int y)
 	{
 		this.xFrom = x;
