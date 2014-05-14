@@ -321,7 +321,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 			navigationBar.setToNode(toNode);
                         drawMapComponent.setTo(e.getX(), e.getY());
 			navigationBar.getTo().setText(edge.getRoadName());
-			System.out.println(toNode);
 		} else if (e.getButton() == MouseEvent.BUTTON1)
 		{
 			Edge edge = drawMapComponent.findClosestRoad(e.getX(), e.getY());
