@@ -34,9 +34,7 @@ public class Dijakstra {
 	private PriorityQueue pQueue;
 	private List<Node> route;
         
-        private boolean heurestic;
-
-	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Node toNode)
+	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Node toNode, boolean heuristic)
 	{
 		this.graph = graph;
 		this.fromNode = fromNode;
@@ -47,12 +45,12 @@ public class Dijakstra {
 			node.setDistTo(Double.POSITIVE_INFINITY);
 		}
 		pQueue = new PriorityQueue(100, new NodeDistToComparator());
-		createRoutes();
+		createRoutes(heuristic);
 	}
 	
-	private void createRoutes()
+	private void createRoutes(boolean heuristic)
 	{
-            System.out.println("heurestic " + heurestic);
+            System.out.println("heurestic " + heuristic);
 		fromNode.setDistTo(0);
 
         // relax vertices in order of distance from s
@@ -62,7 +60,7 @@ public class Dijakstra {
 			if (v.equals(toNode)){break;}
             for (Edge e : graph.get(v))
 			{
-                if (heurestic) {
+                if (heuristic) {
                     relaxDriveTime(e, v);
 //                    System.out.println("drivetime");
                 }
@@ -85,10 +83,7 @@ public class Dijakstra {
 		if(node.equals(e.getFromNode())){return e.getToNode();}
 		else return e.getFromNode();
 	}
-	
-        public void setDrivetimeHeurestic(boolean b) {
-            heurestic = b;
-        }
+        
 	private void relaxDriveTime(Edge e, Node prevNode)
 	{
 		Node nextNode;

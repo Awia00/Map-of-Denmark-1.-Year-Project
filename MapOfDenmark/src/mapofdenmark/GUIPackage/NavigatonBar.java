@@ -62,8 +62,7 @@ public class NavigatonBar extends JPanel {
 
     private JRadioButton shortestRoute;
     private JRadioButton fastestRoute;
-    private boolean isShortestRoute;
-    private boolean isFastestRoute;
+    private boolean isFastestRoute = true;
 
     private WeightedMapGraph wGraph;
 
@@ -170,12 +169,10 @@ public class NavigatonBar extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                isFastestRoute = fastestRoute.isSelected();
-                isShortestRoute = false;
-                wGraph.setHeurestic(isShortestRoute);
+                isFastestRoute = true;
                 
                 if (fromNode != null && toNode != null) {
-                    wGraph.runDij(fromNode, toNode);
+                    wGraph.runDij(fromNode, toNode, isFastestRoute);
                     if (wGraph.hasRoute(toNode)) {
                         mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                         printRoute.setEnabled(true);
@@ -191,12 +188,10 @@ public class NavigatonBar extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                isShortestRoute = shortestRoute.isSelected();
                 isFastestRoute = false;
-                wGraph.setHeurestic(isShortestRoute);
 
                 if (fromNode != null && toNode != null) {
-                    wGraph.runDij(fromNode, toNode);
+                    wGraph.runDij(fromNode, toNode, isFastestRoute);
                     if (wGraph.hasRoute(toNode)) {
                         mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                         printRoute.setEnabled(true);
@@ -293,7 +288,7 @@ public class NavigatonBar extends JPanel {
         mapComponent.setFrom(true);
         mapComponent.setFromNode(fromNode);
         if (toNode != null) {
-            wGraph.runDij(fromNode, toNode);
+            wGraph.runDij(fromNode, toNode, isFastestRoute);
             if (wGraph.hasRoute(toNode)) {
                 mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                 printRoute.setEnabled(true);
@@ -312,7 +307,7 @@ public class NavigatonBar extends JPanel {
         mapComponent.setToNode(toNode);
 //                mapComponent.setTo((int) fromNode.getyCoord(), (int)toNode.getyCoord());
         if (fromNode != null) {
-            wGraph.runDij(fromNode, toNode);
+            wGraph.runDij(fromNode, toNode, isFastestRoute);
             if (wGraph.hasRoute(toNode)) {
                 mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                 printRoute.setEnabled(true);

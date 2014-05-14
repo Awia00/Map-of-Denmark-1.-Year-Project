@@ -75,15 +75,10 @@ public class WeightedMapGraph {
 		return graph;
 	}
 
-	public void runDij(Node from, Node to)
+	public void runDij(Node from, Node to, boolean heuristic)
 	{
-		dij = new Dijakstra(graph, from, to);
+		dij = new Dijakstra(graph, from, to, heuristic);
 	}
-        
-        public void setHeurestic(boolean b) {
-            System.out.println("boolean b " + b);
-            dij.setDrivetimeHeurestic(b);
-        }   
         
 	public boolean hasRoute(Node to)
 	{
