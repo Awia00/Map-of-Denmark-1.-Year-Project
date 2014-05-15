@@ -171,62 +171,58 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
-		if (qName.equals("node"))
-		{
-
-			//Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
-			Node node = new Node(getID(), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")) * 100000, Double.parseDouble(attributes.getValue("lat")) * 150000));
-			//System.out.println(node);
-			placeNameNode = node;
-			mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
-			nodes.add(node);
-			nodesDownloadedPct += (double) 1 / 3500000;
-			createNode = true;
-			return;
-		} else if (qName.equals("way"))
-		{
-			createWay = true;
-			return;
-		} else if (qName.equals("nd"))
-		{
-			if (createWay)
-			{
-				nodesOnWay.add(mapOfNodes.get(Long.parseLong(attributes.getValue("ref"))));
-			}
-		} else if (qName.equals("tag"))
-		{
-			if (createWay)
-			{
-				if (attributes.getValue("k").equalsIgnoreCase("highway"))//|| attributes.getValue("k").equalsIgnoreCase("natural"))
-				{
-					roadType = attributes.getValue("v");
-				}
-				//if (attributes.getValue("k").equalsIgnoreCase("route"))roadType = attributes.getValue("v"); // for ferries
-				if (attributes.getValue("k").equalsIgnoreCase("name"))
-				{
-					roadName = attributes.getValue("v");
-				}
-			} else if (createNode)
-			{
-				if (attributes.getValue("k").equalsIgnoreCase("place"))//|| attributes.getValue("k").equalsIgnoreCase("natural"))
-				{
-					roadType = attributes.getValue("v");
-				}
-				if (attributes.getValue("k").equalsIgnoreCase("name"))
-				{
-					placeName = attributes.getValue("v");
-				}
-			}
-		} else if (qName.equals("bounds"))
-		{
-			minX = Double.parseDouble(attributes.getValue("minlon")) * 100000;
-			minY = Double.parseDouble(attributes.getValue("minlat")) * 150000;
-			maxX = Double.parseDouble(attributes.getValue("maxlon")) * 100000;
-			maxY = Double.parseDouble(attributes.getValue("maxlat")) * 150000;
-			System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
-			return;
-		}
-		//System.out.println("start element    : " + qName);
+            switch (qName) {
+                case "node":
+                    //Node node = new Node(Long.parseLong(attributes.getValue("id")), new Point2D.Double(Double.parseDouble(attributes.getValue("lon"))*10000, Double.parseDouble(attributes.getValue("lat"))*15000));
+                    Node node = new Node(getID(), new Point2D.Double(Double.parseDouble(attributes.getValue("lon")) * 100000, Double.parseDouble(attributes.getValue("lat")) * 150000));
+                    //System.out.println(node);
+                    placeNameNode = node;
+                    mapOfNodes.put(Long.parseLong(attributes.getValue("id")), node);
+                    nodes.add(node);
+                    nodesDownloadedPct += (double) 1 / 3500000;
+                    createNode = true;
+                    return;
+                case "way":
+                    createWay = true;
+                    return;
+                case "nd":
+                    if (createWay)
+                    {
+                        nodesOnWay.add(mapOfNodes.get(Long.parseLong(attributes.getValue("ref"))));
+                    }
+                    break;
+                case "tag":
+                    if (createWay)
+                    {
+                        if (attributes.getValue("k").equalsIgnoreCase("highway"))//|| attributes.getValue("k").equalsIgnoreCase("natural"))
+                        {
+                            roadType = attributes.getValue("v");
+                        }
+                        //if (attributes.getValue("k").equalsIgnoreCase("route"))roadType = attributes.getValue("v"); // for ferries
+                        if (attributes.getValue("k").equalsIgnoreCase("name"))
+                        {
+                            roadName = attributes.getValue("v");
+                        }
+                    } else if (createNode)
+                    {
+                        if (attributes.getValue("k").equalsIgnoreCase("place"))//|| attributes.getValue("k").equalsIgnoreCase("natural"))
+                        {
+                            roadType = attributes.getValue("v");
+                        }
+                        if (attributes.getValue("k").equalsIgnoreCase("name"))
+                        {
+                            placeName = attributes.getValue("v");
+                        }
+                    }
+                    break;
+                case "bounds":
+                    minX = Double.parseDouble(attributes.getValue("minlon")) * 100000;
+                    minY = Double.parseDouble(attributes.getValue("minlat")) * 150000;
+                    maxX = Double.parseDouble(attributes.getValue("maxlon")) * 100000;
+                    maxY = Double.parseDouble(attributes.getValue("maxlat")) * 150000;
+                    System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
+                    return;
+            }
 	}
 
 	/**
@@ -239,43 +235,42 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException
 	{
-		if (qName.equals("node"))
-		{
-			if (convertRoadTypeToInt(roadType) != -1)
-			{
-				edges.add(new Edge(placeNameNode, placeNameNode, convertRoadTypeToInt(roadType), placeName, 0, convertRoadTypeToSpeedLimit(roadType)));
-			}
-			roadType = "";
-			placeName = "";
-			createNode = false;
-			placeNameNode = null;
-		} else if (qName.equals("way"))
-		{
-			Node fromNode = null;
-			if (convertRoadTypeToInt(roadType) != -1 || convertRoadTypeToInt(roadType) == 99)
-			{
-				for (Node node : nodesOnWay)
-				{
-					if (fromNode != null)
-					{
-						edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, convertRoadTypeToSpeedLimit(roadType)));
-						nodesDownloadedPct += (double) 1 / 6500000;
-						fromNode = node;
-					} else
-					{
-						fromNode = node;
-					}
-				}
-			}
-
-			// reset
-			roadName = "";
-			roadType = "";
-			fromNode = null;
-			nodesOnWay = new ArrayList<>();
-			createWay = false;
-
-		}
+            switch (qName) {
+                case "node":
+                    if (convertRoadTypeToInt(roadType) != -1)
+                    {
+                        edges.add(new Edge(placeNameNode, placeNameNode, convertRoadTypeToInt(roadType), placeName, 0, convertRoadTypeToSpeedLimit(roadType)));
+                    }
+                    roadType = "";
+                    placeName = "";
+                    createNode = false;
+                    placeNameNode = null;
+                    break;
+                case "way":
+                    Node fromNode = null;
+                    if (convertRoadTypeToInt(roadType) != -1 || convertRoadTypeToInt(roadType) == 99)
+                    {
+                        for (Node node : nodesOnWay)
+                        {
+                            if (fromNode != null)
+                            {
+                                edges.add(new Edge(fromNode, node, convertRoadTypeToInt(roadType), roadName, 0, convertRoadTypeToSpeedLimit(roadType)));
+                                nodesDownloadedPct += (double) 1 / 6500000;
+                                fromNode = node;
+                            } else
+                            {
+                                fromNode = node;
+                            }
+                        }
+                    }
+                    // reset
+                    roadName = "";
+                    roadType = "";
+                    fromNode = null;
+                    nodesOnWay = new ArrayList<>();
+                    createWay = false;
+                    break;
+            }
 	}
 
 	private void initiateParsing()

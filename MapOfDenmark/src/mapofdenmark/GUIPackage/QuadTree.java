@@ -10,11 +10,8 @@ package mapofdenmark.GUIPackage;
  * @author Christian
  */
 import database.Edge;
-import database.Node;
 import database.RoadTypeEnum;
-import java.awt.Color;
 import java.util.*;
-import java.awt.geom.Point2D;
 
 public class QuadTree implements Iterable<QuadTree> {
 

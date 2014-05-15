@@ -9,7 +9,6 @@ import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
 import database.ShapeFileParser;
-import database.pathfinding.MapGraph;
 import database.pathfinding.WeightedMapGraph;
 import java.util.ArrayList;
 import java.util.List;
