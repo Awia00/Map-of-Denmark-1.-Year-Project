@@ -324,13 +324,13 @@ public class NavigatonBar extends JPanel {
                     currentRoad = edge.getRoadName();
                     continue;
                 }
-                directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength() / 1000)) + " km \n-------------------------------\n");
+                directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
                 currentRoad = edge.getRoadName();
                 currentLength = 0;
             } else {
-                currentLength += edge.getLength() / 1000;
+                currentLength += edge.getLength();
             }
-            total += edge.getLength() / 1000;
+            total += edge.getLength();
         }
         if (directions.getText().equals("") || currentLength != 0) {
             directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
