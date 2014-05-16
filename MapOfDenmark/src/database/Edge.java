@@ -32,8 +32,8 @@ public class Edge implements Comparable<Edge> {
         this.roadType = roadType;
         this.roadName = roadName;
         this.roadcode = roadcode;
-        this.weightTime = weightTime;
-        this.length = length;
+        this.weightTime = weightTime/1000;
+        this.length = length/1000;
         
     }
     //OSM Constructor
@@ -50,7 +50,8 @@ public class Edge implements Comparable<Edge> {
 			this.fromNodeID = 1;
 			this.toNodeID = 1;
 			setLength();
-			this.weightTime = this.length / velocity;
+			length /= 1000;
+			this.weightTime = this.length / (velocity);
 		}
 		else
 		{
