@@ -163,6 +163,7 @@ public class NavigatonBar extends JPanel {
                     if (wGraph.hasRoute(toNode)) {
                         mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                         printRoute.setEnabled(true);
+                        mapComponent.repaint();
                         displayDirections();
                     }
                 }
@@ -182,6 +183,7 @@ public class NavigatonBar extends JPanel {
                     if (wGraph.hasRoute(toNode)) {
                         mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
                         printRoute.setEnabled(true);
+                        mapComponent.repaint();
                         displayDirections();
                     }
                 }
