@@ -44,7 +44,7 @@ public class Dijakstra {
 		{
 			node.setDistTo(Double.POSITIVE_INFINITY);
 		}
-		pQueue = new PriorityQueue(100, new NodeDistToComparator());
+		pQueue = new PriorityQueue(graph.size()/20, new NodeDistToComparator());
 		createRoutes(heuristic);
 	}
 	
@@ -90,16 +90,8 @@ public class Dijakstra {
 		Node nextNode;
 		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
 		else{nextNode = e.getFromNode();} 
+
 		
-        if (nextNode.getDistTo() >= prevNode.getDistTo() + e.getWeight() && !(edgeTo.containsKey(nextNode))) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130*1000));
-			edgeTo.put(nextNode, e);
-			
-			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
-            else pQueue.add(nextNode);
-		}
-		
-		/*
 		double g_Score = prevNode.getDistTo() + e.getWeight();
 		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130000); // 130*1000 
 		double f_Score = h_Score + g_Score;
@@ -116,6 +108,15 @@ public class Dijakstra {
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
             else pQueue.add(nextNode);
 		}
+		
+		/*
+		if (nextNode.getDistTo() >= prevNode.getDistTo() + e.getWeight()) {
+            nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130*1000));
+			edgeTo.put(nextNode, e);
+			
+			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
+            else pQueue.add(nextNode);
+		}
 		*/
 	}
 	
@@ -125,15 +126,35 @@ public class Dijakstra {
 		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
 		else{nextNode = e.getFromNode();} 
 		
-		if(edgeTo.containsKey(nextNode)) return;
+		double g_Score = prevNode.getDistTo() + e.getLength();
+		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2));
+		double f_Score = h_Score + g_Score;
 		
-        if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
-            nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/1000);
+		if(f_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
+		{
+			return;
+		}
+		if(!pQueue.contains(e) || f_Score < nextNode.getDistTo())
+		{
+			nextNode.setDistTo(g_Score);
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
             else pQueue.add(nextNode);
 		}
+		
+		
+		/*
+		if(edgeTo.containsKey(nextNode)) return;
+		
+        if (nextNode.getDistTo() > prevNode.getDistTo() + e.getLength()) {
+            nextNode.setDistTo(prevNode.getDistTo()+e.getLength() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2)));
+			edgeTo.put(nextNode, e);
+			
+			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
+            else pQueue.add(nextNode);
+		}
+		*/
 	}
 	
 	public boolean hasPathTo(Node to)
