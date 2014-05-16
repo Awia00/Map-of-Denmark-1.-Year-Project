@@ -51,12 +51,14 @@ public class Dijakstra {
 	private void createRoutes(boolean heuristic)
 	{
 		fromNode.setDistTo(0);
+		edgeTo.put(fromNode, null);
 
         // relax vertices in order of distance from s
 		pQueue.add(fromNode);
         while (!pQueue.isEmpty()) {
             Node v = (Node) pQueue.poll();
 			if (v.equals(toNode)){break;}
+			
             for (Edge e : graph.get(v))
 			{
                 if (heuristic) {
@@ -89,15 +91,32 @@ public class Dijakstra {
 		if(prevNode.equals(e.getFromNode())){ nextNode = e.getToNode();}
 		else{nextNode = e.getFromNode();} 
 		
-		if(edgeTo.containsKey(nextNode)) return;
-		
-        if (nextNode.getDistTo() > prevNode.getDistTo() + e.getWeight()) {
+        if (nextNode.getDistTo() >= prevNode.getDistTo() + e.getWeight() && !(edgeTo.containsKey(nextNode))) {
             nextNode.setDistTo(prevNode.getDistTo()+e.getWeight() + Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130*1000));
 			edgeTo.put(nextNode, e);
 			
 			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
             else pQueue.add(nextNode);
 		}
+		
+		/*
+		double g_Score = prevNode.getDistTo() + e.getWeight();
+		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord()-nextNode.getxCoord()), 2)+Math.pow(toNode.getyCoord()-nextNode.getyCoord(), 2))/(130000); // 130*1000 
+		double f_Score = h_Score + g_Score;
+		
+		if(f_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
+		{
+			return;
+		}
+		if(!pQueue.contains(e) || f_Score < nextNode.getDistTo())
+		{
+			nextNode.setDistTo(g_Score);
+			edgeTo.put(nextNode, e);
+			
+			if (pQueue.contains(nextNode)){ pQueue.remove(nextNode);pQueue.add(nextNode);}
+            else pQueue.add(nextNode);
+		}
+		*/
 	}
 	
 	private void relaxLength(Edge e, Node prevNode)
