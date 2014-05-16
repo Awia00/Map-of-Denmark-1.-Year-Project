@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -67,6 +68,13 @@ public class MapComponent extends JComponent {
     int moveIconX, moveIconY;
 
     private ColorScheme activeColorScheme;
+
+    private double xVArea;
+    private double xlength;
+    private double componentWidth;
+    private double yVArea;
+    private double ylength;
+    private double componentHeight;
 
     /**
      * The constructor of the mapComponent.
@@ -392,14 +400,14 @@ public class MapComponent extends JComponent {
         g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
         ArrayList<QuadTree> bottomTrees = QuadTree.getBottomTrees();
-        double xlength = visibleArea.getxLength();
-        double ylength = visibleArea.getyLength();
+        xlength = visibleArea.getxLength();
+        ylength = visibleArea.getyLength();
 
-        double xVArea = visibleArea.getxCoord();
-        double yVArea = visibleArea.getyCoord();
+        xVArea = visibleArea.getxCoord();
+        yVArea = visibleArea.getyCoord();
 
-        double componentHeight = getHeight();
-        double componentWidth = getWidth();
+        componentHeight = getHeight();
+        componentWidth = getWidth();
 
         double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
@@ -546,6 +554,10 @@ public class MapComponent extends JComponent {
 
                         g2.setStroke(normalRoadStroke);
                         g.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
+                        
+                        
+                        drawRotatedString(g2, edge);
+                        
                     }
                 }
                 if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2)) {
@@ -690,7 +702,6 @@ public class MapComponent extends JComponent {
 //        System.out.println(icon);
 //        g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
 //    }
-    
 //    public BufferedImage createStringImage(Graphics g, String s) {
 //        int w = g.getFontMetrics().stringWidth(s) + 5;
 //        int h = g.getFontMetrics().getHeight();
@@ -716,16 +727,36 @@ public class MapComponent extends JComponent {
 //        g2D.drawImage(createStringImage(g, e.getRoadName()), aff, this);
 //    }
 //
-//    public double getAngle(Edge edge) {
-//        double x1 = edge.getFromNode().getxCoord();
-//        double y1 = edge.getFromNode().getyCoord();
-//        double x2 = edge.getToNode().getxCoord();
-//        double y2 = edge.getToNode().getyCoord();
-//        
-//        double xDiff = x2 - x1; 
-//        double yDiff = y2 - y1; 
-//        return -Math.atan2(yDiff, xDiff); 
-//    }
+    public double getAngle(Edge edge) {
+        double x1 = edge.getFromNode().getxCoord();
+        double y1 = edge.getFromNode().getyCoord();
+        double x2 = edge.getToNode().getxCoord();
+        double y2 = edge.getToNode().getyCoord();
+
+        double xDiff = x2 - x1;
+        double yDiff = y2 - y1;
+        double angle = -Math.atan2(yDiff, xDiff);
+        if (Math.toDegrees(angle) >= 180) {
+            return angle + Math.PI;
+        } else {
+            return angle;
+        }
+    }
+
+    public void drawRotatedString(Graphics2D g2, Edge edge) {
+        g2.setStroke(new BasicStroke());
+        g2.setColor(Color.black);
+        if (xlength <= quadTreeToDraw.getQuadTreeLength() / 35) {
+            String roadName = edge.getRoadName();
+
+            AffineTransform orig = g2.getTransform();
+            g2.rotate(getAngle(edge), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+            if (!roadName.contains("kørsel")) {
+                g2.drawString(roadName, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+            }
+            g2.setTransform(orig);
+        }
+    }
 
     /**
      * Set the activeColorScheme to one of the three modes.
