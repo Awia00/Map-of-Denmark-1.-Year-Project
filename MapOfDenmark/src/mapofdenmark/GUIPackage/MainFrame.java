@@ -97,7 +97,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         setExtendedState(MAXIMIZED_BOTH);
         requestFocus();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        MigLayout migMainLayout = new MigLayout("", "[180!]10[center]", "[]10[top]");
+        MigLayout migMainLayout = new MigLayout("", "[180!]20[center]", "[]20[top]");
 
         // components
         drawMapComponent = new MapComponent(quadTree, landShapePolygons, landUsePolygons);
