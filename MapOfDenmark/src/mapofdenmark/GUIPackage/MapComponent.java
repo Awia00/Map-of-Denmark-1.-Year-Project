@@ -7,6 +7,7 @@ package mapofdenmark.GUIPackage;
 
 import database.Edge;
 import database.Node;
+import database.RoadTypeEnum;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -394,9 +395,17 @@ public class MapComponent extends JComponent {
 		}
 		double distance = -1;
 		Edge closestEdge = null;
+		outerLoop:
 		for (Edge edge : edges)
 		{
 			double tempDistance = calculateDistanceEdgeToPoint(edge, xCoord, yCoord);
+			for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
+			{
+				if (roadType == edge.getRoadType())
+				{
+					continue outerLoop;
+				}
+			}
 			if (distance == -1 && !edge.getRoadName().trim().equals(""))
 			{
 				distance = tempDistance;
