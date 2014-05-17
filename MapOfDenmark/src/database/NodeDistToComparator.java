@@ -16,11 +16,11 @@ public class NodeDistToComparator implements Comparator<Node>{
 	
 	@Override
     public int compare(Node o1, Node o2) {
-        if (o1.getDistTo()> o2.getDistTo()) {
+        if (o1.getHeuristic()> o2.getHeuristic()) {
 				return 1;
 			}
 
-			else if (o1.getDistTo() == o2.getDistTo()) {
+			else if (o1.getHeuristic() == o2.getHeuristic()) {
 				return 0;
 			}
 
