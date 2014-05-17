@@ -16,6 +16,7 @@ public class Node implements Comparable<Node>{
     private final double xCoord, yCoord;
     private final int ID;   
 	private double distTo;
+	private double heuristic;
     
 
     public Node(int ID, Point2D coords) {
@@ -51,7 +52,16 @@ public class Node implements Comparable<Node>{
 	{
 		return distTo;
 	}
-    
+
+	public void setHeuristic(double heuristic)
+	{
+		this.heuristic = heuristic;
+	}
+
+	public double getHeuristic()
+	{
+		return heuristic;
+	}
 	
     @Override
     public int compareTo(Node o) {
