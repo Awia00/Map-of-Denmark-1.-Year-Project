@@ -536,6 +536,30 @@ public class MapComponent extends JComponent {
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 				{
 					drawEdges(g2, quadTree.getNormalEdges(), false, 150, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
+					for (Edge edge : quadTree.getPlaceNameEdges())
+					{
+						g.setColor(this.activeColorScheme.getPlaceNameColor());
+						if(edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
+						{
+							g.setFont(new Font("Verdana", Font.BOLD, 13));
+							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+						}
+						else if(edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
+						{
+							g.setFont(new Font("Verdana", Font.BOLD, 20));
+							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+						}
+						else if(edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
+						{
+							g.setFont(new Font("Verdana", Font.BOLD, 18));
+							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+						}
+						else if(edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
+						{
+							g.setFont(new Font("Verdana", Font.BOLD, 16));
+							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+						}
+					}
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
@@ -544,14 +568,9 @@ public class MapComponent extends JComponent {
 				drawEdges(g2, quadTree.getHighwayEdges(), false, 35, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
 
 				// draw place names.
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
-					for (Edge edge : quadTree.getPlaceNameEdges())
-					{
-						g.setColor(this.activeColorScheme.getPlaceNameColor());
-						g.setFont(new Font("Verdana", Font.BOLD, 16));
-						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-					}
+					
 				}
 				
 				if (newHashSet)
