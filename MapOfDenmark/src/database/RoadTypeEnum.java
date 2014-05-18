@@ -19,7 +19,7 @@ public enum RoadTypeEnum {
     PATHWAY(new int[] {8,11,28,48}),
     COASTLINE(new int[]{74,75,76}),
     FERRYWAY(new int[] {80}),
-    PLACENAME(new int[] {99,100,101}); // 100 and 101 is for OSM for small cities and big cities
+    PLACENAME(new int[] {99,100,101,102}); // 100, 101, 102 is for OSM for small cities to big cities
     
     private final int[] types;
     
