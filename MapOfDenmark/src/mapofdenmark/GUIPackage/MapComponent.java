@@ -531,11 +531,11 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 20))
 				{
-					drawEdges(g2, quadTree.getSmallEdges(), false, 250, smallRoadStroke, null, activeColorScheme.getSmallRoadColor(), null);
+					drawEdges(g2, quadTree.getSmallEdges(), false, 275, smallRoadStroke, null, activeColorScheme.getSmallRoadColor(), null);
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 				{
-					drawEdges(g2, quadTree.getNormalEdges(), false, 150, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
+					drawEdges(g2, quadTree.getNormalEdges(), false, 200, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
@@ -563,9 +563,9 @@ public class MapComponent extends JComponent {
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
-					drawEdges(g2, quadTree.getSecondaryEdges(), true, 60, secondaryRoadStroke, secondaryRoadStrokeBorder, activeColorScheme.getSecondaryRoadColor(), activeColorScheme.getSecondaryRoadBorderColor());
+					drawEdges(g2, quadTree.getSecondaryEdges(), true, 100, secondaryRoadStroke, secondaryRoadStrokeBorder, activeColorScheme.getSecondaryRoadColor(), activeColorScheme.getSecondaryRoadBorderColor());
 				}
-				drawEdges(g2, quadTree.getHighwayEdges(), false, 35, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
+				drawEdges(g2, quadTree.getHighwayEdges(), false, 50, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
 
 				// draw place names.
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
@@ -683,13 +683,13 @@ public class MapComponent extends JComponent {
 		g2.setStroke(new BasicStroke());
 		g2.setColor(Color.black);
 
-		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 250)
+		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 300)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 14));
-		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 200)
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 225)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 13));
-		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 125)
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 165)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 12));
 		} else
