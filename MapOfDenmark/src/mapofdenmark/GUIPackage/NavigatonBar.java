@@ -119,6 +119,16 @@ public class NavigatonBar extends JPanel {
         });
 
         findAddress = new JButton("Search");
+		findAddress.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// pick the edge the addressParser find's midNode.
+				mapComponent.moveVisibleAreaToCoord(fromNode.getxCoord(), fromNode.getyCoord());
+				mapComponent.repaint();
+			}
+		});
 
         closestRoad = new AAJLabel("");
         closestRoad.setFont(FontLoader.getFontWithSize("Roboto-Bold", 12f));
