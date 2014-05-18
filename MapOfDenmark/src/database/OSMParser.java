@@ -83,7 +83,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		} else if (roadType.equalsIgnoreCase("tertiary") || roadType.equalsIgnoreCase("secondary") || roadType.equalsIgnoreCase("tunnel") || roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 5;
-		} else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("road"))
+		} else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("road") || roadType.equalsIgnoreCase("mini_roundabout"))
 		{
 			return 6;
 		} else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
@@ -125,7 +125,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		} else if (roadType.equalsIgnoreCase("residential") || roadType.equalsIgnoreCase("road") || roadType.equalsIgnoreCase("secondary_link") || roadType.equalsIgnoreCase("tertiary_link"))
 		{
 			return 50;
-		} else if (roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified"))
+		} else if (roadType.equalsIgnoreCase("service") || roadType.equalsIgnoreCase("unclassified") || roadType.equalsIgnoreCase("mini_roundabout"))
 		{
 			return 30;
 		} else if (roadType.equalsIgnoreCase("ferry"))
