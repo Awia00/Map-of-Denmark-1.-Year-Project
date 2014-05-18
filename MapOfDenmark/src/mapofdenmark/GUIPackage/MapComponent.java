@@ -683,18 +683,18 @@ public class MapComponent extends JComponent {
 		g2.setStroke(new BasicStroke());
 		g2.setColor(Color.black);
 
-		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 200)
-		{
-			g2.setFont(new Font("Verdana", Font.BOLD, 16));
-		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 140)
+		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 250)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 14));
-		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 100)
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 200)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 13));
-		} else
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 125)
 		{
 			g2.setFont(new Font("Verdana", Font.BOLD, 12));
+		} else
+		{
+			g2.setFont(new Font("Verdana", Font.BOLD, 11));
 		}
 		String roadName = edge.getRoadName();
 
