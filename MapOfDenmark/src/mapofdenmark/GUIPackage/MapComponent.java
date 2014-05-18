@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,10 +48,14 @@ public class MapComponent extends JComponent {
 	private List<PolygonShape> landUseShapePolygons;
 
 	private List<Node> routeNodes;
+	private HashSet<String> roadNamesDisplayed;
 
 	private int xStartCoord, yStartCoord, xEndCoord, yEndCoord; // for drawing drag N drop zoom
 	private boolean drawRectangle = false;
-	private BasicStroke ferryStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0, new float[]{9}, 0);
+	private BasicStroke ferryStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0, new float[]
+	{
+		9
+	}, 0);
 
 	private int xFrom, yFrom, xTo, yTo;
 
@@ -367,6 +372,11 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(newStartX, newStartY, xZoomLength, yZoomLength);
 	}
 
+	public void moveVisibleAreaToCoord(double xCoord, double yCoord)
+	{
+		visibleArea.setCoord(xCoord - (visibleArea.getxLength() / 2), yCoord - (visibleArea.getyLength() / 2), visibleArea.getxLength(), visibleArea.getyLength());
+	}
+
 	/**
 	 * The findClosestRoad method checks which quadtree the user has its cursor
 	 * in and then goes through all the edges in that quadtree to find out which
@@ -445,6 +455,7 @@ public class MapComponent extends JComponent {
 
 		// draw the map white and with a border
 		Graphics2D g2 = (Graphics2D) g;
+
 		if (landShapePolygons.isEmpty())
 		{
 			g.setColor(this.activeColorScheme.getBackgroundColor());
@@ -465,7 +476,7 @@ public class MapComponent extends JComponent {
 
 		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
-        // create strokes using the zoomFacotrStroke.
+		// create strokes using the zoomFacotrStroke.
 		//BasicStroke highWayStrokeBorder = new BasicStroke((float) (Math.max(3.5, (zoomFactorStroke * 1.2) + 1.5)), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 		BasicStroke highWayStroke = new BasicStroke((float) (Math.max(2, (zoomFactorStroke * 1.2))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
@@ -483,7 +494,7 @@ public class MapComponent extends JComponent {
 
 		BasicStroke routeStroke = new BasicStroke((float) (Math.max(4, (zoomFactorStroke * 2.05))), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 		BasicStroke routeBorderStroke = new BasicStroke((float) (Math.max(5, (zoomFactorStroke * 2.3))), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-		
+
 		drawPolys(g2);
 
 		// sets the rendering hints so that it uses ANTI-ALIASING to render the edges.
@@ -491,12 +502,22 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
+		boolean newHashSet = true;
 		for (QuadTree quadTree : QuadTree.getBottomTrees())
 		{
 			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
-				if(!quadTree.getCoastLineEdges().isEmpty())
+				if (newHashSet)
+				{
+					roadNamesDisplayed = new HashSet<>();
+					newHashSet = false;
+				} else
+				{
+					newHashSet = true;
+				}
+				
+				if (!quadTree.getCoastLineEdges().isEmpty())
 				{
 					drawEdges(g2, quadTree.getCoastLineEdges(), false, -1, new BasicStroke(1.4f), null, new Color(205, 189, 163), null);
 				}
@@ -504,24 +525,24 @@ public class MapComponent extends JComponent {
 				{
 					drawEdges(g2, quadTree.getPathEdges(), false, -1, pathRoadStroke, null, activeColorScheme.getPathwayColor(), null);
 				}
-				if(!quadTree.getFerryEdges().isEmpty())
+				if (!quadTree.getFerryEdges().isEmpty())
 				{
 					drawEdges(g2, quadTree.getFerryEdges(), false, -1, ferryStroke, null, activeColorScheme.getFerrywayColor(), null);
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 20))
 				{
-					drawEdges(g2, quadTree.getSmallEdges(), false, 120, smallRoadStroke, null, activeColorScheme.getSmallRoadColor(), null);
+					drawEdges(g2, quadTree.getSmallEdges(), false, 250, smallRoadStroke, null, activeColorScheme.getSmallRoadColor(), null);
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 				{
-					drawEdges(g2, quadTree.getNormalEdges(), false, 80, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
+					drawEdges(g2, quadTree.getNormalEdges(), false, 150, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
 				}
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
-					drawEdges(g2, quadTree.getSecondaryEdges(), true, 20, secondaryRoadStroke, secondaryRoadStrokeBorder, activeColorScheme.getSecondaryRoadColor(), activeColorScheme.getSecondaryRoadBorderColor());
+					drawEdges(g2, quadTree.getSecondaryEdges(), true, 60, secondaryRoadStroke, secondaryRoadStrokeBorder, activeColorScheme.getSecondaryRoadColor(), activeColorScheme.getSecondaryRoadBorderColor());
 				}
-				drawEdges(g2, quadTree.getHighwayEdges(), false, 10, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
-				
+				drawEdges(g2, quadTree.getHighwayEdges(), false, 35, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
+
 				// draw place names.
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 35))
 				{
@@ -532,11 +553,17 @@ public class MapComponent extends JComponent {
 						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 					}
 				}
+				
+				if (newHashSet)
+				{
+				roadNamesDisplayed = null;
+				}
 			}
+			
 		}
 
 		drawRoute(g2, routeStroke, routeBorderStroke);
-		
+
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		int iconOffsetX = fromIcon.getWidth() / 2;
@@ -564,7 +591,6 @@ public class MapComponent extends JComponent {
 
 		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 
-		
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
 		{
@@ -576,7 +602,7 @@ public class MapComponent extends JComponent {
 			g2.setStroke(new BasicStroke());
 		}
 
-        // when drawing: take the coord, substract its value with the startCoord from visible area
+		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
 	}
 
@@ -637,21 +663,38 @@ public class MapComponent extends JComponent {
 	{
 		g2.setStroke(new BasicStroke());
 		g2.setColor(Color.black);
-		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 35)
-		{
-			String roadName = edge.getRoadName();
 
-			AffineTransform orig = g2.getTransform();
-			g2.rotate(getAngle(edge), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-			if (!roadName.contains("kørsel"))
-			{
-				g2.drawString(roadName, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-			}
-			g2.setTransform(orig);
+		if (xlength <= quadTreeToDraw.getQuadTreeLength() / 200)
+		{
+			g2.setFont(new Font("Verdana", Font.BOLD, 16));
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 140)
+		{
+			g2.setFont(new Font("Verdana", Font.BOLD, 14));
+		} else if (xlength <= quadTreeToDraw.getQuadTreeLength() / 100)
+		{
+			g2.setFont(new Font("Verdana", Font.BOLD, 13));
+		} else
+		{
+			g2.setFont(new Font("Verdana", Font.BOLD, 12));
 		}
+		String roadName = edge.getRoadName();
+
+		AffineTransform orig = g2.getTransform();
+		double rotationFixer = 0;
+		System.out.println(getAngle(edge));
+		if(getAngle(edge) >= Math.PI) 
+		{
+			rotationFixer = Math.PI;
+		}
+		g2.rotate(getAngle(edge)-rotationFixer, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+		if (!roadName.contains("kørsel"))
+		{
+			g2.drawString(roadName, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+		}
+		g2.setTransform(orig);
 	}
 
-	private void drawEdges(Graphics2D g2,List<Edge> edges, boolean drawBorder, int zoomLevelToDrawName, BasicStroke roadStroke, BasicStroke borderStroke, Color roadColor, Color borderColor)
+	private void drawEdges(Graphics2D g2, List<Edge> edges, boolean drawBorder, int zoomLevelToDrawName, BasicStroke roadStroke, BasicStroke borderStroke, Color roadColor, Color borderColor)
 	{
 		for (Edge edge : edges)
 		{
@@ -660,24 +703,29 @@ public class MapComponent extends JComponent {
 			double x2 = edge.getToNode().getxCoord();
 			double y2 = edge.getToNode().getyCoord();
 
-			if(drawBorder)
+			if (drawBorder)
 			{
 				g2.setColor(borderColor);
 				g2.setStroke(borderStroke);
 				g2.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 			}
-			
+
 			g2.setColor(roadColor);
 			g2.setStroke(roadStroke);
 			g2.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
-			if(zoomLevelToDrawName >0 && xlength <= (quadTreeToDraw.getQuadTreeLength() / zoomLevelToDrawName))
+			if (zoomLevelToDrawName > 0 && xlength <= (quadTreeToDraw.getQuadTreeLength() / zoomLevelToDrawName))
 			{
-				drawRotatedString(g2, edge);
+				if (!roadNamesDisplayed.contains(edge.getRoadName()))
+				{
+					drawRotatedString(g2, edge);
+					roadNamesDisplayed.add(edge.getRoadName());
+				}
+
 			}
 		}
 	}
-	
+
 	private void drawRoute(Graphics2D g2, BasicStroke routeStroke, BasicStroke routeBorderStroke)
 	{
 		if (routeNodes != null)
