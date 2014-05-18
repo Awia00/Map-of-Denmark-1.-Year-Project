@@ -95,9 +95,17 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 		} else if (roadType.equalsIgnoreCase("ferry"))
 		{
 			return 80;
-		}else if (roadType.equalsIgnoreCase("city") || roadType.equalsIgnoreCase("village") || roadType.equalsIgnoreCase("town") || roadType.equalsIgnoreCase("suburb") || roadType.equalsIgnoreCase("hamlet") ||  roadType.equalsIgnoreCase("neighbourhood"))
+		}else if (roadType.equalsIgnoreCase("city")) // big cities
 		{
-			return 99;
+			return 102;
+		}
+		else if (roadType.equalsIgnoreCase("town")) // big cities
+		{
+			return 101;
+		}
+		else if (roadType.equalsIgnoreCase("village") || roadType.equalsIgnoreCase("suburb") || roadType.equalsIgnoreCase("hamlet") ||  roadType.equalsIgnoreCase("neighbourhood"))
+		{
+			return 100;
 		}
 		tempRoadTypeList.add(roadType);
 		return -1;
