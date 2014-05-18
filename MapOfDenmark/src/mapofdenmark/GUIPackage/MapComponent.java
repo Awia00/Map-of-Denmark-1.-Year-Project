@@ -680,13 +680,10 @@ public class MapComponent extends JComponent {
 		String roadName = edge.getRoadName();
 
 		AffineTransform orig = g2.getTransform();
-		double rotationFixer = 0;
-		System.out.println(getAngle(edge));
-		if(getAngle(edge) >= Math.PI) 
-		{
-			rotationFixer = Math.PI;
-		}
-		g2.rotate(getAngle(edge)-rotationFixer, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+		double rotationFixer = getAngle(edge);
+		if(rotationFixer > Math.PI/2) rotationFixer = rotationFixer+Math.PI;
+		if(rotationFixer < -Math.PI/2) rotationFixer = rotationFixer+Math.PI;
+		g2.rotate(rotationFixer, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 		if (!roadName.contains("kørsel"))
 		{
 			g2.drawString(roadName, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
