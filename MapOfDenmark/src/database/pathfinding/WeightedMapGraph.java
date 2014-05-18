@@ -37,7 +37,7 @@ public class WeightedMapGraph {
 		{
 			// checks for bad values
 			if (edge.getFromNode().getID() < 0 || edge.getToNode().getID() < 0 || edge.getLength() < 0 || edge.getWeight() < 0
-					|| edge.getLength() == Integer.MAX_VALUE || edge.getWeight() == Integer.MAX_VALUE || edge.getRoadName().equals(""))
+					|| edge.getLength() == Integer.MAX_VALUE || edge.getWeight() == Integer.MAX_VALUE)
 			{
 				continue;
 			}
