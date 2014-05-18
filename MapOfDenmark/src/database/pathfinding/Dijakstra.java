@@ -22,7 +22,7 @@ import java.util.PriorityQueue;
  * @authorNewVersion Anders Wind - awis@itu.dk
  *
  * @buildDate 05-05-2014
- * @author Anders Wind - anextNodeis@itu.dk
+ * @author Anders Wind - awis@itu.dk
  */
 public class Dijakstra {
 
@@ -122,7 +122,7 @@ public class Dijakstra {
 		{
 			return;
 		}
-		if (!pQueue.contains(nextNode) || g_Score < nextNode.getDistTo())
+		if (g_Score < nextNode.getDistTo())
 		{
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
@@ -168,7 +168,7 @@ public class Dijakstra {
 		{
 			return;
 		}
-		if (!pQueue.contains(nextNode) || g_Score < nextNode.getDistTo())
+		if (g_Score < nextNode.getDistTo())
 		{
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
