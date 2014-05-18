@@ -544,12 +544,12 @@ public class MapComponent extends JComponent {
 				drawEdges(g2, quadTree.getHighwayEdges(), false, 35, highWayStroke, null, activeColorScheme.getHighwayColor(), null);
 
 				// draw place names.
-				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 35))
+				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
 				{
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
-						g.setFont(new Font("Verdana", Font.BOLD, 14));
+						g.setFont(new Font("Verdana", Font.BOLD, 16));
 						g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 					}
 				}
