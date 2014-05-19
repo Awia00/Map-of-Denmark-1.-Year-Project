@@ -161,7 +161,7 @@ public class MapComponent extends JComponent {
 	public void setRouteNodes(List<Node> routeNodes)
 	{
 		this.routeNodes = routeNodes;
-		if(!routeNodes.isEmpty())
+		if(routeNodes != null && !routeNodes.isEmpty())
 		{
 			zoomtoRouteArea();
 		}
