@@ -5,6 +5,7 @@
  */
 package mapofdenmark.GUIPackage;
 
+import AddressParser.AddressFinder;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
@@ -40,6 +43,10 @@ public class GUIController {
 	private GUIController()
 	{
 		frameChooser = new FrameChooser();
+		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+		//Handle exception
+        }
 	}
 
 	public static void startLoading(boolean isKrak)
@@ -82,6 +89,7 @@ public class GUIController {
 				QuadTree quadTree = db.getQuadTree();
 
 				graph = new WeightedMapGraph(edges);
+				AddressFinder addressFinder = new AddressFinder(edges);
 
 				List<PolygonShape> landShapePolygons = new ArrayList<>();
 				List<PolygonShape> landUsePolygons = new ArrayList<>();
@@ -93,7 +101,7 @@ public class GUIController {
 
 					landUsePolygons = shapeParser.getLandUsePolygons();
 				}
-				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons); // brug disse 
+				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons, addressFinder); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
 				lframe.setVisible(false);

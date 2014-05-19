@@ -59,6 +59,15 @@ public class Edge implements Comparable<Edge> {
 			this.toNodeID = 0;
 		}
     }
+	
+	public Edge(String roadName)
+	{
+		fromNodeID = 0;
+		toNodeID = 0;
+		roadcode = 0;
+		roadType = 0;
+		this.roadName = roadName;
+	}
     
    public void setLength(){
        if(length == Double.MAX_VALUE) 

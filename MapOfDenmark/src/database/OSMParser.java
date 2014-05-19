@@ -153,7 +153,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	public void startDocument() throws SAXException
 	{
 		mapOfNodes = new HashMap<>();
-		System.out.println("start document   : ");
+//		System.out.println("start document   : ");
 	}
 
 	@Override
@@ -161,13 +161,13 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 	{
 		for (String roadType : tempRoadTypeList)
 		{
-			System.out.println(roadType);
+//			System.out.println(roadType);
 		}
 		mapOfNodes = null;
 		nodesDownloadedPct = 1;
 		edgesDownloadedPct = 1;
 		streetsDownloadedPct = 1;
-		System.out.println("end document     : ");
+//		System.out.println("end document     : ");
 	}
 
 	@Override
@@ -228,7 +228,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
                     minY = Double.parseDouble(attributes.getValue("minlat")) * 150000;
                     maxX = Double.parseDouble(attributes.getValue("maxlon")) * 100000;
                     maxY = Double.parseDouble(attributes.getValue("maxlat")) * 150000;
-                    System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
+//                    System.out.println(minX + ", " + minY + " and " + maxX + ", " + maxY);
                     return;
             }
 	}

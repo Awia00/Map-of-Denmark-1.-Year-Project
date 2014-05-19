@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -60,8 +62,8 @@ public class MapComponent extends JComponent {
 	private int xFrom, yFrom, xTo, yTo;
 
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
-	protected final double zoomInConstant = 0.98;
-	protected final double zoomOutConstant = 1.02;
+	protected double zoomInConstant = 0.98;
+	protected double zoomOutConstant = 1.02;
 
 	private boolean toSet;
 	private boolean fromSet;
@@ -82,6 +84,12 @@ public class MapComponent extends JComponent {
 	private double yVArea;
 	private double ylength;
 	private double componentHeight;
+
+	private Timer timer;
+	private double searchXCoord;
+	private double searchYCoord;
+
+	private String searchedRoad = "no road";
 
 	/**
 	 * The constructor of the mapComponent.
@@ -106,6 +114,7 @@ public class MapComponent extends JComponent {
 		visibleArea = new VisibleArea();
 		this.landShapePolygons = landShapePolygons;
 		this.landUseShapePolygons = landUsePolygons;
+		timer = new Timer();
 
 		try
 		{
@@ -144,9 +153,24 @@ public class MapComponent extends JComponent {
 		this.toNode = toNode;
 	}
 
+	public void setSearchedRoad(String searchedRoad)
+	{
+		this.searchedRoad = searchedRoad;
+	}
+
 	public void setRouteNodes(List<Node> routeNodes)
 	{
 		this.routeNodes = routeNodes;
+		if(routeNodes != null && !routeNodes.isEmpty())
+		{
+			zoomtoRouteArea();
+		}
+			
+	}
+
+	public Timer getTimer()
+	{
+		return timer;
 	}
 
 	public QuadTree quadTree()
@@ -348,7 +372,7 @@ public class MapComponent extends JComponent {
 	 */
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 100000))
+		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 5000))
 		{
 			return;
 		}
@@ -375,6 +399,57 @@ public class MapComponent extends JComponent {
 	public void moveVisibleAreaToCoord(double xCoord, double yCoord)
 	{
 		visibleArea.setCoord(xCoord - (visibleArea.getxLength() / 2), yCoord - (visibleArea.getyLength() / 2), visibleArea.getxLength(), visibleArea.getyLength());
+		searchXCoord = getWidth() / 2;
+		searchYCoord = getHeight() / 2;
+		timer.purge();
+		timer.cancel();
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run()
+			{
+				if (xlength <= quadTreeToDraw.getQuadTreeLength() / 180)
+				{
+					timer.cancel();
+					timer.purge();
+					searchYCoord = 0;
+					searchXCoord = 0;
+					zoomInConstant = 0.98;
+				}
+				else
+				{
+					zoomInConstant = 0.99 - Math.log(xlength)*0.0014;
+					zoomIn(searchXCoord, searchYCoord);
+					repaint();
+				}
+			}
+		};
+		timer.scheduleAtFixedRate(task, 10, 10);
+	}
+	
+	private void zoomtoRouteArea()
+	{
+		double fromNodeX = fromNode.getxCoord();
+		double fromNodeY = fromNode.getyCoord();
+		double toNodeX = toNode.getxCoord();
+		double toNodeY = toNode.getyCoord();
+		
+		
+		double xDistance = Math.max(fromNodeX, toNodeX) - Math.min(fromNodeX, toNodeX);
+		double yDistance = Math.max(fromNodeY, toNodeY) - Math.min(fromNodeY, toNodeY);
+		
+		double zoomconstant;
+		if (xDistance > yDistance)
+		{
+			zoomconstant = (xDistance) / xlength;
+		} else
+		{
+			zoomconstant = (yDistance+yDistance) / xlength;
+		}
+		double newXLength = zoomconstant*xlength*2;
+		double newYLength = zoomconstant*ylength*2;
+		
+		visibleArea.setCoord(Math.min(fromNodeX, toNodeX)+xDistance/2-newXLength/2, Math.min(fromNodeY, toNodeY)+yDistance/2-newYLength/2, newXLength, newYLength);
 	}
 
 	/**
@@ -516,7 +591,7 @@ public class MapComponent extends JComponent {
 				{
 					newHashSet = true;
 				}
-				
+
 				if (!quadTree.getCoastLineEdges().isEmpty())
 				{
 					drawEdges(g2, quadTree.getCoastLineEdges(), false, -1, new BasicStroke(1.4f), null, new Color(205, 189, 163), null);
@@ -539,22 +614,19 @@ public class MapComponent extends JComponent {
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
-						if(edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
+						if (edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 13));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
+						} else if (edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 20));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
+						} else if (edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 18));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
+						} else if (edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 16));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
@@ -570,15 +642,15 @@ public class MapComponent extends JComponent {
 				// draw place names.
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
-					
+
 				}
-				
+
 				if (newHashSet)
 				{
-				roadNamesDisplayed = null;
+					roadNamesDisplayed = null;
 				}
 			}
-			
+
 		}
 
 		drawRoute(g2, routeStroke, routeBorderStroke);
@@ -590,26 +662,19 @@ public class MapComponent extends JComponent {
 		// Draw a pin at destination
 		if (toSet)
 		{
-			double toIconX = toNode.getxCoord();
-			double toIconY = toNode.getyCoord();
-			g2.drawImage(toIcon, (int) (((toIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((toIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    toSet = false;
+			drawPin(g2, toNode, toIcon);
 		}
 		// Draw a pin at start
 		if (fromSet)
 		{
-			double fromIconX = fromNode.getxCoord();
-			double fromIconY = fromNode.getyCoord();
-			g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    fromSet = false;
+			drawPin(g2, fromNode, fromIcon);
 		}
 
 		// draw border around the component
-		g2.setStroke(new BasicStroke(1));
-		g.setColor(Color.black);
-
-		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
-
+//		g2.setStroke(new BasicStroke(1));
+//		g.setColor(Color.black);
+//
+//		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
 		{
@@ -625,15 +690,14 @@ public class MapComponent extends JComponent {
 		// then divide by the length. that way you get values from 0-1.
 	}
 
-//      private void drawPin(Graphics2D g2, Node atNode, BufferedImage icon) {
-//        System.out.println("ho");
-//        int iconOffsetX = icon.getWidth() / 2;
-//        int iconOffsetY = icon.getHeight();
-//        double nodeIconX = atNode.getxCoord();
-//        double nodeIconY = atNode.getyCoord();
-//        System.out.println(icon);
-//        g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//    }
+	private void drawPin(Graphics2D g2, Node atNode, BufferedImage icon)
+	{
+		int iconOffsetX = icon.getWidth() / 2;
+		int iconOffsetY = icon.getHeight();
+		double nodeIconX = atNode.getxCoord();
+		double nodeIconY = atNode.getyCoord();
+		g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+	}
 //    public BufferedImage createStringImage(Graphics g, String s) {
 //        int w = g.getFontMetrics().stringWidth(s) + 5;
 //        int h = g.getFontMetrics().getHeight();
@@ -659,6 +723,7 @@ public class MapComponent extends JComponent {
 //        g2D.drawImage(createStringImage(g, e.getRoadName()), aff, this);
 //    }
 //
+
 	private double getAngle(Edge edge)
 	{
 		double x1 = edge.getFromNode().getxCoord();
@@ -700,8 +765,14 @@ public class MapComponent extends JComponent {
 
 		AffineTransform orig = g2.getTransform();
 		double rotationFixer = getAngle(edge);
-		if(rotationFixer > Math.PI/2) rotationFixer = rotationFixer+Math.PI;
-		if(rotationFixer < -Math.PI/2) rotationFixer = rotationFixer+Math.PI;
+		if (rotationFixer > Math.PI / 2)
+		{
+			rotationFixer = rotationFixer + Math.PI;
+		}
+		if (rotationFixer < -Math.PI / 2)
+		{
+			rotationFixer = rotationFixer + Math.PI;
+		}
 		g2.rotate(rotationFixer, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 		if (!roadName.contains("kørsel"))
 		{
@@ -727,6 +798,10 @@ public class MapComponent extends JComponent {
 			}
 
 			g2.setColor(roadColor);
+			if (searchedRoad.equals(edge.getRoadName()))
+			{
+				g2.setColor(Color.blue);
+			}
 			g2.setStroke(roadStroke);
 			g2.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 

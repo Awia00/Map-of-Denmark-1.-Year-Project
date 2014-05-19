@@ -41,4 +41,47 @@ public enum RoadTypeEnum {
         }
         return false;
     }
+	
+	public static String getRoadTypeName(int roadtype)
+	{
+		switch (roadtype){
+			case 1: return "Highway";
+			case 2: return "Highway";
+			case 21: return "Highway";
+			case 22: return "Highway";
+			case 31: return "Highway";
+			case 32: return "Highway";
+			case 41: return "Highway";
+			case 42: return "Highway";
+			//
+			case 3: return "Secondary road";
+			case 4: return "Secondary road";
+			case 23: return "Secondary road";
+			case 24: return "Secondary road";
+			case 33: return "Secondary road";
+			case 34: return "Secondary road";
+			case 43: return "Secondary road";
+			case 44: return "Secondary road";
+			//
+			case 5: return "Normal road";
+			case 25: return "Normal road";
+			case 35: return "Normal road";
+			case 45: return "Normal road";
+			//
+			case 6: return "Small road";
+			case 10: return "Small road";
+			case 26: return "Small road";
+			case 46: return "Small road";
+			case 48: return "Small road";
+			//
+			case 8: return "Path";
+			case 11: return "Path";
+			case 28: return "Path";
+			//case 48: return "Path";
+			//
+			case 80: return "Ferry route";
+			
+			default: return "Could not find road type";
+		}
+	}
 }
