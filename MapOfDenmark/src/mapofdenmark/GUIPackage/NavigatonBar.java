@@ -133,6 +133,11 @@ public class NavigatonBar extends JPanel {
 					mapComponent.setSearchedRoad(edge.getRoadName());
 					mapComponent.repaint();
 				}
+				else
+				{
+					mapComponent.setSearchedRoad("no road");
+					mapComponent.repaint();
+				}
 				// pick the edge the addressParser find's midNode.
 				
 			}
