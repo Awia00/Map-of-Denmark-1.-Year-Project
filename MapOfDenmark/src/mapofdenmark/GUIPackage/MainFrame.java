@@ -52,9 +52,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     private Container mainContainer;
     private JMenuBar menuBar;
     private NavigatonBar navigationBar;
-    private JLabel closestRoadLabel;
-    private JTextField enterAddressField;
-    private JButton searchButton;
 
     private Dimension screenSize;
 
@@ -100,9 +97,6 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
 
         // components
         drawMapComponent = new MapComponent(quadTree, landShapePolygons, landUsePolygons);
-        closestRoadLabel = new AAJLabel("Closest road");
-        enterAddressField = new JTextField("Enter Address... ");
-        searchButton = new JButton("Search");
         closestRoadString = "";
 
         navigationBar = new NavigatonBar(drawMapComponent, addressFinder);
