@@ -221,29 +221,10 @@ public class MapComponent extends JComponent {
 	 */
 	public void dragNDropZoom(double xStartCoord, double yStartCoord, double xEndCoord, double yEndCoord)
 	{
-		double mapXStartCoord;
-		double mapYStartCoord;
-		double mapXEndCoord;
-		double mapYEndCoord;
-
-		if (xStartCoord < xEndCoord)
-		{
-			mapXStartCoord = convertMouseXToMap(xStartCoord);
-			mapXEndCoord = convertMouseXToMap(xEndCoord);
-		} else
-		{
-			mapXStartCoord = convertMouseXToMap(xEndCoord);
-			mapXEndCoord = convertMouseXToMap(xStartCoord);
-		}
-		if (yStartCoord > yEndCoord)
-		{
-			mapYStartCoord = convertMouseYToMap(yStartCoord);
-			mapYEndCoord = convertMouseYToMap(yEndCoord);
-		} else
-		{
-			mapYStartCoord = convertMouseYToMap(yEndCoord);
-			mapYEndCoord = convertMouseYToMap(yStartCoord);
-		}
+		final double mapXStartCoord = Math.min(convertMouseXToMap(xStartCoord),convertMouseXToMap(xEndCoord));
+		final double mapYStartCoord = Math.min(convertMouseYToMap(yStartCoord),convertMouseYToMap(yEndCoord));
+		final double mapXEndCoord = Math.max(convertMouseXToMap(xStartCoord),convertMouseXToMap(xEndCoord));
+		final double mapYEndCoord = Math.max(convertMouseYToMap(yStartCoord),convertMouseYToMap(yEndCoord));
 
 		double zoomconstant;
 		if (mapXEndCoord - mapXStartCoord > mapYEndCoord - mapYStartCoord)
@@ -263,8 +244,40 @@ public class MapComponent extends JComponent {
 		{
 			return;
 		}
-		System.out.println("zoomconstant: " + zoomconstant);
-		visibleArea.setCoord(mapXStartCoord, mapYStartCoord, visibleArea.getxLength() * zoomconstant, visibleArea.getyLength() * zoomconstant);
+		final double newXLength = visibleArea.getxLength() * zoomconstant;
+		final double newYLength = visibleArea.getyLength() * zoomconstant;
+		
+		visibleArea.setCoord(mapXStartCoord+newXLength/2-xlength/2, mapYStartCoord+newYLength/2-ylength/2, xlength, ylength);
+		
+		searchXCoord = getWidth() / 2;
+		searchYCoord = getHeight() / 2;
+		
+		timer.purge();
+		timer.cancel();
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run()
+			{
+				if (xlength <= newXLength)
+				{
+					visibleArea.setCoord(mapXStartCoord, mapYStartCoord, newXLength, newYLength);
+					timer.cancel();
+					timer.purge();
+					searchYCoord = 0;
+					searchXCoord = 0;
+					zoomInConstant = 0.98;
+					repaint();
+				}
+				else
+				{
+					zoomInConstant = 0.99 - Math.log(xlength)*0.0014;
+					zoomIn(searchXCoord, searchYCoord);
+					repaint();
+				}
+			}
+		};
+		timer.scheduleAtFixedRate(task, 10, 10);
 	}
 
 	/**
@@ -372,6 +385,7 @@ public class MapComponent extends JComponent {
 	 */
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
+		zoomInConstant = 0.98;
 		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 5000))
 		{
 			return;
@@ -429,16 +443,16 @@ public class MapComponent extends JComponent {
 	
 	private void zoomtoRouteArea()
 	{
-		double fromNodeX = fromNode.getxCoord();
-		double fromNodeY = fromNode.getyCoord();
-		double toNodeX = toNode.getxCoord();
-		double toNodeY = toNode.getyCoord();
+		final double fromNodeX = fromNode.getxCoord();
+		final double fromNodeY = fromNode.getyCoord();
+		final double toNodeX = toNode.getxCoord();
+		final double toNodeY = toNode.getyCoord();
 		
 		
-		double xDistance = Math.max(fromNodeX, toNodeX) - Math.min(fromNodeX, toNodeX);
-		double yDistance = Math.max(fromNodeY, toNodeY) - Math.min(fromNodeY, toNodeY);
+		final double xDistance = Math.max(fromNodeX, toNodeX) - Math.min(fromNodeX, toNodeX);
+		final double yDistance = Math.max(fromNodeY, toNodeY) - Math.min(fromNodeY, toNodeY);
 		
-		double zoomconstant;
+		final double zoomconstant;
 		if (xDistance > yDistance)
 		{
 			zoomconstant = (xDistance) / xlength;
@@ -446,10 +460,40 @@ public class MapComponent extends JComponent {
 		{
 			zoomconstant = (yDistance+yDistance) / xlength;
 		}
-		double newXLength = zoomconstant*xlength*2;
-		double newYLength = zoomconstant*ylength*2;
+		final double newXLength = zoomconstant*xlength*2;
+		final double newYLength = zoomconstant*ylength*2;
 		
-		visibleArea.setCoord(Math.min(fromNodeX, toNodeX)+xDistance/2-newXLength/2, Math.min(fromNodeY, toNodeY)+yDistance/2-newYLength/2, newXLength, newYLength);
+		visibleArea.setCoord(Math.min(fromNodeX, toNodeX)+xDistance/2-xlength/2, Math.min(fromNodeY, toNodeY)+yDistance/2-ylength/2, xlength, ylength);
+		
+		searchXCoord = getWidth() / 2;
+		searchYCoord = getHeight() / 2;
+		
+		timer.purge();
+		timer.cancel();
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run()
+			{
+				if (xlength <= newXLength)
+				{
+					visibleArea.setCoord(Math.min(fromNodeX, toNodeX)+xDistance/2-newXLength/2, Math.min(fromNodeY, toNodeY)+yDistance/2-newYLength/2, newXLength, newYLength);
+					timer.cancel();
+					timer.purge();
+					searchYCoord = 0;
+					searchXCoord = 0;
+					zoomInConstant = 0.98;
+					repaint();
+				}
+				else
+				{
+					zoomInConstant = 0.99 - Math.log(xlength)*0.0014;
+					zoomIn(searchXCoord, searchYCoord);
+					repaint();
+				}
+			}
+		};
+		timer.scheduleAtFixedRate(task, 10, 10);
 	}
 
 	/**
