@@ -161,6 +161,11 @@ public class MapComponent extends JComponent {
 	public void setRouteNodes(List<Node> routeNodes)
 	{
 		this.routeNodes = routeNodes;
+		if(!routeNodes.isEmpty())
+		{
+			zoomtoRouteArea();
+		}
+			
 	}
 
 	public Timer getTimer()
@@ -420,6 +425,31 @@ public class MapComponent extends JComponent {
 			}
 		};
 		timer.scheduleAtFixedRate(task, 10, 10);
+	}
+	
+	private void zoomtoRouteArea()
+	{
+		double fromNodeX = fromNode.getxCoord();
+		double fromNodeY = fromNode.getyCoord();
+		double toNodeX = toNode.getxCoord();
+		double toNodeY = toNode.getyCoord();
+		
+		
+		double xDistance = Math.max(fromNodeX, toNodeX) - Math.min(fromNodeX, toNodeX);
+		double yDistance = Math.max(fromNodeY, toNodeY) - Math.min(fromNodeY, toNodeY);
+		
+		double zoomconstant;
+		if (xDistance > yDistance)
+		{
+			zoomconstant = (xDistance) / xlength;
+		} else
+		{
+			zoomconstant = (yDistance+yDistance) / xlength;
+		}
+		double newXLength = zoomconstant*xlength*2;
+		double newYLength = zoomconstant*ylength*2;
+		
+		visibleArea.setCoord(Math.min(fromNodeX, toNodeX)+xDistance/2-newXLength/2, Math.min(fromNodeY, toNodeY)+yDistance/2-newYLength/2, newXLength, newYLength);
 	}
 
 	/**
