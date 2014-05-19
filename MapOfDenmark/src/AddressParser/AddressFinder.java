@@ -21,12 +21,26 @@ import java.util.List;
  * @author Anders Wind - awis@itu.dk
  */
 public class AddressFinder {
-	List<Edge> Edges;
+	List<Edge> edges;
+	EdgeComparerName nameComparator;
 
-	public AddressFinder(List<Edge> Edges)
+	public AddressFinder(List<Edge> edges)
 	{
-		this.Edges = Edges;
-		Collections.sort(Edges, new EdgeComparerName());		
+		this.edges = edges;
+		nameComparator = new EdgeComparerName();
+		Collections.sort(edges, nameComparator);
+	}
+	
+	public Edge searchForEdge(String input)
+	{
+		String address = cleanString(input);
+		Edge edge = edges.get(Collections.binarySearch(edges, new Edge(null, null, 0, address, 0, 0), nameComparator));
+		return edge;
+	}
+	
+	private String cleanString(String string)
+	{
+		return string;
 	}
 	
 	

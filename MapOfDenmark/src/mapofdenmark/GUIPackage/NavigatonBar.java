@@ -5,6 +5,7 @@
  */
 package mapofdenmark.GUIPackage;
 
+import AddressParser.AddressFinder;
 import database.Edge;
 import database.Node;
 import database.pathfinding.WeightedMapGraph;
@@ -59,11 +60,13 @@ public class NavigatonBar extends JPanel {
     private boolean isFastestRoute = true;
 
     private WeightedMapGraph wGraph;
+	private AddressFinder addressFinder;
 
-    MapComponent mapComponent;
+    private MapComponent mapComponent;
 
-    public NavigatonBar(MapComponent mc) {
+    public NavigatonBar(MapComponent mc, AddressFinder addressFinder) {
         mapComponent = mc;
+		this.addressFinder = addressFinder;
 
         rutevejledning = new AAJLabel("Get Directions ");
         rutevejledning.setFont(FontLoader.getFontWithSize("Roboto-Bold", 15f));
@@ -257,7 +260,7 @@ public class NavigatonBar extends JPanel {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.add(new NavigatonBar(null));
+        frame.add(new NavigatonBar(null, null));
         frame.pack();
         frame.setVisible(true);
     }

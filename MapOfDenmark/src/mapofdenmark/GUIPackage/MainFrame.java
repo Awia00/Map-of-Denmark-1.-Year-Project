@@ -5,14 +5,13 @@
  */
 package mapofdenmark.GUIPackage;
 
+import AddressParser.AddressFinder;
 import database.Edge;
 import database.Node;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -73,8 +72,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
     Timer timer = new Timer();
     Timer mouseStillTimer = new Timer();
 
-    public MainFrame(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons) {
-        initialize(quadTree, landShapePolygons, landUsePolygons);
+    public MainFrame(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons, AddressFinder addressFinder) {
+        initialize(quadTree, landShapePolygons, landUsePolygons, addressFinder);
         addListeners();
 
         revalidate();
@@ -83,7 +82,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         setVisible(true);
     }
 
-    private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons) {
+    private void initialize(QuadTree quadTree, List<PolygonShape> landShapePolygons, List<PolygonShape> landUsePolygons, AddressFinder addressFinder) {
         try {
             setIconImage(ImageIO.read(new File("assets/Icon48.png")));
 
@@ -106,7 +105,7 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
         searchButton = new JButton("Search");
         closestRoadString = "";
 
-        navigationBar = new NavigatonBar(drawMapComponent);
+        navigationBar = new NavigatonBar(drawMapComponent, addressFinder);
 
         mainContainer = new JPanel(migMainLayout);
 
