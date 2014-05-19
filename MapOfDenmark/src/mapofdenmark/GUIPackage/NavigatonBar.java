@@ -37,7 +37,7 @@ public class NavigatonBar extends JPanel {
     private PlaceholderTextField from, to, searchAddress;
     private JLabel rutevejledning;
     private Container roadInfo;
-    private JTextField roadNameField, velocityField, roadTypeField;
+    private JLabel roadNameField, velocityField, roadTypeField;
     private Button visVej;
     private JButton printRoute, findRoute, findAddress, reset;
     private JLabel closestRoad;
@@ -78,26 +78,26 @@ public class NavigatonBar extends JPanel {
         searchAddress.setForeground(Color.decode("#4A4A4A"));
 
         from = new PlaceholderTextField("");
-        from.setPlaceholder("Fra");
+        from.setPlaceholder("From");
         from.setColumns(20);
         from.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
         from.setForeground(Color.decode("#4A4A4A"));
 
         to = new PlaceholderTextField("");
-        to.setPlaceholder("Til");
+        to.setPlaceholder("To");
         to.setColumns(20);
         to.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
         to.setForeground(Color.decode("#4A4A4A"));
 
-        roadNameField = new JTextField("roadname");
-        roadNameField.setEditable(false);
-        roadNameField.setBorder(null);
-        velocityField = new JTextField("velocity");
-        velocityField.setEditable(false);
-        velocityField.setBorder(null);
-        roadTypeField = new JTextField("roadtype");
-        roadTypeField.setEditable(false);
-        roadTypeField.setBorder(null);
+        roadNameField = new AAJLabel("");
+//        roadNameFiled.setEditable(false);
+//        roadNameField.setBorder(null);
+        velocityField = new AAJLabel("");
+//        velocityField.setEditable(false);
+//        velocityField.setBorder(null);
+        roadTypeField = new AAJLabel("");
+//        roadTypeField.setEditable(false);
+//        roadTypeField.setBorder(null);
 
         roadInfo = new JPanel();
         roadInfo.setLayout(new BoxLayout(roadInfo, BoxLayout.Y_AXIS));
@@ -246,7 +246,7 @@ public class NavigatonBar extends JPanel {
     public void setClosestRoadEdge(Edge closestRoadEdge) {
         this.closestRoadEdge = closestRoadEdge;
         roadNameField.setText(closestRoadEdge.getRoadName());
-        velocityField.setText("" + String.format("%.0f", closestRoadEdge.getLength() / closestRoadEdge.getWeight()) + " km/t");
+        velocityField.setText("" + String.format("%.0f", closestRoadEdge.getLength() / closestRoadEdge.getWeight()) + " km/h");
         roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
     }
 
@@ -329,11 +329,11 @@ public class NavigatonBar extends JPanel {
             }
             if (!currentRoad.equals(edge.getRoadName())) {
                 if (currentRoad.contains("Fra-/tilkørsel")) {
-                    directions.append("Tag " + currentRoad + "\n\n-------------------------------\n");
+                    directions.append("Take " + currentRoad + "\n\n-------------------------------\n");
                     currentRoad = edge.getRoadName();
                     continue;
                 }
-                directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+                directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
                 currentRoad = edge.getRoadName();
                 currentLength = 0;
             } else {
@@ -342,7 +342,7 @@ public class NavigatonBar extends JPanel {
             total += edge.getLength();
         }
         if (directions.getText().equals("") || currentLength != 0) {
-            directions.append("Kør ad " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
+            directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
         }
         directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
     }
