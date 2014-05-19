@@ -34,7 +34,7 @@ public class AddressFinder {
 	public Edge searchForEdge(String input)
 	{
 		String address = cleanString(input);
-		Edge edge = edges.get(Collections.binarySearch(edges, new Edge(null, null, 0, address, 0, 0), nameComparator));
+		Edge edge = edges.get(Collections.binarySearch(edges, new Edge(address), nameComparator));
 		return edge;
 	}
 	
