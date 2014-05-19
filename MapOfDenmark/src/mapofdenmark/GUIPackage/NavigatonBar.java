@@ -101,7 +101,6 @@ public class NavigatonBar extends JPanel {
 
         roadInfo = new JPanel();
         roadInfo.setLayout(new BoxLayout(roadInfo, BoxLayout.Y_AXIS));
-        roadInfo.setBackground(Color.white);
         roadInfo.add(roadNameField);
         roadInfo.add(velocityField);
         roadInfo.add(roadTypeField);
