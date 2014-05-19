@@ -571,18 +571,21 @@ public class MapComponent extends JComponent {
 	@Override
 	public void paint(Graphics g)
 	{
-
-		// draw the map white and with a border
-		Graphics2D g2 = (Graphics2D) g;
-
+		final Graphics2D g2 = (Graphics2D) g;
+		Thread thread = new Thread() {
+			@Override
+			@SuppressWarnings("empty-statement")
+			public void run()
+			{
+				
 		if (landShapePolygons.isEmpty())
 		{
-			g.setColor(this.activeColorScheme.getBackgroundColor());
+			g2.setColor(activeColorScheme.getBackgroundColor());
 		} else
 		{
-			g.setColor(new Color(181, 207, 241));
+			g2.setColor(new Color(181, 207, 241));
 		}
-		g.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
+		g2.fillRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		xlength = visibleArea.getxLength();
 		ylength = visibleArea.getyLength();
@@ -657,23 +660,23 @@ public class MapComponent extends JComponent {
 					drawEdges(g2, quadTree.getNormalEdges(), false, 200, normalRoadStroke, null, activeColorScheme.getNormalRoadColor(), null);
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
-						g.setColor(this.activeColorScheme.getPlaceNameColor());
+						g2.setColor(activeColorScheme.getPlaceNameColor());
 						if (edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
 						{
-							g.setFont(new Font("Verdana", Font.BOLD, 13));
-							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+							g2.setFont(new Font("Verdana", Font.BOLD, 13));
+							g2.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 						} else if (edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 						{
-							g.setFont(new Font("Verdana", Font.BOLD, 20));
-							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+							g2.setFont(new Font("Verdana", Font.BOLD, 20));
+							g2.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 						} else if (edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
 						{
-							g.setFont(new Font("Verdana", Font.BOLD, 18));
-							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+							g2.setFont(new Font("Verdana", Font.BOLD, 18));
+							g2.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 						} else if (edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
 						{
-							g.setFont(new Font("Verdana", Font.BOLD, 16));
-							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
+							g2.setFont(new Font("Verdana", Font.BOLD, 16));
+							g2.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 						}
 					}
 				}
@@ -723,12 +726,18 @@ public class MapComponent extends JComponent {
 		if (drawRectangle)
 		{
 			//The color of the rectangle is set as the inverted color of the background color.
-			g.setColor(new Color(255 - (this.activeColorScheme.getBackgroundColor().getRed()), 255 - (this.activeColorScheme.getBackgroundColor().getGreen()), 255 - (this.activeColorScheme.getBackgroundColor().getBlue())));
+			g2.setColor(new Color(255 - (activeColorScheme.getBackgroundColor().getRed()), 255 - (activeColorScheme.getBackgroundColor().getGreen()), 255 - (activeColorScheme.getBackgroundColor().getBlue())));
 
 			g2.setStroke(new BasicStroke(2));
-			g.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
+			g2.drawRect(xStartCoord, yStartCoord, xEndCoord - xStartCoord, yEndCoord - yStartCoord);
 			g2.setStroke(new BasicStroke());
 		}
+			}
+		};
+		thread.run();
+		// draw the map white and with a border
+		
+
 
 		// when drawing: take the coord, substract its value with the startCoord from visible area
 		// then divide by the length. that way you get values from 0-1.
