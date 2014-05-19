@@ -64,7 +64,7 @@ public class NavigatonBar extends JPanel {
 
     private MapComponent mapComponent;
 
-    public NavigatonBar(MapComponent mc, AddressFinder addressFinder) {
+    public NavigatonBar(MapComponent mc, final AddressFinder addressFinder) {
         mapComponent = mc;
 		this.addressFinder = addressFinder;
 
@@ -126,9 +126,14 @@ public class NavigatonBar extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				Edge edge = addressFinder.searchForEdge(searchAddress.getText());
+				if(edge != null)
+				{
+					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
+					mapComponent.repaint();
+				}
 				// pick the edge the addressParser find's midNode.
-				mapComponent.moveVisibleAreaToCoord(fromNode.getxCoord(), fromNode.getyCoord());
-				mapComponent.repaint();
+				
 			}
 		});
 
