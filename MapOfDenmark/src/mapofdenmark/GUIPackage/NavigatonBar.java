@@ -8,6 +8,7 @@ package mapofdenmark.GUIPackage;
 import AddressParser.AddressFinder;
 import database.Edge;
 import database.Node;
+import database.RoadTypeEnum;
 import database.pathfinding.WeightedMapGraph;
 import java.awt.Color;
 import java.awt.Container;
@@ -261,7 +262,7 @@ public class NavigatonBar extends JPanel {
         this.closestRoadEdge = closestRoadEdge;
         roadNameField.setText(closestRoadEdge.getRoadName());
         velocityField.setText("" + String.format("%.0f", closestRoadEdge.getLength() / closestRoadEdge.getWeight()) + " km/h");
-        roadTypeField.setText("roadType: " + closestRoadEdge.getRoadType());
+        roadTypeField.setText(RoadTypeEnum.getRoadTypeName(closestRoadEdge.getRoadType()) + "  ");
     }
 
     @Override

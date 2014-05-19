@@ -637,10 +637,10 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 		}
 
 		// draw border around the component
-		g2.setStroke(new BasicStroke(1));
-		g.setColor(Color.black);
-
-		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
+//		g2.setStroke(new BasicStroke(1));
+//		g.setColor(Color.black);
+//
+//		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
