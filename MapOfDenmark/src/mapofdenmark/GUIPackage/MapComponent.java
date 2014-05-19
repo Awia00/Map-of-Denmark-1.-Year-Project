@@ -62,8 +62,8 @@ public class MapComponent extends JComponent {
 	private int xFrom, yFrom, xTo, yTo;
 
 	// zoom constants to explain how much is zoomed in each time the zoom function is called.
-	protected final double zoomInConstant = 0.98;
-	protected final double zoomOutConstant = 1.02;
+	protected double zoomInConstant = 0.98;
+	protected double zoomOutConstant = 1.02;
 
 	private boolean toSet;
 	private boolean fromSet;
@@ -114,6 +114,7 @@ public class MapComponent extends JComponent {
 		visibleArea = new VisibleArea();
 		this.landShapePolygons = landShapePolygons;
 		this.landUseShapePolygons = landUsePolygons;
+		timer = new Timer();
 
 		try
 		{
@@ -160,6 +161,11 @@ public class MapComponent extends JComponent {
 	public void setRouteNodes(List<Node> routeNodes)
 	{
 		this.routeNodes = routeNodes;
+	}
+
+	public Timer getTimer()
+	{
+		return timer;
 	}
 
 	public QuadTree quadTree()
@@ -361,7 +367,7 @@ public class MapComponent extends JComponent {
 	 */
 	public void zoomIn(double mouseXCoord, double mouseYCoord)
 	{
-		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 100000))
+		if (visibleArea.getyLength() <= (quadTreeToDraw.getQuadTreeLength() / 5000))
 		{
 			return;
 		}
@@ -390,19 +396,26 @@ public class MapComponent extends JComponent {
 		visibleArea.setCoord(xCoord - (visibleArea.getxLength() / 2), yCoord - (visibleArea.getyLength() / 2), visibleArea.getxLength(), visibleArea.getyLength());
 		searchXCoord = getWidth() / 2;
 		searchYCoord = getHeight() / 2;
+		timer.purge();
+		timer.cancel();
 		timer = new Timer();
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run()
 			{
-				zoomIn(searchXCoord, searchYCoord);
-				repaint();
-				if (xlength <= quadTreeToDraw.getQuadTreeLength() / 75)
+				if (xlength <= quadTreeToDraw.getQuadTreeLength() / 180)
 				{
 					timer.cancel();
 					timer.purge();
 					searchYCoord = 0;
 					searchXCoord = 0;
+					zoomInConstant = 0.98;
+				}
+				else
+				{
+					zoomInConstant = 0.99 - Math.log(xlength)*0.0014;
+					zoomIn(searchXCoord, searchYCoord);
+					repaint();
 				}
 			}
 		};
