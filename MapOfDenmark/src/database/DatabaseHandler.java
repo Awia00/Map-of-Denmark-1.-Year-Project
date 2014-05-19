@@ -42,7 +42,6 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<Edge> edges = new ArrayList<>();
     ArrayList<Node> nodes = new ArrayList<>();
     NodeComparer nc = new NodeComparer();
-    EdgeComparer ec = new EdgeComparer();
     EdgeComparerName ecName = new EdgeComparerName();
     StreetComparer sc = new StreetComparer();
     private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
