@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -82,6 +84,12 @@ public class MapComponent extends JComponent {
 	private double yVArea;
 	private double ylength;
 	private double componentHeight;
+	
+	private Timer timer;
+	private double searchXCoord;
+	private double searchYCoord;
+	
+	private String searchedRoad = "no road";
 
 	/**
 	 * The constructor of the mapComponent.
@@ -142,6 +150,11 @@ public class MapComponent extends JComponent {
 	public void setToNode(Node toNode)
 	{
 		this.toNode = toNode;
+	}
+
+	public void setSearchedRoad(String searchedRoad)
+	{
+		this.searchedRoad = searchedRoad;
 	}
 
 	public void setRouteNodes(List<Node> routeNodes)
@@ -375,19 +388,38 @@ public class MapComponent extends JComponent {
 	public void moveVisibleAreaToCoord(double xCoord, double yCoord)
 	{
 		visibleArea.setCoord(xCoord - (visibleArea.getxLength() / 2), yCoord - (visibleArea.getyLength() / 2), visibleArea.getxLength(), visibleArea.getyLength());
+		searchXCoord = getWidth() / 2;
+		searchYCoord = getHeight() / 2;
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run()
+			{
+				zoomIn(searchXCoord, searchYCoord);
+				repaint();
+				if (xlength <= quadTreeToDraw.getQuadTreeLength()/100)
+				{
+					timer.cancel();
+					timer.purge();
+					searchYCoord = 0;
+					searchXCoord = 0;
+				}
+			}
+		};
+		timer.scheduleAtFixedRate(task, 10, 10);
 	}
 
-	/**
-	 * The findClosestRoad method checks which quadtree the user has its cursor
-	 * in and then goes through all the edges in that quadtree to find out which
-	 * edge is the closest.
-	 *
-	 * @param mouseCoordX
-	 * @param mouseCoordY
-	 * @return a string with that edge's roadName. Could be changed to return
-	 * that edge or the street it is in.
-	 */
-	public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
+/**
+ * The findClosestRoad method checks which quadtree the user has its cursor in
+ * and then goes through all the edges in that quadtree to find out which edge
+ * is the closest.
+ *
+ * @param mouseCoordX
+ * @param mouseCoordY
+ * @return a string with that edge's roadName. Could be changed to return that
+ * edge or the street it is in.
+ */
+public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 	{
 		//QuadTree quadTreeToSearch;
 		double xCoord = convertMouseXToMap(mouseCoordX);
@@ -450,7 +482,7 @@ public class MapComponent extends JComponent {
 	}
 
 	@Override
-	public void paint(Graphics g)
+		public void paint(Graphics g)
 	{
 
 		// draw the map white and with a border
@@ -727,6 +759,7 @@ public class MapComponent extends JComponent {
 			}
 
 			g2.setColor(roadColor);
+			if (searchedRoad.equals(edge.getRoadName()))g2.setColor(Color.blue);
 			g2.setStroke(roadStroke);
 			g2.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 

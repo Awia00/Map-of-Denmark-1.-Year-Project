@@ -130,6 +130,7 @@ public class NavigatonBar extends JPanel {
 				if(edge != null)
 				{
 					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
+					mapComponent.setSearchedRoad(edge.getRoadName());
 					mapComponent.repaint();
 				}
 				// pick the edge the addressParser find's midNode.
