@@ -45,7 +45,13 @@ public class AddressFinder {
 			}
 			tempString = tempString.substring(0,tempString.length()-1);
 		}
-		return edges.get(index);
+		if (index>=0 && index < edges.size())
+		{
+			Edge edge = edges.get(index);
+			if (edge.getRoadName().trim().equals("")) return null;
+			return edge;
+		}
+		return null;
 	}
 	
 	private String cleanString(String string)
