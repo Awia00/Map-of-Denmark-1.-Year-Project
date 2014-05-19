@@ -84,11 +84,11 @@ public class MapComponent extends JComponent {
 	private double yVArea;
 	private double ylength;
 	private double componentHeight;
-	
+
 	private Timer timer;
 	private double searchXCoord;
 	private double searchYCoord;
-	
+
 	private String searchedRoad = "no road";
 
 	/**
@@ -397,7 +397,7 @@ public class MapComponent extends JComponent {
 			{
 				zoomIn(searchXCoord, searchYCoord);
 				repaint();
-				if (xlength <= quadTreeToDraw.getQuadTreeLength()/100)
+				if (xlength <= quadTreeToDraw.getQuadTreeLength() / 75)
 				{
 					timer.cancel();
 					timer.purge();
@@ -409,17 +409,17 @@ public class MapComponent extends JComponent {
 		timer.scheduleAtFixedRate(task, 10, 10);
 	}
 
-/**
- * The findClosestRoad method checks which quadtree the user has its cursor in
- * and then goes through all the edges in that quadtree to find out which edge
- * is the closest.
- *
- * @param mouseCoordX
- * @param mouseCoordY
- * @return a string with that edge's roadName. Could be changed to return that
- * edge or the street it is in.
- */
-public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
+	/**
+	 * The findClosestRoad method checks which quadtree the user has its cursor
+	 * in and then goes through all the edges in that quadtree to find out which
+	 * edge is the closest.
+	 *
+	 * @param mouseCoordX
+	 * @param mouseCoordY
+	 * @return a string with that edge's roadName. Could be changed to return
+	 * that edge or the street it is in.
+	 */
+	public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 	{
 		//QuadTree quadTreeToSearch;
 		double xCoord = convertMouseXToMap(mouseCoordX);
@@ -482,7 +482,7 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 	}
 
 	@Override
-		public void paint(Graphics g)
+	public void paint(Graphics g)
 	{
 
 		// draw the map white and with a border
@@ -548,7 +548,7 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 				{
 					newHashSet = true;
 				}
-				
+
 				if (!quadTree.getCoastLineEdges().isEmpty())
 				{
 					drawEdges(g2, quadTree.getCoastLineEdges(), false, -1, new BasicStroke(1.4f), null, new Color(205, 189, 163), null);
@@ -571,22 +571,19 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 					for (Edge edge : quadTree.getPlaceNameEdges())
 					{
 						g.setColor(this.activeColorScheme.getPlaceNameColor());
-						if(edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
+						if (edge.getRoadType() == 99 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 55))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 13));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
+						} else if (edge.getRoadType() == 102 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 5))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 20));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
+						} else if (edge.getRoadType() == 101 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 17))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 18));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
-						}
-						else if(edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
+						} else if (edge.getRoadType() == 100 && xlength <= (quadTreeToDraw.getQuadTreeLength() / 32))
 						{
 							g.setFont(new Font("Verdana", Font.BOLD, 16));
 							g.drawString(edge.getRoadName(), (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
@@ -602,15 +599,15 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 				// draw place names.
 				if (xlength <= (quadTreeToDraw.getQuadTreeLength() / 2))
 				{
-					
+
 				}
-				
+
 				if (newHashSet)
 				{
-				roadNamesDisplayed = null;
+					roadNamesDisplayed = null;
 				}
 			}
-			
+
 		}
 
 		drawRoute(g2, routeStroke, routeBorderStroke);
@@ -622,18 +619,12 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 		// Draw a pin at destination
 		if (toSet)
 		{
-			double toIconX = toNode.getxCoord();
-			double toIconY = toNode.getyCoord();
-			g2.drawImage(toIcon, (int) (((toIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((toIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    toSet = false;
+			drawPin(g2, toNode, toIcon);
 		}
 		// Draw a pin at start
 		if (fromSet)
 		{
-			double fromIconX = fromNode.getxCoord();
-			double fromIconY = fromNode.getyCoord();
-			g2.drawImage(fromIcon, (int) (((fromIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((fromIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//                                    fromSet = false;
+			drawPin(g2, fromNode, fromIcon);
 		}
 
 		// draw border around the component
@@ -641,7 +632,6 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 //		g.setColor(Color.black);
 //
 //		g.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
-
 		// draw the "drag and drop" rectangle if the user is dragging and dropping it.
 		if (drawRectangle)
 		{
@@ -657,15 +647,14 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 		// then divide by the length. that way you get values from 0-1.
 	}
 
-//      private void drawPin(Graphics2D g2, Node atNode, BufferedImage icon) {
-//        System.out.println("ho");
-//        int iconOffsetX = icon.getWidth() / 2;
-//        int iconOffsetY = icon.getHeight();
-//        double nodeIconX = atNode.getxCoord();
-//        double nodeIconY = atNode.getyCoord();
-//        System.out.println(icon);
-//        g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
-//    }
+	private void drawPin(Graphics2D g2, Node atNode, BufferedImage icon)
+	{
+		int iconOffsetX = icon.getWidth() / 2;
+		int iconOffsetY = icon.getHeight();
+		double nodeIconX = atNode.getxCoord();
+		double nodeIconY = atNode.getyCoord();
+		g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
+	}
 //    public BufferedImage createStringImage(Graphics g, String s) {
 //        int w = g.getFontMetrics().stringWidth(s) + 5;
 //        int h = g.getFontMetrics().getHeight();
@@ -691,6 +680,7 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 //        g2D.drawImage(createStringImage(g, e.getRoadName()), aff, this);
 //    }
 //
+
 	private double getAngle(Edge edge)
 	{
 		double x1 = edge.getFromNode().getxCoord();
@@ -732,8 +722,14 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 
 		AffineTransform orig = g2.getTransform();
 		double rotationFixer = getAngle(edge);
-		if(rotationFixer > Math.PI/2) rotationFixer = rotationFixer+Math.PI;
-		if(rotationFixer < -Math.PI/2) rotationFixer = rotationFixer+Math.PI;
+		if (rotationFixer > Math.PI / 2)
+		{
+			rotationFixer = rotationFixer + Math.PI;
+		}
+		if (rotationFixer < -Math.PI / 2)
+		{
+			rotationFixer = rotationFixer + Math.PI;
+		}
 		g2.rotate(rotationFixer, (int) (((edge.getMidX() - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((edge.getMidY() - yVArea) / ylength) * componentHeight));
 		if (!roadName.contains("kørsel"))
 		{
@@ -759,7 +755,10 @@ public Edge findClosestRoad(int mouseCoordX, int mouseCoordY)
 			}
 
 			g2.setColor(roadColor);
-			if (searchedRoad.equals(edge.getRoadName()))g2.setColor(Color.blue);
+			if (searchedRoad.equals(edge.getRoadName()))
+			{
+				g2.setColor(Color.blue);
+			}
 			g2.setStroke(roadStroke);
 			g2.drawLine((int) (((x1 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y1 - yVArea) / ylength) * componentHeight), (int) (((x2 - xVArea) / xlength) * componentWidth), (int) (componentHeight - ((y2 - yVArea) / ylength) * componentHeight));
 
