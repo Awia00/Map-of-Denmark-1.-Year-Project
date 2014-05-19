@@ -169,6 +169,8 @@ public class NavigatonBar extends JPanel {
 				} else
 				{
 					mapComponent.setSearchedRoad("no road");
+					searchAddress.setText(null);
+					searchAddress.setPlaceholder("Find Address...");
 					mapComponent.repaint();
 				}
 			}
@@ -336,6 +338,7 @@ public class NavigatonBar extends JPanel {
 				}
 				else
 				{
+					from.setText(null);
 					from.setPlaceholder("Street not found");
 					fromNode = null;
 					mapComponent.setFrom(false);
@@ -380,6 +383,7 @@ public class NavigatonBar extends JPanel {
 				}
 				else
 				{
+					to.setText(null);
 					to.setPlaceholder("Street not found");
 					toNode = null;
 					mapComponent.setTo(false);
