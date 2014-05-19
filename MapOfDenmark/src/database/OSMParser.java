@@ -206,7 +206,10 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
                         {
                             roadType = attributes.getValue("v");
                         }
-                        //if (attributes.getValue("k").equalsIgnoreCase("route"))roadType = attributes.getValue("v"); // for ferries
+                        if (attributes.getValue("k").equalsIgnoreCase("route"))
+						{
+							roadType = attributes.getValue("v"); // for ferries
+						}
                         if (attributes.getValue("k").equalsIgnoreCase("name"))
                         {
                             roadName = attributes.getValue("v");
