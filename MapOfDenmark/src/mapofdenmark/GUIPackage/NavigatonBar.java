@@ -149,16 +149,10 @@ public class NavigatonBar extends JPanel {
 
 			}
 		});
-		searchAddress.addFocusListener(new FocusListener() {
+		searchAddress.addActionListener(new ActionListener() {
 
 			@Override
-			public void focusGained(FocusEvent e)
-			{
-				//
-			}
-
-			@Override
-			public void focusLost(FocusEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
 				Edge edge = addressFinder.searchForEdge(searchAddress.getText());
 				if (edge != null && !edge.getRoadName().equals(""))
@@ -199,10 +193,10 @@ public class NavigatonBar extends JPanel {
 				mapComponent.setFrom(false);
 				mapComponent.setFromNode(null);
 				mapComponent.setRouteNodes(null);
-				mapComponent.repaint();
 				from.setText("");
 				to.setText("");
 				reset.setEnabled(false);
+				mapComponent.repaint();
 			}
 		});
 
@@ -304,16 +298,10 @@ public class NavigatonBar extends JPanel {
 		//add(findRoute, "cell 0 3");
 		wGraph = GUIController.getGraph();
 
-		from.addFocusListener(new FocusListener() {
+		from.addActionListener(new ActionListener() {
 
 			@Override
-			public void focusGained(FocusEvent e)
-			{
-				//
-			}
-
-			@Override
-			public void focusLost(FocusEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
 				Edge edgeFrom = addressFinder.searchForEdge(from.getText());
 				if (edgeFrom != null)
@@ -335,8 +323,7 @@ public class NavigatonBar extends JPanel {
 							displayDirections();
 						}
 					}
-				}
-				else
+				} else
 				{
 					from.setText(null);
 					from.setPlaceholder("Street not found");
@@ -349,53 +336,97 @@ public class NavigatonBar extends JPanel {
 				}
 			}
 		});
-		to.addFocusListener(new FocusListener() {
+
+		from.addActionListener(new ActionListener() {
 
 			@Override
-			public void focusGained(FocusEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
-				//
+				if(!from.getText().equals(""))checkFromNode();
+				if(!to.getText().equals(""))checkToNode();
 			}
+		});
+
+		to.addActionListener(new ActionListener() {
 
 			@Override
-			public void focusLost(FocusEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
-				Edge edgeFrom = addressFinder.searchForEdge(to.getText());
-				if (edgeFrom != null)
-				{
-					toNode = edgeFrom.getFromNode();
-					to.setText(edgeFrom.getRoadName());
-					mapComponent.setTo(true);
-					mapComponent.setToNode(toNode);
-					mapComponent.repaint();
-					reset.setEnabled(true);
-					if (fromNode != null)
-					{
-						wGraph.runDij(fromNode, toNode, isFastestRoute);
-						if (wGraph.hasRoute(toNode))
-						{
-							mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-							printRoute.setEnabled(true);
-							mapComponent.repaint();
-							displayDirections();
-						}
-					}
-				}
-				else
-				{
-					to.setText(null);
-					to.setPlaceholder("Street not found");
-					toNode = null;
-					mapComponent.setTo(false);
-					mapComponent.setToNode(null);
-					printRoute.setEnabled(false);
-					mapComponent.setRouteNodes(null);
-					mapComponent.repaint();
-				}
+				if(!to.getText().equals(""))checkToNode();
+				if(!from.getText().equals(""))checkFromNode();
 			}
 		});
 	}
 
+	private void checkToNode()
+	{
+		Edge edgeFrom = addressFinder.searchForEdge(to.getText());
+		if (edgeFrom != null)
+		{
+			toNode = edgeFrom.getFromNode();
+			to.setText(edgeFrom.getRoadName());
+			mapComponent.setTo(true);
+			mapComponent.setToNode(toNode);
+			mapComponent.repaint();
+			reset.setEnabled(true);
+			if (fromNode != null)
+			{
+				wGraph.runDij(fromNode, toNode, isFastestRoute);
+				if (wGraph.hasRoute(toNode))
+				{
+					mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
+					printRoute.setEnabled(true);
+					displayDirections();
+				}
+			}
+		} else
+		{
+			to.setText(null);
+			to.setPlaceholder("Street not found");
+			toNode = null;
+			mapComponent.setTo(false);
+			mapComponent.setToNode(null);
+			printRoute.setEnabled(false);
+			mapComponent.setRouteNodes(null);
+		}
+		mapComponent.repaint();
+	}
+
+	private void checkFromNode()
+	{
+		Edge edgeFrom = addressFinder.searchForEdge(from.getText());
+		if (edgeFrom != null)
+		{
+			fromNode = edgeFrom.getFromNode();
+			from.setText(edgeFrom.getRoadName());
+			mapComponent.setFrom(true);
+			mapComponent.setFromNode(fromNode);
+			mapComponent.repaint();
+			reset.setEnabled(true);
+			if (toNode != null)
+			{
+				wGraph.runDij(fromNode, toNode, isFastestRoute);
+				if (wGraph.hasRoute(toNode))
+				{
+					mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
+					printRoute.setEnabled(true);
+					displayDirections();
+				}
+			}
+		} else
+		{
+			from.setText(null);
+			from.setPlaceholder("Street not found");
+			fromNode = null;
+			mapComponent.setFrom(false);
+			mapComponent.setFromNode(null);
+			printRoute.setEnabled(false);
+			mapComponent.setRouteNodes(null);
+		}
+		mapComponent.repaint();
+	}
+
+	// LAV KODE FOR FROM OG TO.
 	private void createRouteDirectionFrame()
 	{
 		if (wGraph.hasRoute(toNode))
