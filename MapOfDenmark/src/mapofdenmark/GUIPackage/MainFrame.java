@@ -300,7 +300,9 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
      */
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (pressedKeyCode == 17) // press ctrl key
+        drawMapComponent.getTimer().purge();
+		drawMapComponent.getTimer().cancel();
+		if (pressedKeyCode == 17) // press ctrl key
         {
             newPosition = e.getPoint();
             drawMapComponent.drawRectangle((int) oldPosition.getX(), (int) oldPosition.getY(), (int) newPosition.getX(), (int) newPosition.getY(), true);
@@ -360,6 +362,8 @@ public class MainFrame extends JFrame implements MouseListener, MouseMotionListe
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+		drawMapComponent.getTimer().purge();
+		drawMapComponent.getTimer().cancel();
         callSmoothZoom(e.getX(), e.getY(), e.getWheelRotation());
     }
 
