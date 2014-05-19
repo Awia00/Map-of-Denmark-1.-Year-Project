@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 /**
@@ -41,6 +43,10 @@ public class GUIController {
 	private GUIController()
 	{
 		frameChooser = new FrameChooser();
+		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+		//Handle exception
+        }
 	}
 
 	public static void startLoading(boolean isKrak)
