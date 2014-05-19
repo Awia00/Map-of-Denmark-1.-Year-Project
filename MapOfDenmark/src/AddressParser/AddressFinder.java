@@ -34,13 +34,23 @@ public class AddressFinder {
 	public Edge searchForEdge(String input)
 	{
 		String address = cleanString(input);
-		Edge edge = edges.get(Collections.binarySearch(edges, new Edge(address), nameComparator));
-		return edge;
+		String tempString = address;
+		int index = 0;
+		while(tempString.length()>0)
+		{
+			index = Collections.binarySearch(edges, new Edge(tempString), nameComparator);
+			if(index >=0)
+			{
+				break;
+			}
+			tempString = tempString.substring(0,tempString.length()-1);
+		}
+		return edges.get(index);
 	}
 	
 	private String cleanString(String string)
 	{
-		return string;
+		return string.replaceAll(" ", "");
 	}
 	
 	

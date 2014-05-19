@@ -14,7 +14,7 @@ public class EdgeComparerName implements Comparator<Edge>{
 
     @Override
     public int compare(Edge o1, Edge o2) {
-        return o1.getRoadName().compareToIgnoreCase(o2.getRoadName());                
+        return o1.getRoadName().replaceAll(" ", "").compareToIgnoreCase(o2.getRoadName().replaceAll(" ", ""));                
                 
     }
 }
