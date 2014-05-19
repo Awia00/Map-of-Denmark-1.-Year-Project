@@ -5,6 +5,7 @@
  */
 package mapofdenmark.GUIPackage;
 
+import AddressParser.AddressFinder;
 import database.Database;
 import database.DatabaseInterface;
 import database.Edge;
@@ -82,6 +83,7 @@ public class GUIController {
 				QuadTree quadTree = db.getQuadTree();
 
 				graph = new WeightedMapGraph(edges);
+				AddressFinder addressFinder = new AddressFinder(edges);
 
 				List<PolygonShape> landShapePolygons = new ArrayList<>();
 				List<PolygonShape> landUsePolygons = new ArrayList<>();
@@ -93,7 +95,7 @@ public class GUIController {
 
 					landUsePolygons = shapeParser.getLandUsePolygons();
 				}
-				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons); // brug disse 
+				mainframe = new MainFrame(quadTree, landShapePolygons, landUsePolygons, addressFinder); // brug disse 
 
 				//mainframe = new MainFrame(new QuadTree(null, 0, 0, 0)); // brug denne hvis du ikke vil loade
 				lframe.setVisible(false);
