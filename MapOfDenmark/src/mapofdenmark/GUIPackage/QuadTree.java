@@ -46,7 +46,7 @@ public class QuadTree implements Iterable<QuadTree> {
 		this.length = length;
 		this.allEdges = edges;
 		double h = length / 2;
-    
+                
     // Divide when number of edges is above 500
 		if (edges.size() > 500)
 		{
@@ -369,4 +369,7 @@ public class QuadTree implements Iterable<QuadTree> {
 	{
 		return SE;
 	}
+        public static void clearQuadTree(){
+            bottomTrees.clear();
+        }
 }
