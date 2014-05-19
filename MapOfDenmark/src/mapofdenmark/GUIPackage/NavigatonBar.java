@@ -139,10 +139,13 @@ public class NavigatonBar extends JPanel {
 				{
 					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
 					mapComponent.setSearchedRoad(edge.getRoadName());
+					searchAddress.setText(edge.getRoadName());
 					mapComponent.repaint();
 				} else
 				{
 					mapComponent.setSearchedRoad("no road");
+					searchAddress.setText(null);
+					searchAddress.setPlaceholder("Find Address...");
 					mapComponent.repaint();
 				}
 				// pick the edge the addressParser find's midNode.
@@ -159,6 +162,7 @@ public class NavigatonBar extends JPanel {
 				{
 					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
 					mapComponent.setSearchedRoad(edge.getRoadName());
+					searchAddress.setText(edge.getRoadName());
 					mapComponent.repaint();
 				} else
 				{
@@ -435,11 +439,12 @@ public class NavigatonBar extends JPanel {
 			{
 				routeFrame.dispose();
 				routeFrame = null;
+				routeScroll = null;
 			}
 			routeScroll = new JScrollPane(directions);
 			routeFrame = new JFrame("Directions"); // evt fra bla til bla
 			//routeFrame.add(directions);
-			routeFrame.setPreferredSize(new Dimension(300, 800));
+			routeFrame.setPreferredSize(new Dimension(getWidth()*2, getHeight()));
 			routeFrame.add(routeScroll);
 
 			routeFrame.pack();
