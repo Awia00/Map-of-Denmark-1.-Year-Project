@@ -285,7 +285,8 @@ public class DatabaseHandler implements DatabaseInterface {
 
             //Add edges to edge ArrayList, and count percentage for loading screen.
             while (rs.next()) {
-                edge = new Edge(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(7)/(rs.getDouble(6)*1.15), rs.getDouble(7));
+                edge = new Edge(getNode(rs.getInt(1)), getNode(rs.getInt(2)), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(7)/(rs.getDouble(6)*1.15), rs.getDouble(7));
+                edge.setMidNode();
                 edges.add(edge);
                 i++;
                 edgesDownloadedPct += (double) 1 / 812301;
@@ -350,9 +351,7 @@ public class DatabaseHandler implements DatabaseInterface {
         int i = 0;
         for (Edge edge : edges) {
             if (edge.getRoadType() != 74) {
-                edge.setFromNode(getNode(edge.getFromID()));
-                edge.setToNode(getNode(edge.getToID()));
-                edge.setMidNode();
+
             }
             //System.out.println(i++);
         }
@@ -380,14 +379,8 @@ public class DatabaseHandler implements DatabaseInterface {
             while (rs.next()) {
                 Point2D startNode = new Point2D.Double(rs.getDouble(1), rs.getDouble(2));
                 Point2D endNode = new Point2D.Double(rs.getDouble(3), rs.getDouble(4));
-                edge = new Edge(0, 0, 74, "", 0, Double.MAX_VALUE, Double.MAX_VALUE);
-                Node fromNode = new Node(startNode);
-                Node toNode = new Node(endNode);
-                edge.setFromNode(fromNode);
-                edge.setToNode(toNode);
+                edge = new Edge(new Node(startNode),new Node(endNode), 74, "", 0, Double.MAX_VALUE, Double.MAX_VALUE);
                 edge.setMidNode();
-                //nodes.add(toNode);
-                //nodes.add(fromNode);
                 edges.add(edge);
                 i++;
                 //edgesDownloadedPct += (double) 1 / 812301;

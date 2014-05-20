@@ -13,8 +13,6 @@ import java.awt.geom.Point2D;
  */
 public class Edge implements Comparable<Edge> {
 
-    private final int fromNodeID;
-    private final int toNodeID;
     private Node fromNode = null;
     private Node toNode = null;
    // private Node midNodeTrue = null;
@@ -25,9 +23,9 @@ public class Edge implements Comparable<Edge> {
     private double weightTime = Double.MAX_VALUE;
     private double length = Double.MAX_VALUE;
     // KRAK Constructor
-    public Edge(int fromNode, int toNode, int roadType, String roadName, int roadcode, double weightTime, double length) {
-        this.fromNodeID = fromNode;
-        this.toNodeID = toNode;
+    public Edge(Node fromNode, Node toNode, int roadType, String roadName, int roadcode, double weightTime, double length) {
+        this.fromNode = fromNode;
+        this.toNode = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
         this.weightTime = weightTime/1000;
@@ -44,23 +42,14 @@ public class Edge implements Comparable<Edge> {
 		
 		if(velocity>0)
 		{
-			this.fromNodeID = 1;
-			this.toNodeID = 1;
 			setLength();
 			length /= 1000;
 			this.weightTime = this.length / (velocity);
-		}
-		else
-		{
-			this.fromNodeID = 0;
-			this.toNodeID = 0;
 		}
     }
 	
 	public Edge(String roadName)
 	{
-		fromNodeID = 0;
-		toNodeID = 0;
 		roadType = 0;
 		this.roadName = roadName;
 	}
@@ -74,14 +63,6 @@ public class Edge implements Comparable<Edge> {
        return length;
    }
     
-    protected int getFromID() {
-        return fromNodeID;
-    }
-
-    protected int getToID() {
-        return toNodeID;
-    }
-
     public String getRoadName() {
         return roadName;
     }
