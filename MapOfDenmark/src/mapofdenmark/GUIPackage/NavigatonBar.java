@@ -500,10 +500,12 @@ public class NavigatonBar extends JPanel {
 			{
 				if (currentRoad.contains("Fra-/tilkørsel"))
 				{
+					drivetime += 0.3; // add 0.3 minutes per afkørsel
 					directions.append("Take " + currentRoad + "\n\n-------------------------------\n");
 					currentRoad = edge.getRoadName();
 					continue;
 				}
+				drivetime += 0.5; // add 0.5 minutes per afkørsel
 				directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
 				currentRoad = edge.getRoadName();
 				currentLength = 0;
@@ -511,7 +513,7 @@ public class NavigatonBar extends JPanel {
 			{
 				currentLength += edge.getLength();
 			}
-			drivetime += edge.getWeight();
+			drivetime += edge.getWeight()*60;
 			total += edge.getLength();
 		}
 		if (directions.getText().equals("") || currentLength != 0)
@@ -519,7 +521,7 @@ public class NavigatonBar extends JPanel {
 			directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
 		}
 		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
-		drivetime =  drivetime*60+3+Math.sqrt(drivetime*60);
+		drivetime =  drivetime+Math.sqrt(drivetime);
 		if(drivetime < 60)
 		directions.append("\nTotal drive time\t" + String.format("%.0f",drivetime) + " minutes\n");
 		else
