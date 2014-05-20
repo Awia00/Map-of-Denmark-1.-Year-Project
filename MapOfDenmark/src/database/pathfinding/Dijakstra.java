@@ -122,12 +122,12 @@ public class Dijakstra {
 			edgeTo.put(nextNode, e);
 			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
 			double f_Score = h_Score + g_Score;
-			nextNode.setDistTo(g_Score);
-			nextNode.setHeuristic(f_Score);
 			if (pQueue.contains(nextNode))
 			{
 				pQueue.remove(nextNode);
 			}
+			nextNode.setDistTo(g_Score);
+			nextNode.setHeuristic(f_Score);
 			pQueue.add(nextNode);
 		}
 
@@ -160,13 +160,12 @@ public class Dijakstra {
 			edgeTo.put(nextNode, e);
 			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / 1000;
 			double f_Score = h_Score + g_Score;
-			nextNode.setDistTo(g_Score);
-			nextNode.setHeuristic(f_Score);
-
 			if (pQueue.contains(nextNode))
 			{
 				pQueue.remove(nextNode);
 			}
+			nextNode.setDistTo(g_Score);
+			nextNode.setHeuristic(f_Score);
 			pQueue.add(nextNode);
 		}
 
