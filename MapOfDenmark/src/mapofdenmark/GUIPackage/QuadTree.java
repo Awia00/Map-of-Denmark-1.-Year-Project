@@ -94,8 +94,8 @@ public class QuadTree implements Iterable<QuadTree> {
 			placeNameEdges = new ArrayList<>();
 			coastLineEdges = new ArrayList<>();
 			splitEdgesIntoTypes();
-			bottomTrees.add(this);
-			// this.points = pointData;
+                        bottomTrees.add(this);
+                    // this.points = pointData;
 		}
 	}
   
