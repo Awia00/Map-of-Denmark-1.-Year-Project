@@ -115,7 +115,7 @@ public class Dijakstra {
 		}
 
 		double g_Score = prevNode.getDistTo() + e.getWeight();
-		if (g_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
+		if (g_Score >= nextNode.getDistTo() || edgeTo.containsKey(nextNode))
 		{
 			return;
 		}
@@ -162,7 +162,7 @@ public class Dijakstra {
 
 		double g_Score = prevNode.getDistTo() + e.getLength();
 
-		if (g_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
+		if (g_Score >= nextNode.getDistTo() || edgeTo.containsKey(nextNode))
 		{
 			return;
 		}
