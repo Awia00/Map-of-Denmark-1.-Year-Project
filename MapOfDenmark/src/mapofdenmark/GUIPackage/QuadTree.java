@@ -48,30 +48,30 @@ public class QuadTree implements Iterable<QuadTree> {
 		double h = length / 2;
                 
     // Divide when number of edges is above 500
-		if (edges.size() > 500)
+		if (edges.size() > 500)                                                                                     /*1*/
 		{
-			List<Edge> NWEdges = new ArrayList<>(),
+			     List<Edge> NWEdges = new ArrayList<>(),
 					NEEdges = new ArrayList<>(),
 					SWEdges = new ArrayList<>(),
 					SEEdges = new ArrayList<>();
-			for (Edge edge : edges)
+			for (Edge edge : edges)                                                                             /*2*/
 			{
 				double px = edge.getMidX();
 				double py = edge.getMidY();
         // Assign edges to corresponding quad leaves
-				if (px >= x && px < x + h && py > y + h && py <= y + length)
+				if (px >= x && px < x + h && py > y + h && py <= y + length)                                /*3*/
 				{
 					NWEdges.add(edge);
 				}
-				if (px > x + h && px <= x + length && py > y + h && py <= y + length)
+				if (px > x + h && px <= x + length && py > y + h && py <= y + length)                       /*4*/
 				{
 					NEEdges.add(edge);
 				}
-				if (px >= x && px < x + h && py >= y && py < y + h)
+				if (px >= x && px < x + h && py >= y && py < y + h)                                         /*5*/
 				{
 					SWEdges.add(edge);
 				}
-				if (px >= x + h && px <= x + length && py >= y && py <= y + h)
+				if (px >= x + h && px <= x + length && py >= y && py <= y + h)                              /*6*/
 				{
 					SEEdges.add(edge);
 				}
@@ -82,7 +82,7 @@ public class QuadTree implements Iterable<QuadTree> {
 			this.SW = new QuadTree(SWEdges, x, y, h);
 			this.SE = new QuadTree(SEEdges, x + h, y, h);
 			this.allEdges = Collections.emptyList();
-		} else
+		} else                                                                                                      
 		{
       // Assign edges to distinct list if end of recursion is reached
 			highwayEdges = new ArrayList<>();
