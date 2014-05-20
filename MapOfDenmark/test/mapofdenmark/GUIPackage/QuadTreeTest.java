@@ -4,8 +4,9 @@
  */
 package mapofdenmark.GUIPackage;
 
-import database.Edge;
-import database.Node;
+import DataStructure.QuadTree;
+import DataStructure.Edge;
+import DataStructure.Node;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
