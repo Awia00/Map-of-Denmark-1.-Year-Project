@@ -6,8 +6,8 @@
 
 package AddressParser;
 
-import database.Edge;
-import database.EdgeComparerName;
+import DataStructure.Edge;
+import DataStructure.EdgeComparerName;
 import java.util.Collections;
 import java.util.List;
 
