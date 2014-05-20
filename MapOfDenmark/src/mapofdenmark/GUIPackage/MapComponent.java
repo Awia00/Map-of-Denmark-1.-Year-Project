@@ -595,6 +595,7 @@ public class MapComponent extends JComponent {
 
 		componentHeight = getHeight();
 		componentWidth = getWidth();
+		roadNamesDisplayed = new HashSet<>();
 
 		double zoomFactorStroke = Math.sqrt(((quadTreeToDraw.getQuadTreeLength()) / (xlength * 3)));
 
@@ -624,21 +625,11 @@ public class MapComponent extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
-		boolean newHashSet = true;
 		for (QuadTree quadTree : QuadTree.getBottomTrees())
 		{
 			// checks that they should be drawn, this is set when the visibleArea is updated.
 			if (quadTree.isDrawable())
 			{
-				if (newHashSet)
-				{
-					roadNamesDisplayed = new HashSet<>();
-					newHashSet = false;
-				} else
-				{
-					newHashSet = true;
-				}
-
 				if (!quadTree.getCoastLineEdges().isEmpty())
 				{
 					drawEdges(g2, quadTree.getCoastLineEdges(), false, -1, new BasicStroke(1.4f), null, new Color(205, 189, 163), null);
@@ -691,15 +682,11 @@ public class MapComponent extends JComponent {
 				{
 
 				}
-
-				if (newHashSet)
-				{
-					roadNamesDisplayed = null;
-				}
 			}
 
 		}
-
+		roadNamesDisplayed = null;
+		
 		drawRoute(g2, routeStroke, routeBorderStroke);
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
