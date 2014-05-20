@@ -54,24 +54,24 @@ public class QuadTree implements Iterable<QuadTree> {
 					NEEdges = new ArrayList<>(),
 					SWEdges = new ArrayList<>(),
 					SEEdges = new ArrayList<>();
-			for (Edge edge : edges)                                                                             /*2*/
+			for (Edge edge : edges)                                                                             
 			{
 				double px = edge.getMidX();
 				double py = edge.getMidY();
         // Assign edges to corresponding quad leaves
-				if (px >= x && px < x + h && py > y + h && py <= y + length)                                /*3*/
+				if (px >= x && px < x + h && py > y + h && py <= y + length)                                /*2*/
 				{
 					NWEdges.add(edge);
 				}
-				if (px > x + h && px <= x + length && py > y + h && py <= y + length)                       /*4*/
+				if (px > x + h && px <= x + length && py > y + h && py <= y + length)                       /*3*/
 				{
 					NEEdges.add(edge);
 				}
-				if (px >= x && px < x + h && py >= y && py < y + h)                                         /*5*/
+				if (px >= x && px < x + h && py >= y && py < y + h)                                         /*4*/
 				{
 					SWEdges.add(edge);
 				}
-				if (px >= x + h && px <= x + length && py >= y && py <= y + h)                              /*6*/
+				if (px >= x + h && px <= x + length && py >= y && py <= y + h)                              /*5*/
 				{
 					SEEdges.add(edge);
 				}
