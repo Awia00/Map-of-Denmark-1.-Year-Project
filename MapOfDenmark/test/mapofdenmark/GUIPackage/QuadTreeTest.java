@@ -72,9 +72,17 @@ public class QuadTreeTest {
          * This gives us a total of 16 QuadTrees, with 12 of them having 1 point in them, and the rest having 500.
          * 
          *          
-         * We want to make sure that every step of the program text can be reached. We focus our attention to this, by trying to assert that they have been reached.
+         * With this test, we want to make sure that the input will be parsed into an output which matches our expectations for the class and it's code.
+         * This means that the test will try to uncover if the points (nodes/edges) are accepted by the QuadTree and distributed as expected.
          * 
+         * |500|1  |1  |500|
+         * |1  |1  |1  |1  |
+         * |1  |1  |1  |1  |
+         * |500|1  |1  |500|
+         * 
+         * The above is an ASCII rendering of the pattern of segmentation which we are aiming for.
          */
+        
         //Clear the QuadTree
         QuadTree.clearQuadTree();
                 
@@ -150,14 +158,14 @@ public class QuadTreeTest {
         /* WHITE BOX QUADTREE TEST.
          * 
          * We want to create a QuadTree with the following parameters:
-         * Length: 400.
-         * Number of QuadTrees: 16 (4x4).
-         * Number of Points in each: 1 (but + 499 in the four corners).
-         * Total number of points: 16 (with the corner padding; 2012).
+         * Length: 800.
+         * Number of QuadTrees: 16 (See below for ASCII 'art').
+         * Number of Points in each: (Check ASCII).
+         * Total number of points: 2012.
          * 
          * Our implementation of QuadTree, splits the QuadTree after 500 points have been reached.
          * 
-         * This gives us a total of 16 QuadTrees, with 12 of them having 1 point in them, and the rest having 500.
+         * This gives us a total of 16 QuadTrees (Due to the way we've split the points).
          * 
          *          
          * We want to make sure that every step of the program text can be reached. We focus our attention to this, by trying to assert that they have been reached.
@@ -170,21 +178,8 @@ public class QuadTreeTest {
         List<Edge> edges = new ArrayList<>();
         List<Point2D> points = new ArrayList<>();
         
-        //We set the length, and iterate over the 16 (4*4) QuadTree's which we expect to have as output. (add 1 point to them)
-        int length = 400;
-        for (int i = 0; i < 4; i++) {
-
-            for (int j = 0; j < 4; j++) {
-                int xMin = length / 4 * i;
-                int yMin = length / 4 * j;
-                int xMax = length / 4 * i + length / 4;
-                int yMax = length / 4 * j + length / 4;
-                points.addAll(createRandomPoints(xMin, yMin, xMax, yMax, 1));
-            }
-        }
-        
-
-        //Remember to fill each corner (of whole QuadTree) with 500 points, to ensure the QuadTree split (division).
+        //Since we want a really specific division of our QuadTree, we must add points manually.
+        // createRandomPoints(xMin, yMin, xMax, yMax, Amount) <- This is how we define the boundries for the creation of points.
         points.addAll(createRandomPoints(0, 0, 100, 100, 499));
         points.addAll(createRandomPoints(300, 0, 400, 100, 499));
         points.addAll(createRandomPoints(0, 300, 100, 400, 499));
@@ -248,10 +243,10 @@ public class QuadTreeTest {
         
         
         //Test to see if division works, we input 2012 points into the QuadTree. That should give a maximum of 16 QuadTrees, and a minimum of 
-        expResult = 400/2;
+        //expResult = 400/2;
         //result = QT.get
                 
-        assertEquals(expResult, result, 0);
+       // assertEquals(expResult, result, 0);
         
         
     }
