@@ -20,6 +20,9 @@ public class MapOfDenmark {
     public static void main(String[] args)
     {
         //new GUIController();
+        for(int i = 0; 1<100; i++){
+        System.out.println();
+    }
     }
     
 }
