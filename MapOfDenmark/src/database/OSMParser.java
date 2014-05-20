@@ -138,7 +138,7 @@ public class OSMParser extends DefaultHandler implements DatabaseInterface {
 			return 30;
 		} else if (roadType.equalsIgnoreCase("ferry"))
 		{
-			return 90;
+			return 60;
 		} else if (roadType.equalsIgnoreCase("path") || roadType.equalsIgnoreCase("cycleway") || roadType.equalsIgnoreCase("footway"))
 		{
 			return -1;

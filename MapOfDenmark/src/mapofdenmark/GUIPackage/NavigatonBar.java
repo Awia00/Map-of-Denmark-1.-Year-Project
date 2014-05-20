@@ -17,6 +17,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -473,6 +474,12 @@ public class NavigatonBar extends JPanel {
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
+			else 
+			{	
+				mapComponent.setRouteNodes(new ArrayList<Node>());
+				printRoute.setEnabled(false);
+			}
+			
 			setCursor(Cursor.getDefaultCursor());
 		}
 	}
@@ -487,29 +494,39 @@ public class NavigatonBar extends JPanel {
 
 		String currentRoad = "";
 		double currentLength = 0;
+		Edge lastEdge = null;
 		double total = 0;
+		double drivetime = 0;
 		for (Edge edge : routeEdges)
 		{
 
 			if (currentRoad.equals(""))
 			{
 				currentRoad = edge.getRoadName();
+				lastEdge = edge;
 			}
 			if (!currentRoad.equals(edge.getRoadName()))
 			{
 				if (currentRoad.contains("Fra-/tilkørsel"))
 				{
+					drivetime += 0.3; // add 0.3 minutes per afkørsel
 					directions.append("Take " + currentRoad + "\n\n-------------------------------\n");
 					currentRoad = edge.getRoadName();
+					lastEdge = edge;
 					continue;
 				}
-				directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				drivetime += 0.5; // add 0.5 minutes per afkørsel
+				
+				if(lastEdge.getRoadType()!= 80)directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				else directions.append("Take the ferry route " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
 				currentRoad = edge.getRoadName();
+				lastEdge = edge;
 				currentLength = 0;
 			} else
 			{
 				currentLength += edge.getLength();
 			}
+			drivetime += edge.getWeight()*60;
 			total += edge.getLength();
 		}
 		if (directions.getText().equals("") || currentLength != 0)
@@ -517,6 +534,13 @@ public class NavigatonBar extends JPanel {
 			directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength) + " km \n-------------------------------\n");
 		}
 		directions.append("\nTotal distance\t\t" + String.format("%.2f", total) + " km \n");
+		drivetime =  drivetime+Math.sqrt(drivetime);
+		if(drivetime < 60)
+		directions.append("\nTotal drive time\t" + String.format("%.0f",drivetime) + " minutes\n");
+		else
+		{
+			directions.append("\nTotal drive time\t" + String.format("%.2f", drivetime/60) + " hours\n");
+		}
 	}
 
 }

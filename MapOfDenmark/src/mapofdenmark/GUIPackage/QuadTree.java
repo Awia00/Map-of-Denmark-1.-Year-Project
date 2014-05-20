@@ -102,6 +102,7 @@ public class QuadTree implements Iterable<QuadTree> {
   // Sort all edges into their respective lists
 	private void splitEdgesIntoTypes()
 	{
+		outerloop:
 		for (Edge edge : allEdges)
 		{
 			for (int roadType : RoadTypeEnum.HIGHWAY.getTypes())
@@ -109,7 +110,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					highwayEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.SECONDARYROAD.getTypes())
@@ -117,7 +118,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					secondaryEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.NORMALROAD.getTypes())
@@ -125,7 +126,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					normalEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.SMALLROAD.getTypes())
@@ -133,7 +134,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					smallEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.PATHWAY.getTypes())
@@ -141,7 +142,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					pathEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.FERRYWAY.getTypes())
@@ -149,7 +150,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					ferryEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.COASTLINE.getTypes())
@@ -157,7 +158,7 @@ public class QuadTree implements Iterable<QuadTree> {
 				if (roadType == edge.getRoadType())
 				{
 					coastLineEdges.add(edge);
-					break;
+					continue outerloop;
 				}
 			}
 			for (int roadType : RoadTypeEnum.PLACENAME.getTypes())
@@ -172,7 +173,7 @@ public class QuadTree implements Iterable<QuadTree> {
 					if (addThisEdge){
 						placeNameEdges.add(edge);
 					}
-					break;
+					continue outerloop;
 				}
 			}
 		}

@@ -53,7 +53,7 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 
 		getContentPane().add(mainContainer);
 
-		messageField = new AAJLabel("Step 1/4 - Loading nodes from the database...");
+		messageField = new AAJLabel("Step 1/4 - Loading nodes...");
 		messageField.setFont(FontLoader.getFontWithSize("Roboto-Bold", 14f));
 	
 		loadingBar = new loadingComponent();
@@ -78,10 +78,10 @@ public class LoadingFrame extends JFrame implements MouseMotionListener{
 			messageField.setText("Step 4/4 - Preparing the last details...");
 		} else if (edgesLoaded >= 1)
 		{
-			messageField.setText("Step 3/4 - Loading streets from the database...");
+			messageField.setText("Step 3/4 - Building data structures...");
 		} else if (nodesLoaded >= 1)
 		{
-			messageField.setText("Step 2/4 - Loading edges from the database...");
+			messageField.setText("Step 2/4 - Loading edges...");
 		}
 		this.repaint();
 	}
