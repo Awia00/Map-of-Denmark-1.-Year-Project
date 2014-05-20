@@ -28,6 +28,7 @@ public class Dijakstra {
 
 	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
 	private HashMap<Node, Edge> edgeTo; // the edge to Node
+	private HashSet<Node> closedSet;
 
 	private Node fromNode, toNode;
 	private PriorityQueue pQueue;
@@ -38,6 +39,7 @@ public class Dijakstra {
 		this.graph = graph;
 		this.fromNode = fromNode;
 		this.toNode = toNode;
+		closedSet = new HashSet<>();
 		edgeTo = new HashMap<>();
 		for (Node node : graph.keySet())
 		{
@@ -51,13 +53,12 @@ public class Dijakstra {
 	private void createRoutes(boolean heuristic)
 	{
 		fromNode.setDistTo(0);
-		if(heuristic)
+		if (heuristic)
 		{
-			fromNode.setHeuristic(Math.sqrt(Math.pow((toNode.getxCoord() - fromNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - fromNode.getyCoord(), 2))/1000);
-		}
-		else
+			fromNode.setHeuristic(Math.sqrt(Math.pow((toNode.getxCoord() - fromNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - fromNode.getyCoord(), 2)) / 1000);
+		} else
 		{
-			fromNode.setHeuristic(Math.sqrt(Math.pow((toNode.getxCoord() - fromNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - fromNode.getyCoord(), 2))/(130000));
+			fromNode.setHeuristic(Math.sqrt(Math.pow((toNode.getxCoord() - fromNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - fromNode.getyCoord(), 2)) / (130000));
 		}
 		edgeTo.put(fromNode, null);
 
@@ -66,23 +67,26 @@ public class Dijakstra {
 		while (!pQueue.isEmpty())
 		{
 			Node v = (Node) pQueue.poll();
+			closedSet.add(v);
 			if (v.equals(toNode))
 			{
 				break;
 			}
 
-			for (Edge e : graph.get(v))
+			if (heuristic)
 			{
-				if (heuristic)
+				for (Edge e : graph.get(v))
 				{
 					relaxDriveTime(e, v);
-//                    System.out.println("drivetime");
-				} else
+				}
+			} else
+			{
+				for (Edge e : graph.get(v))
 				{
 					relaxLength(e, v);
-//                    System.out.println("length");
 				}
 			}
+
 		}
 	}
 
@@ -113,26 +117,21 @@ public class Dijakstra {
 		{
 			nextNode = e.getFromNode();
 		}
-
-		double g_Score = prevNode.getDistTo() + e.getWeight();
-		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
-		double f_Score = h_Score + g_Score;
-
-		if (g_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
+		if (closedSet.contains(nextNode))
 		{
 			return;
 		}
-		if (g_Score < nextNode.getDistTo())
+
+		double g_Score = prevNode.getDistTo() + e.getWeight();
+
+		if (!pQueue.contains(nextNode) || g_Score < nextNode.getDistTo())
 		{
+			edgeTo.put(nextNode, e);
+			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
+			double f_Score = h_Score + g_Score;
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
-			edgeTo.put(nextNode, e);
-
-			if (pQueue.contains(nextNode))
-			{
-				pQueue.remove(nextNode);
-				pQueue.add(nextNode);
-			} else
+			if (!pQueue.contains(nextNode))
 			{
 				pQueue.add(nextNode);
 			}
@@ -159,26 +158,22 @@ public class Dijakstra {
 		{
 			nextNode = e.getFromNode();
 		}
-
-		double g_Score = prevNode.getDistTo() + e.getLength();
-		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2))/1000;
-		double f_Score = h_Score + g_Score;
-
-		if (g_Score >= nextNode.getDistTo()&& edgeTo.containsKey(nextNode))
+		if (closedSet.contains(nextNode))
 		{
 			return;
 		}
-		if (g_Score < nextNode.getDistTo())
+
+		double g_Score = prevNode.getDistTo() + e.getLength();
+
+		if (g_Score < nextNode.getDistTo() || !pQueue.contains(nextNode))
 		{
+			edgeTo.put(nextNode, e);
+			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / 1000;
+			double f_Score = h_Score + g_Score;
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
-			edgeTo.put(nextNode, e);
 
-			if (pQueue.contains(nextNode))
-			{
-				pQueue.remove(nextNode);
-				pQueue.add(nextNode);
-			} else
+			if (!pQueue.contains(nextNode))
 			{
 				pQueue.add(nextNode);
 			}
@@ -221,9 +216,10 @@ public class Dijakstra {
 			System.out.println("edgeTo: " + edgeTo.size());
 			System.out.println("route: " + route.size());
 			return route;
-		}
-		else
+		} else
+		{
 			return route;
+		}
 	}
 
 	private void getPathRecoursive(Node toNode)
