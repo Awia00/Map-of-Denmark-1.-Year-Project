@@ -28,7 +28,6 @@ public class Dijakstra {
 
 	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
 	private HashMap<Node, Edge> edgeTo; // the edge to Node
-	private HashSet<Node> closedSet;
 
 	private Node fromNode, toNode;
 	private PriorityQueue pQueue;
@@ -39,7 +38,6 @@ public class Dijakstra {
 		this.graph = graph;
 		this.fromNode = fromNode;
 		this.toNode = toNode;
-		closedSet = new HashSet<>();
 		edgeTo = new HashMap<>();
 		for (Node node : graph.keySet())
 		{
@@ -67,7 +65,6 @@ public class Dijakstra {
 		while (!pQueue.isEmpty())
 		{
 			Node v = (Node) pQueue.poll();
-			closedSet.add(v);
 			if (v.equals(toNode))
 			{
 				break;
@@ -117,24 +114,21 @@ public class Dijakstra {
 		{
 			nextNode = e.getFromNode();
 		}
-		if (closedSet.contains(nextNode))
-		{
-			return;
-		}
 
 		double g_Score = prevNode.getDistTo() + e.getWeight();
 
-		if (!pQueue.contains(nextNode) || g_Score < nextNode.getDistTo())
+		if (g_Score < nextNode.getDistTo())
 		{
 			edgeTo.put(nextNode, e);
 			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
 			double f_Score = h_Score + g_Score;
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
-			if (!pQueue.contains(nextNode))
+			if (pQueue.contains(nextNode))
 			{
-				pQueue.add(nextNode);
+				pQueue.remove(nextNode);
 			}
+			pQueue.add(nextNode);
 		}
 
 		/*
@@ -158,14 +152,10 @@ public class Dijakstra {
 		{
 			nextNode = e.getFromNode();
 		}
-		if (closedSet.contains(nextNode))
-		{
-			return;
-		}
 
 		double g_Score = prevNode.getDistTo() + e.getLength();
 
-		if (g_Score < nextNode.getDistTo() || !pQueue.contains(nextNode))
+		if (g_Score < nextNode.getDistTo())
 		{
 			edgeTo.put(nextNode, e);
 			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / 1000;
@@ -173,10 +163,11 @@ public class Dijakstra {
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
 
-			if (!pQueue.contains(nextNode))
+			if (pQueue.contains(nextNode))
 			{
-				pQueue.add(nextNode);
+				pQueue.remove(nextNode);
 			}
+			pQueue.add(nextNode);
 		}
 
 		/*
