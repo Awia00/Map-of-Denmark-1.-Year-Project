@@ -12,15 +12,11 @@ import database.RoadTypeEnum;
 import database.pathfinding.WeightedMapGraph;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -32,8 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -139,10 +133,13 @@ public class NavigatonBar extends JPanel {
 				{
 					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
 					mapComponent.setSearchedRoad(edge.getRoadName());
+					searchAddress.setText(edge.getRoadName());
 					mapComponent.repaint();
 				} else
 				{
 					mapComponent.setSearchedRoad("no road");
+					searchAddress.setText(null);
+					searchAddress.setPlaceholder("Find Address...");
 					mapComponent.repaint();
 				}
 				// pick the edge the addressParser find's midNode.
@@ -159,6 +156,7 @@ public class NavigatonBar extends JPanel {
 				{
 					mapComponent.moveVisibleAreaToCoord(edge.getMidX(), edge.getMidY());
 					mapComponent.setSearchedRoad(edge.getRoadName());
+					searchAddress.setText(edge.getRoadName());
 					mapComponent.repaint();
 				} else
 				{
@@ -222,17 +220,7 @@ public class NavigatonBar extends JPanel {
 					}
 				}
 
-				if (fromNode != null && toNode != null)
-				{
-					wGraph.runDij(fromNode, toNode, isFastestRoute);
-					if (wGraph.hasRoute(toNode))
-					{
-						mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-						printRoute.setEnabled(true);
-						mapComponent.repaint();
-						displayDirections();
-					}
-				}
+				runRouteCalculation();
 			}
 		});
 
@@ -259,17 +247,7 @@ public class NavigatonBar extends JPanel {
 					}
 				}
 
-				if (fromNode != null && toNode != null)
-				{
-					wGraph.runDij(fromNode, toNode, isFastestRoute);
-					if (wGraph.hasRoute(toNode))
-					{
-						mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-						printRoute.setEnabled(true);
-						mapComponent.repaint();
-						displayDirections();
-					}
-				}
+				runRouteCalculation();
 			}
 		});
 
@@ -312,17 +290,7 @@ public class NavigatonBar extends JPanel {
 					mapComponent.setFromNode(fromNode);
 					mapComponent.repaint();
 					reset.setEnabled(true);
-					if (toNode != null)
-					{
-						wGraph.runDij(fromNode, toNode, isFastestRoute);
-						if (wGraph.hasRoute(toNode))
-						{
-							mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-							printRoute.setEnabled(true);
-							mapComponent.repaint();
-							displayDirections();
-						}
-					}
+					runRouteCalculation();
 				} else
 				{
 					from.setText(null);
@@ -369,16 +337,7 @@ public class NavigatonBar extends JPanel {
 			mapComponent.setToNode(toNode);
 			mapComponent.repaint();
 			reset.setEnabled(true);
-			if (fromNode != null)
-			{
-				wGraph.runDij(fromNode, toNode, isFastestRoute);
-				if (wGraph.hasRoute(toNode))
-				{
-					mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-					printRoute.setEnabled(true);
-					displayDirections();
-				}
-			}
+			runRouteCalculation();
 		} else
 		{
 			to.setText(null);
@@ -403,16 +362,7 @@ public class NavigatonBar extends JPanel {
 			mapComponent.setFromNode(fromNode);
 			mapComponent.repaint();
 			reset.setEnabled(true);
-			if (toNode != null)
-			{
-				wGraph.runDij(fromNode, toNode, isFastestRoute);
-				if (wGraph.hasRoute(toNode))
-				{
-					mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-					printRoute.setEnabled(true);
-					displayDirections();
-				}
-			}
+			runRouteCalculation();
 		} else
 		{
 			from.setText(null);
@@ -435,11 +385,12 @@ public class NavigatonBar extends JPanel {
 			{
 				routeFrame.dispose();
 				routeFrame = null;
+				routeScroll = null;
 			}
 			routeScroll = new JScrollPane(directions);
 			routeFrame = new JFrame("Directions"); // evt fra bla til bla
 			//routeFrame.add(directions);
-			routeFrame.setPreferredSize(new Dimension(300, 800));
+			routeFrame.setPreferredSize(new Dimension(getWidth()*2, getHeight()));
 			routeFrame.add(routeScroll);
 
 			routeFrame.pack();
@@ -493,16 +444,7 @@ public class NavigatonBar extends JPanel {
 		mapComponent.setFrom(true);
 		mapComponent.setFromNode(fromNode);
 		reset.setEnabled(true);
-		if (toNode != null)
-		{
-			wGraph.runDij(fromNode, toNode, isFastestRoute);
-			if (wGraph.hasRoute(toNode))
-			{
-				mapComponent.setRouteNodes(wGraph.calculateRoute(toNode));
-				printRoute.setEnabled(true);
-				displayDirections();
-			}
-		}
+		runRouteCalculation();
 
 		// wGraph.hasRoute(toNode) tjek med denne også
 	}
@@ -515,8 +457,15 @@ public class NavigatonBar extends JPanel {
 		mapComponent.setTo(true);
 		mapComponent.setToNode(toNode);
 		reset.setEnabled(true);
-		if (fromNode != null)
+		runRouteCalculation();
+		// wGraph.hasRoute(toNode) tjek med denne også
+	}
+	
+	private void runRouteCalculation()
+	{
+		if (fromNode != null && toNode != null)
 		{
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			wGraph.runDij(fromNode, toNode, isFastestRoute);
 			if (wGraph.hasRoute(toNode))
 			{
@@ -524,9 +473,8 @@ public class NavigatonBar extends JPanel {
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
+			setCursor(Cursor.getDefaultCursor());
 		}
-
-		// wGraph.hasRoute(toNode) tjek med denne også
 	}
 
 	private void displayDirections()

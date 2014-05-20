@@ -15,7 +15,6 @@ public class Edge implements Comparable<Edge> {
 
     private final int fromNodeID;
     private final int toNodeID;
-    private final int roadcode;
     private Node fromNode = null;
     private Node toNode = null;
    // private Node midNodeTrue = null;
@@ -31,7 +30,6 @@ public class Edge implements Comparable<Edge> {
         this.toNodeID = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
-        this.roadcode = roadcode;
         this.weightTime = weightTime/1000;
         this.length = length/1000;
         
@@ -42,7 +40,6 @@ public class Edge implements Comparable<Edge> {
         this.toNode = toNode;
         this.roadType = roadType;
         this.roadName = roadName;
-        this.roadcode = roadcode;
         setMidNode();
 		
 		if(velocity>0)
@@ -64,7 +61,6 @@ public class Edge implements Comparable<Edge> {
 	{
 		fromNodeID = 0;
 		toNodeID = 0;
-		roadcode = 0;
 		roadType = 0;
 		this.roadName = roadName;
 	}
@@ -116,10 +112,6 @@ public class Edge implements Comparable<Edge> {
         midY = (fromNode.getyCoord() + toNode.getyCoord()) / 2;
     }
 
-    public int getRoadcode() {
-        return roadcode;
-    }
-
     public double getMidX() {
         return midX;
     }
@@ -145,6 +137,6 @@ public class Edge implements Comparable<Edge> {
 
     @Override
     public String toString() {
-        return "\n    E-VEJKODE: " + roadcode + "\n   E-VEJNAVN: " + roadName;
+        return "\n   E-VEJNAVN: " + roadName;
     }
 }
