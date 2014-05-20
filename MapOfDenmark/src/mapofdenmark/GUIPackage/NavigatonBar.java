@@ -474,7 +474,11 @@ public class NavigatonBar extends JPanel {
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
-			else mapComponent.setRouteNodes(new ArrayList<Node>());
+			else 
+			{	
+				mapComponent.setRouteNodes(new ArrayList<Node>());
+				printRoute.setEnabled(false);
+			}
 			
 			setCursor(Cursor.getDefaultCursor());
 		}
@@ -490,6 +494,7 @@ public class NavigatonBar extends JPanel {
 
 		String currentRoad = "";
 		double currentLength = 0;
+		Edge lastEdge = null;
 		double total = 0;
 		double drivetime = 0;
 		for (Edge edge : routeEdges)
@@ -498,6 +503,7 @@ public class NavigatonBar extends JPanel {
 			if (currentRoad.equals(""))
 			{
 				currentRoad = edge.getRoadName();
+				lastEdge = edge;
 			}
 			if (!currentRoad.equals(edge.getRoadName()))
 			{
@@ -506,13 +512,15 @@ public class NavigatonBar extends JPanel {
 					drivetime += 0.3; // add 0.3 minutes per afkørsel
 					directions.append("Take " + currentRoad + "\n\n-------------------------------\n");
 					currentRoad = edge.getRoadName();
+					lastEdge = edge;
 					continue;
 				}
 				drivetime += 0.5; // add 0.5 minutes per afkørsel
 				
-				if(edge.getRoadType()!= 80)directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
-				else directions.append("Take the ferry route " + currentRoad + "\n\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				if(lastEdge.getRoadType()!= 80)directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				else directions.append("Take the ferry route " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
 				currentRoad = edge.getRoadName();
+				lastEdge = edge;
 				currentLength = 0;
 			} else
 			{
