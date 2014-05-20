@@ -508,7 +508,9 @@ public class NavigatonBar extends JPanel {
 					continue;
 				}
 				drivetime += 0.5; // add 0.5 minutes per afkørsel
-				directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				
+				if(edge.getRoadType()!= 80)directions.append("Drive along " + currentRoad + "\n\t\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
+				else directions.append("Take the ferry route " + currentRoad + "\n\t" + String.format("%.2f", currentLength + (edge.getLength())) + " km \n-------------------------------\n");
 				currentRoad = edge.getRoadName();
 				currentLength = 0;
 			} else
