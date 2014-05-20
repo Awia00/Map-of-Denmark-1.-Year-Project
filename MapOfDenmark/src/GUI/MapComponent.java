@@ -739,31 +739,6 @@ public class MapComponent extends JComponent {
 		double nodeIconY = atNode.getyCoord();
 		g2.drawImage(icon, (int) (((nodeIconX - xVArea) / xlength) * componentWidth) - iconOffsetX, (int) (componentHeight - ((nodeIconY - yVArea) / ylength) * componentHeight) - iconOffsetY, this);
 	}
-//    public BufferedImage createStringImage(Graphics g, String s) {
-//        int w = g.getFontMetrics().stringWidth(s) + 5;
-//        int h = g.getFontMetrics().getHeight();
-//
-//        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-//        Graphics2D imageGraphics = image.createGraphics();
-//        imageGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//        imageGraphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-//        imageGraphics.setColor(Color.BLACK);
-//        imageGraphics.setFont(g.getFont());
-//        imageGraphics.drawString(s, 0, h - g.getFontMetrics().getDescent());
-//        imageGraphics.dispose();
-//
-//        return image;
-//    }
-//
-//    private void drawString(Graphics g, Edge e, int tx, int ty) {
-//        AffineTransform aff = AffineTransform.getRotateInstance(getAngle(e));
-//        aff.translate(tx, ty);
-//
-//        Graphics2D g2D = ((Graphics2D) g);
-//        g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-//        g2D.drawImage(createStringImage(g, e.getRoadName()), aff, this);
-//    }
-//
 
 	private double getAngle(Edge edge)
 	{
