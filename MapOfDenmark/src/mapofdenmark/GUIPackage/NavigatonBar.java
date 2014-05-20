@@ -474,7 +474,8 @@ public class NavigatonBar extends JPanel {
 				printRoute.setEnabled(true);
 				displayDirections();
 			}
-			mapComponent.setRouteNodes(new ArrayList<Node>());
+			else mapComponent.setRouteNodes(new ArrayList<Node>());
+			
 			setCursor(Cursor.getDefaultCursor());
 		}
 	}
