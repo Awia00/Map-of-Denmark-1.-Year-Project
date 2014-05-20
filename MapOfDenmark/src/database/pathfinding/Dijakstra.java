@@ -115,15 +115,15 @@ public class Dijakstra {
 		}
 
 		double g_Score = prevNode.getDistTo() + e.getWeight();
-		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
-		double f_Score = h_Score + g_Score;
-
 		if (g_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
 		{
 			return;
 		}
+		
 		if (g_Score < nextNode.getDistTo())
 		{
+			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2)) / (130000); // 130*1000 
+			double f_Score = h_Score + g_Score;
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
 			edgeTo.put(nextNode, e);
@@ -161,15 +161,15 @@ public class Dijakstra {
 		}
 
 		double g_Score = prevNode.getDistTo() + e.getLength();
-		double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2))/1000;
-		double f_Score = h_Score + g_Score;
 
-		if (g_Score >= nextNode.getDistTo()&& edgeTo.containsKey(nextNode))
+		if (g_Score >= nextNode.getDistTo() && edgeTo.containsKey(nextNode))
 		{
 			return;
 		}
 		if (g_Score < nextNode.getDistTo())
 		{
+			double h_Score = Math.sqrt(Math.pow((toNode.getxCoord() - nextNode.getxCoord()), 2) + Math.pow(toNode.getyCoord() - nextNode.getyCoord(), 2))/1000;
+			double f_Score = h_Score + g_Score;
 			nextNode.setDistTo(g_Score);
 			nextNode.setHeuristic(f_Score);
 			edgeTo.put(nextNode, e);
