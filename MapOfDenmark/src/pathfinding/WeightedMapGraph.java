@@ -26,7 +26,7 @@ import java.util.List;
 public class WeightedMapGraph {
 
 	private final HashMap<Node, HashSet<Edge>> graph;
-	private Dijakstra dij;
+	private Dijkstra dij;
 	private LinkedHashSet<String> directionKeys;
 
 	public WeightedMapGraph(List<Edge> edges)
@@ -77,7 +77,7 @@ public class WeightedMapGraph {
 
 	public void runDij(Node from, Node to, boolean heuristic)
 	{
-		dij = new Dijakstra(graph, from, to, heuristic);
+		dij = new Dijkstra(graph, from, to, heuristic);
 	}
         
 	public boolean hasRoute(Node to)

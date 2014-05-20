@@ -24,7 +24,7 @@ import java.util.PriorityQueue;
  * @buildDate 05-05-2014
  * @author Anders Wind - awis@itu.dk
  */
-public class Dijakstra {
+public class Dijkstra {
 
 	private HashMap<Node, HashSet<Edge>> graph; // the adjecent edges to a node
 	private HashMap<Node, Edge> edgeTo; // the edge to Node
@@ -33,7 +33,7 @@ public class Dijakstra {
 	private PriorityQueue pQueue;
 	private List<Node> route;
 
-	public Dijakstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Node toNode, boolean heuristic)
+	public Dijkstra(HashMap<Node, HashSet<Edge>> graph, Node fromNode, Node toNode, boolean heuristic)
 	{
 		this.graph = graph;
 		this.fromNode = fromNode;
