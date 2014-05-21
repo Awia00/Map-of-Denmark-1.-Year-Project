@@ -278,7 +278,7 @@ public class QuadTreeTest {
          * 
          */
         //Series of tests to check every single QuadTree expected to be created, it's number of points, and whether they respect the logical mathematic boundries, and logical placements.
-        // Basically a test of /*1 + 2 + 3 + 4 + 5 + 6 */ (see QuadTree.java for markings).
+        // Basically a test of /*1 + 2 + 3 + 4 + 5 */ (see QuadTree.java for markings).
 
         //QT#1
         expResult = 0;
