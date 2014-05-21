@@ -36,13 +36,12 @@ public class DatabaseHandler implements DatabaseInterface {
     ArrayList<Connection> cons = new ArrayList();
     ArrayList<SQLWarning> warnings = new ArrayList();
     ComboPooledDataSource cpds = new ComboPooledDataSource();
-    //Fields for Streets, Edges and Nodes.
-    ArrayList<Street> streets = new ArrayList<>();
+    //Fields for Edges and Nodes.
     ArrayList<Edge> edges = new ArrayList<>();
     ArrayList<Node> nodes = new ArrayList<>();
     NodeComparer nc = new NodeComparer();
     EdgeComparerName ecName = new EdgeComparerName();
-    StreetComparer sc = new StreetComparer();
+
     private double nodesDownloadedPct, edgesDownloadedPct, streetsDownloadedPct;
     
     //QuadTree field.
@@ -308,38 +307,6 @@ public class DatabaseHandler implements DatabaseInterface {
         node = nodes.get(Collections.binarySearch(nodes, new Node(id, p), nc));
 
         return node;
-    }
-
-    private ArrayList<Street> getStreets() {
-        try {
-            Long time = System.currentTimeMillis();
-            Street street = null;
-            String sql = "SELECT * FROM [jonovic_dk_db].[dbo].[road2id];";
-            Connection con = cpds.getConnection();
-
-            PreparedStatement pstatement = con.prepareStatement(sql);
-            ResultSet rs = executeQuery(pstatement);
-            time -= System.currentTimeMillis();
-
-            System.out.println("Time spent fetching elements: " + -time * 0.001 + " seconds...");
-            int i = 0;
-            while (rs.next()) {
-
-                street = new Street(rs.getInt(2), rs.getString(1));
-                streets.add(street);
-                i++;
-                streetsDownloadedPct += (double) 1 / 115883;
-            }
-
-            System.out.println("Total streets: " + i);
-        } catch (SQLException ex) {
-            printSQLException(ex);
-        } finally {
-            closeConnection(cons, pstatements, resultsets);
-        }
-        Collections.sort(streets);
-        streetsDownloadedPct = 1;
-        return streets;
     }
 
     private QuadTree initDataStructure() {
