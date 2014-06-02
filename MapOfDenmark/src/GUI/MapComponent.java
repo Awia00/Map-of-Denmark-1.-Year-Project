@@ -835,7 +835,7 @@ public class MapComponent extends JComponent {
 
 	private void drawRoute(Graphics2D g2, BasicStroke routeStroke, BasicStroke routeBorderStroke)
 	{
-		if (routeNodes != null)
+		if (routeNodes != null || !routeNodes.isEmpty())
 		{
 			int jumpOver = 1;
 			if (xlength >= (quadTreeToDraw.getQuadTreeLength() / 15))

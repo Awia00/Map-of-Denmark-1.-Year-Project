@@ -44,7 +44,7 @@ public class Dijkstra {
 			node.setDistTo(Double.POSITIVE_INFINITY);
 			node.setHeuristic(Double.POSITIVE_INFINITY);
 		}
-		pQueue = new PriorityQueue(graph.size() / 20, new NodeDistToComparator());
+		pQueue = new PriorityQueue(1, new NodeDistToComparator());
 		createRoutes(heuristic);
 	}
 
